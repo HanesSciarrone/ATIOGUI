@@ -1,0 +1,1789 @@
+{
+  "Application": {
+    "Screens": [
+      {
+        "Components": [
+          {
+            "Color": {
+              "Red": 41,
+              "Green": 73,
+              "Blue": 105
+            },
+            "Alpha": 255,
+            "Name": "Background",
+            "X": 0,
+            "Y": 0,
+            "Width": 800,
+            "Height": 480,
+            "Type": "Box",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Color": {
+              "Red": 145,
+              "Green": 145,
+              "Blue": 145
+            },
+            "Alpha": 255,
+            "Name": "Toolbar",
+            "X": 0,
+            "Y": 0,
+            "Width": 800,
+            "Height": 62,
+            "Type": "Box",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Filename": "ControlGas.png",
+            "Alpha": 255,
+            "ScalingAlgorithm": "Nearest-neighbor",
+            "Name": "logo",
+            "X": 0,
+            "Y": 1,
+            "Width": 153,
+            "Height": 60,
+            "Type": "ScalableImage",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId11",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Alpha": 255,
+            "AutoSize": true,
+            "LineSpacing": 0,
+            "Name": "textArea1",
+            "X": 199,
+            "Y": 129,
+            "Width": 402,
+            "Height": 120,
+            "Type": "TextArea",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Alpha": 255,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "TextButtonStyle",
+                "X": 0,
+                "Y": 58,
+                "TextId": "SingleUseId12",
+                "TextRotation": "0",
+                "ColorReleased": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "ColorPressed": {
+                  "Red": 184,
+                  "Green": 184,
+                  "Blue": 184
+                }
+              },
+              {
+                "Type": "IconButtonStyle",
+                "X": 21,
+                "Y": 7,
+                "IconReleased": "__designer\\Dark_Icons_User_48.png",
+                "IconPressed": "__designer\\Dark_Icons_User_48.png"
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "X": 0,
+                "Y": 0,
+                "Width": 90,
+                "Height": 90,
+                "LockToFlexButtonSize": true,
+                "BorderSize": 3,
+                "ColorReleased": {
+                  "Red": 71,
+                  "Green": 77,
+                  "Blue": 80
+                },
+                "ColorPressed": {
+                  "Red": 45,
+                  "Green": 53,
+                  "Blue": 55
+                },
+                "ColorBorderReleased": {
+                  "Red": 0,
+                  "Green": 0,
+                  "Blue": 0
+                },
+                "ColorBorderPressed": {
+                  "Red": 0,
+                  "Green": 0,
+                  "Blue": 0
+                }
+              }
+            ],
+            "Name": "btnOptionID",
+            "X": 199,
+            "Y": 317,
+            "Width": 90,
+            "Height": 90,
+            "Type": "FlexButton",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Alpha": 255,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "TextButtonStyle",
+                "X": 0,
+                "Y": 58,
+                "TextId": "SingleUseId13",
+                "TextRotation": "0",
+                "ColorReleased": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "ColorPressed": {
+                  "Red": 184,
+                  "Green": 184,
+                  "Blue": 184
+                }
+              },
+              {
+                "Type": "IconButtonStyle",
+                "X": 21,
+                "Y": 7,
+                "IconReleased": "__designer\\Dark_Icons_Tools_48.png",
+                "IconPressed": "__designer\\Dark_Icons_Tools_48.png"
+              },
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "X": 0,
+                "Y": 0,
+                "Width": 90,
+                "Height": 90,
+                "LockToFlexButtonSize": true,
+                "BorderSize": 3,
+                "ColorReleased": {
+                  "Red": 71,
+                  "Green": 77,
+                  "Blue": 80
+                },
+                "ColorPressed": {
+                  "Red": 45,
+                  "Green": 53,
+                  "Blue": 55
+                },
+                "ColorBorderReleased": {
+                  "Red": 0,
+                  "Green": 0,
+                  "Blue": 0
+                },
+                "ColorBorderPressed": {
+                  "Red": 0,
+                  "Green": 0,
+                  "Blue": 0
+                }
+              }
+            ],
+            "Name": "btnSetupWifi",
+            "X": 511,
+            "Y": 317,
+            "Width": 90,
+            "Height": 90,
+            "Type": "FlexButton",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "ChangeIDScreen",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "btnOptionID",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "ScreenTransitionType": "ScreenTransitionCover",
+              "ScreenTransitionDirection": "South",
+              "ActionComponent": "InputIDScreen",
+              "Type": "ActionGotoScreen"
+            }
+          },
+          {
+            "InteractionName": "ChangeSetupWifi",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "btnSetupWifi",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "ScreenTransitionType": "ScreenTransitionCover",
+              "ScreenTransitionDirection": "South",
+              "ActionComponent": "SetupWifiScreen",
+              "Type": "ActionGotoScreen"
+            }
+          }
+        ],
+        "Name": "MainScreen",
+        "OverrideDefaultBufferSize": false,
+        "CanvasBufferSize": 0
+      },
+      {
+        "Components": [
+          {
+            "Color": {
+              "Red": 41,
+              "Green": 73,
+              "Blue": 105
+            },
+            "Alpha": 255,
+            "Name": "Background",
+            "X": 0,
+            "Y": 0,
+            "Width": 800,
+            "Height": 480,
+            "Type": "Box",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Color": {
+              "Red": 145,
+              "Green": 145,
+              "Blue": 145
+            },
+            "Alpha": 255,
+            "Name": "ToolBar",
+            "X": 0,
+            "Y": 0,
+            "Width": 800,
+            "Height": 62,
+            "Type": "Box",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Filename": "ControlGas.png",
+            "Alpha": 255,
+            "ScalingAlgorithm": "Nearest-neighbor",
+            "Name": "logo",
+            "X": 0,
+            "Y": 1,
+            "Width": 153,
+            "Height": 60,
+            "Type": "ScalableImage",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "CustomContainerDefinitionName": "PadNumeric",
+            "Name": "PadNumericID",
+            "X": 54,
+            "Y": 105,
+            "Width": 700,
+            "Height": 294,
+            "Type": "CustomContainerInstance",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId14",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Alpha": 255,
+            "AutoSize": true,
+            "LineSpacing": 0,
+            "Name": "titleInputID",
+            "X": 153,
+            "Y": 137,
+            "Width": 241,
+            "Height": 40,
+            "Type": "TextArea",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Pressed": "__designer\\Blue_Buttons_Round_Edge_small_pressed.png",
+            "Released": "__designer\\Blue_Buttons_Round_Edge_small.png",
+            "Alpha": 255,
+            "TextId": "SingleUseId17",
+            "ReleasedColor": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "PressedColor": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "TextRotation": "0",
+            "Style": "Style4",
+            "Name": "BtnAccept",
+            "X": 309,
+            "Y": 308,
+            "Width": 170,
+            "Height": 60,
+            "Type": "ButtonWithLabel",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Pressed": "__designer\\Blue_Buttons_Round_Edge_small_pressed.png",
+            "Released": "__designer\\Blue_Buttons_Round_Edge_small.png",
+            "Alpha": 255,
+            "TextId": "SingleUseId18",
+            "ReleasedColor": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "PressedColor": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "TextRotation": "0",
+            "Style": "Style4",
+            "Name": "BtnCancel",
+            "X": 68,
+            "Y": 308,
+            "Width": 170,
+            "Height": 60,
+            "Type": "ButtonWithLabel",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "GoMainScreen",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "BtnCancel",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "ScreenTransitionType": "ScreenTransitionCover",
+              "ScreenTransitionDirection": "North",
+              "ActionComponent": "MainScreen",
+              "Type": "ActionGotoScreen"
+            }
+          }
+        ],
+        "Name": "InputIDScreen",
+        "OverrideDefaultBufferSize": false,
+        "CanvasBufferSize": 0
+      },
+      {
+        "Components": [
+          {
+            "Color": {
+              "Red": 41,
+              "Green": 73,
+              "Blue": 105
+            },
+            "Alpha": 255,
+            "Name": "background",
+            "X": 0,
+            "Y": 0,
+            "Width": 800,
+            "Height": 480,
+            "Type": "Box",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Color": {
+              "Red": 145,
+              "Green": 145,
+              "Blue": 145
+            },
+            "Alpha": 255,
+            "Name": "ToolBar",
+            "X": 0,
+            "Y": 0,
+            "Width": 800,
+            "Height": 62,
+            "Type": "Box",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "RelativeFilename": "ControlGas.png",
+            "Alpha": 255,
+            "Name": "logo",
+            "X": 0,
+            "Y": 1,
+            "Width": 153,
+            "Height": 60,
+            "Type": "Image",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Pressed": "__designer\\Blue_Buttons_Round_Edge_icon_button_pressed.png",
+            "Released": "__designer\\Blue_Buttons_Round_Edge_icon_button.png",
+            "Alpha": 255,
+            "IconPressed": "__designer\\Blue_Icons_Search_32.png",
+            "IconReleased": "__designer\\Blue_Icons_Search_32.png",
+            "IconX": 15,
+            "IconY": 15,
+            "IconHeight": 30,
+            "IconWidth": 30,
+            "Name": "btnSearch",
+            "X": 738,
+            "Y": 1,
+            "Width": 60,
+            "Height": 60,
+            "Type": "ButtonWithIcon",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "RelativeFilename": "Background_scroll_list.png",
+            "Alpha": 255,
+            "Name": "bckScroll",
+            "X": 376,
+            "Y": 130,
+            "Width": 410,
+            "Height": 272,
+            "Type": "Image",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Components": [
+              {
+                "Components": [],
+                "Direction": "South",
+                "Name": "list",
+                "X": 0,
+                "Y": 0,
+                "Width": 250,
+                "Height": 250,
+                "Type": "ListLayout",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              }
+            ],
+            "HorizontalScrollEnabled": false,
+            "VerticalScrollEnabled": true,
+            "ScrollbarsVisible": true,
+            "ScrollbarsVisibleOnPressed": true,
+            "ScrollbarsColor": {
+              "Red": 253,
+              "Green": 253,
+              "Blue": 253
+            },
+            "ScrollbarsAlpha": 255,
+            "Name": "CntScroll",
+            "X": 400,
+            "Y": 166,
+            "Width": 360,
+            "Height": 194,
+            "Type": "ScrollableContainer",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId21",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Alpha": 255,
+            "AutoSize": true,
+            "LineSpacing": 0,
+            "Name": "titile",
+            "X": 30,
+            "Y": 96,
+            "Width": 318,
+            "Height": 40,
+            "Type": "TextArea",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId22",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Alpha": 255,
+            "AutoSize": true,
+            "LineSpacing": 0,
+            "Name": "titleSSID",
+            "X": 171,
+            "Y": 154,
+            "Width": 37,
+            "Height": 25,
+            "Type": "TextArea",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId23",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Alpha": 255,
+            "AutoSize": true,
+            "LineSpacing": 0,
+            "Name": "titlePassword",
+            "X": 150,
+            "Y": 251,
+            "Width": 79,
+            "Height": 25,
+            "Type": "TextArea",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Pressed": "__designer\\Blue_Buttons_Round_Edge_icon_button_pressed.png",
+            "Released": "__designer\\Blue_Buttons_Round_Edge_icon_button.png",
+            "Alpha": 255,
+            "IconPressed": "__designer\\Blue_Icons_Remove_32.png",
+            "IconReleased": "__designer\\Blue_Icons_Remove_32.png",
+            "IconX": 16,
+            "IconY": 16,
+            "IconHeight": 29,
+            "IconWidth": 29,
+            "Name": "btnCancel",
+            "X": 30,
+            "Y": 342,
+            "Width": 60,
+            "Height": 60,
+            "Type": "ButtonWithIcon",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Pressed": "__designer\\Blue_Buttons_Round_Edge_icon_button_pressed.png",
+            "Released": "__designer\\Blue_Buttons_Round_Edge_icon_button.png",
+            "Alpha": 255,
+            "IconPressed": "__designer\\Blue_Icons_Done_32.png",
+            "IconReleased": "__designer\\Blue_Icons_Done_32.png",
+            "IconX": 15,
+            "IconY": 15,
+            "IconHeight": 30,
+            "IconWidth": 30,
+            "Name": "btnAccept",
+            "X": 288,
+            "Y": 342,
+            "Width": 60,
+            "Height": 60,
+            "Type": "ButtonWithIcon",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "BorderColor": {
+              "Red": 0,
+              "Green": 0,
+              "Blue": 0
+            },
+            "BorderSize": 5,
+            "Alpha": 255,
+            "Name": "background_SSID",
+            "X": 14,
+            "Y": 192,
+            "Width": 351,
+            "Height": 40,
+            "Type": "BoxWithBorder",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "BorderColor": {
+              "Red": 0,
+              "Green": 0,
+              "Blue": 0
+            },
+            "BorderSize": 5,
+            "Alpha": 255,
+            "Name": "background_Password",
+            "X": 14,
+            "Y": 291,
+            "Width": 351,
+            "Height": 40,
+            "Type": "BoxWithBorder",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId24",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 0,
+              "Green": 0,
+              "Blue": 0
+            },
+            "Alpha": 255,
+            "AutoSize": false,
+            "LineSpacing": 0,
+            "Wildcard1": {
+              "UseBuffer": true,
+              "BufferSize": 22
+            },
+            "Name": "textSSID",
+            "X": 22,
+            "Y": 203,
+            "Width": 335,
+            "Height": 20,
+            "Type": "TextArea",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId25",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 0,
+              "Green": 0,
+              "Blue": 0
+            },
+            "Alpha": 255,
+            "AutoSize": false,
+            "LineSpacing": 0,
+            "Wildcard1": {
+              "UseBuffer": true,
+              "BufferSize": 22
+            },
+            "Name": "textPassword",
+            "X": 22,
+            "Y": 301,
+            "Width": 335,
+            "Height": 20,
+            "Type": "TextArea",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": true,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Components": [
+              {
+                "Pressed": "__designer\\Blue_Buttons_Round_icon_button_pressed.png",
+                "Released": "__designer\\Blue_Buttons_Round_icon_button.png",
+                "Alpha": 255,
+                "TextId": "SingleUseId26",
+                "ReleasedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "PressedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "TextRotation": "0",
+                "Name": "PopupCancel",
+                "X": 9,
+                "Y": 206,
+                "Width": 60,
+                "Height": 60,
+                "Type": "ButtonWithLabel",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
+              {
+                "Pressed": "__designer\\Blue_Buttons_Round_icon_button_pressed.png",
+                "Released": "__designer\\Blue_Buttons_Round_icon_button.png",
+                "Alpha": 255,
+                "TextId": "SingleUseId27",
+                "ReleasedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "PressedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "TextRotation": "0",
+                "Name": "PopupAccept",
+                "X": 430,
+                "Y": 206,
+                "Width": 60,
+                "Height": 60,
+                "Type": "ButtonWithLabel",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              }
+            ],
+            "FileName": "Background_qwerty.png",
+            "Color": {
+              "Red": 0,
+              "Green": 0,
+              "Blue": 0
+            },
+            "ModalX": 150,
+            "ModalY": 105,
+            "ModalWidth": 500,
+            "ModalHeight": 270,
+            "ContX": 0,
+            "ContY": 0,
+            "Alpha": 178,
+            "Name": "Pop_up",
+            "X": 0,
+            "Y": 0,
+            "Width": 800,
+            "Height": 480,
+            "Type": "ModalWindow",
+            "Visible": false,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "BackMain",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "btnCancel",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "ScreenTransitionType": "ScreenTransitionCover",
+              "ScreenTransitionDirection": "North",
+              "ActionComponent": "MainScreen",
+              "Type": "ActionGotoScreen"
+            }
+          },
+          {
+            "InteractionName": "HideQWERTY",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "PopupCancel",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "ActionComponent": "Pop_up",
+              "Type": "ActionHide"
+            }
+          },
+          {
+            "InteractionName": "AcceptPopup",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "PopupAccept",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "FunctionName": "PopupClickAccept",
+              "Type": "ActionCustom"
+            }
+          }
+        ],
+        "Name": "SetupWifiScreen",
+        "OverrideDefaultBufferSize": false,
+        "CanvasBufferSize": 0
+      }
+    ],
+    "CustomContainerDefinitions": [
+      {
+        "Components": [
+          {
+            "Components": [
+              {
+                "Color": {
+                  "Red": 98,
+                  "Green": 98,
+                  "Blue": 98
+                },
+                "Alpha": 255,
+                "Name": "background",
+                "X": 0,
+                "Y": 0,
+                "Width": 228,
+                "Height": 294,
+                "Type": "Box",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
+              {
+                "Pressed": "__designer\\Blue_Buttons_Round_Edge_icon_button_pressed.png",
+                "Released": "__designer\\Blue_Buttons_Round_Edge_icon_button.png",
+                "Alpha": 255,
+                "TextId": "SingleUseId1",
+                "ReleasedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "PressedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "TextRotation": "0",
+                "Name": "button_N1",
+                "X": 13,
+                "Y": 12,
+                "Width": 60,
+                "Height": 60,
+                "Type": "ButtonWithLabel",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
+              {
+                "Pressed": "__designer\\Blue_Buttons_Round_Edge_icon_button_pressed.png",
+                "Released": "__designer\\Blue_Buttons_Round_Edge_icon_button.png",
+                "Alpha": 255,
+                "TextId": "SingleUseId2",
+                "ReleasedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "PressedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "TextRotation": "0",
+                "Name": "button_N2",
+                "X": 83,
+                "Y": 12,
+                "Width": 60,
+                "Height": 60,
+                "Type": "ButtonWithLabel",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
+              {
+                "Pressed": "__designer\\Blue_Buttons_Round_Edge_icon_button_pressed.png",
+                "Released": "__designer\\Blue_Buttons_Round_Edge_icon_button.png",
+                "Alpha": 255,
+                "TextId": "SingleUseId3",
+                "ReleasedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "PressedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "TextRotation": "0",
+                "Name": "button_N3",
+                "X": 153,
+                "Y": 12,
+                "Width": 60,
+                "Height": 60,
+                "Type": "ButtonWithLabel",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
+              {
+                "Pressed": "__designer\\Blue_Buttons_Round_Edge_icon_button_pressed.png",
+                "Released": "__designer\\Blue_Buttons_Round_Edge_icon_button.png",
+                "Alpha": 255,
+                "TextId": "SingleUseId4",
+                "ReleasedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "PressedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "TextRotation": "0",
+                "Name": "button_N4",
+                "X": 13,
+                "Y": 82,
+                "Width": 60,
+                "Height": 60,
+                "Type": "ButtonWithLabel",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
+              {
+                "Pressed": "__designer\\Blue_Buttons_Round_Edge_icon_button_pressed.png",
+                "Released": "__designer\\Blue_Buttons_Round_Edge_icon_button.png",
+                "Alpha": 255,
+                "TextId": "SingleUseId5",
+                "ReleasedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "PressedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "TextRotation": "0",
+                "Name": "button_N5",
+                "X": 83,
+                "Y": 82,
+                "Width": 60,
+                "Height": 60,
+                "Type": "ButtonWithLabel",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
+              {
+                "Pressed": "__designer\\Blue_Buttons_Round_Edge_icon_button_pressed.png",
+                "Released": "__designer\\Blue_Buttons_Round_Edge_icon_button.png",
+                "Alpha": 255,
+                "TextId": "SingleUseId6",
+                "ReleasedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "PressedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "TextRotation": "0",
+                "Name": "button_N6",
+                "X": 153,
+                "Y": 82,
+                "Width": 60,
+                "Height": 60,
+                "Type": "ButtonWithLabel",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
+              {
+                "Pressed": "__designer\\Blue_Buttons_Round_Edge_icon_button_pressed.png",
+                "Released": "__designer\\Blue_Buttons_Round_Edge_icon_button.png",
+                "Alpha": 255,
+                "TextId": "SingleUseId7",
+                "ReleasedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "PressedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "TextRotation": "0",
+                "Name": "button_N7",
+                "X": 13,
+                "Y": 152,
+                "Width": 60,
+                "Height": 60,
+                "Type": "ButtonWithLabel",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
+              {
+                "Pressed": "__designer\\Blue_Buttons_Round_Edge_icon_button_pressed.png",
+                "Released": "__designer\\Blue_Buttons_Round_Edge_icon_button.png",
+                "Alpha": 255,
+                "TextId": "SingleUseId8",
+                "ReleasedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "PressedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "TextRotation": "0",
+                "Name": "button_N8",
+                "X": 83,
+                "Y": 152,
+                "Width": 60,
+                "Height": 60,
+                "Type": "ButtonWithLabel",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
+              {
+                "Pressed": "__designer\\Blue_Buttons_Round_Edge_icon_button_pressed.png",
+                "Released": "__designer\\Blue_Buttons_Round_Edge_icon_button.png",
+                "Alpha": 255,
+                "TextId": "SingleUseId9",
+                "ReleasedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "PressedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "TextRotation": "0",
+                "Name": "button_N9",
+                "X": 153,
+                "Y": 152,
+                "Width": 60,
+                "Height": 60,
+                "Type": "ButtonWithLabel",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
+              {
+                "Pressed": "__designer\\Blue_Buttons_Round_Edge_icon_button_pressed.png",
+                "Released": "__designer\\Blue_Buttons_Round_Edge_icon_button.png",
+                "Alpha": 255,
+                "TextId": "SingleUseId10",
+                "ReleasedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "PressedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "TextRotation": "0",
+                "Name": "button_N0",
+                "X": 83,
+                "Y": 222,
+                "Width": 60,
+                "Height": 60,
+                "Type": "ButtonWithLabel",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
+              {
+                "Pressed": "__designer\\Blue_Buttons_Round_Edge_icon_button_pressed.png",
+                "Released": "__designer\\Blue_Buttons_Round_Edge_icon_button.png",
+                "Alpha": 255,
+                "TextId": "SingleUseId16",
+                "ReleasedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "PressedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "TextRotation": "0",
+                "Name": "button_decimal",
+                "X": 13,
+                "Y": 222,
+                "Width": 60,
+                "Height": 60,
+                "Type": "ButtonWithLabel",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
+              {
+                "Pressed": "__designer\\Blue_Buttons_Round_Edge_icon_button_pressed.png",
+                "Released": "__designer\\Blue_Buttons_Round_Edge_icon_button.png",
+                "Alpha": 255,
+                "IconPressed": "__designer\\Dark_Icons_trash_32.png",
+                "IconReleased": "__designer\\Dark_Icons_trash_32.png",
+                "IconX": 17,
+                "IconY": 14,
+                "IconHeight": 32,
+                "IconWidth": 26,
+                "Name": "button_delete",
+                "X": 153,
+                "Y": 222,
+                "Width": 60,
+                "Height": 60,
+                "Type": "ButtonWithIcon",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              }
+            ],
+            "IsCacheableContainer": false,
+            "Name": "ContainerKeyboard",
+            "X": 472,
+            "Y": 0,
+            "Width": 228,
+            "Height": 294,
+            "Type": "Container",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "BorderColor": {
+              "Red": 0,
+              "Green": 0,
+              "Blue": 0
+            },
+            "BorderSize": 5,
+            "Alpha": 255,
+            "Name": "bkgTextID",
+            "X": 15,
+            "Y": 122,
+            "Width": 404,
+            "Height": 53,
+            "Type": "BoxWithBorder",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId19",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 0,
+              "Green": 0,
+              "Blue": 0
+            },
+            "Alpha": 255,
+            "AutoSize": false,
+            "LineSpacing": 0,
+            "Wildcard1": {
+              "UseBuffer": true,
+              "BufferSize": 20
+            },
+            "Name": "textArea",
+            "X": 22,
+            "Y": 128,
+            "Width": 392,
+            "Height": 40,
+            "Type": "TextArea",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "Button1",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "button_N1",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "FunctionName": "Btn1Click",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "Button2",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "button_N2",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "FunctionName": "Btn2Click",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "Button3",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "button_N3",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "FunctionName": "Btn3Click",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "Button4",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "button_N4",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "FunctionName": "Btn4Click",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "Button5",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "button_N5",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "FunctionName": "Btn5Click",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "Button6",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "button_N6",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "FunctionName": "Btn6Click",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "Button7",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "button_N7",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "FunctionName": "Btn7Click",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "Button8",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "button_N8",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "FunctionName": "Btn8Click",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "Button9",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "button_N9",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "FunctionName": "Btn9Click",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "Button0",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "button_N0",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "FunctionName": "Btn0Click",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "ButtonDecimal",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "button_decimal",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "FunctionName": "BtnDecimalClick",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "ButtonDelete",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "button_delete",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "FunctionName": "BtnDeleteClick",
+              "Type": "ActionCustom"
+            }
+          }
+        ],
+        "Name": "PadNumeric",
+        "X": 0,
+        "Y": 0,
+        "Width": 700,
+        "Height": 294
+      },
+      {
+        "Components": [
+          {
+            "Color": {
+              "Red": 131,
+              "Green": 129,
+              "Blue": 129
+            },
+            "BorderColor": {
+              "Red": 175,
+              "Green": 175,
+              "Blue": 175
+            },
+            "BorderSize": 3,
+            "Alpha": 255,
+            "Name": "background",
+            "X": 0,
+            "Y": 0,
+            "Width": 357,
+            "Height": 61,
+            "Type": "BoxWithBorder",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId20",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Alpha": 255,
+            "AutoSize": false,
+            "LineSpacing": 0,
+            "Wildcard1": {
+              "UseBuffer": true,
+              "BufferSize": 22
+            },
+            "Name": "label",
+            "X": 6,
+            "Y": 18,
+            "Width": 287,
+            "Height": 25,
+            "Type": "TextArea",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "RelativeFilename": "Signal_0.png",
+            "Alpha": 255,
+            "Name": "image",
+            "X": 293,
+            "Y": 4,
+            "Width": 60,
+            "Height": 55,
+            "Type": "Image",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Alpha": 0,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "BoxWithBorderButtonStyle",
+                "X": 0,
+                "Y": 0,
+                "Width": 357,
+                "Height": 61,
+                "LockToFlexButtonSize": true,
+                "BorderSize": 5,
+                "ColorReleased": {
+                  "Red": 0,
+                  "Green": 102,
+                  "Blue": 153
+                },
+                "ColorPressed": {
+                  "Red": 0,
+                  "Green": 153,
+                  "Blue": 204
+                },
+                "ColorBorderReleased": {
+                  "Red": 0,
+                  "Green": 51,
+                  "Blue": 102
+                },
+                "ColorBorderPressed": {
+                  "Red": 51,
+                  "Green": 102,
+                  "Blue": 153
+                }
+              }
+            ],
+            "Name": "btnItem",
+            "X": 0,
+            "Y": 0,
+            "Width": 357,
+            "Height": 61,
+            "Type": "FlexButton",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "Selection_Item",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "btnItem",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "FunctionName": "SelectItem",
+              "Type": "ActionCustom"
+            }
+          }
+        ],
+        "Name": "ItemList",
+        "X": 0,
+        "Y": 0,
+        "Width": 357,
+        "Height": 61
+      }
+    ],
+    "TextEntries": [
+      {
+        "TextEntryId": "SingleUseId1",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId2",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId3",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId4",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId5",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId6",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId7",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId8",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId9",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId10",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId11",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId12",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId13",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId14",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId16",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId17",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId18",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId19",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId20",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId21",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId22",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId23",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId24",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId25",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId26",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId27",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "EnteredText",
+        "IsResource": true
+      },
+      {
+        "TextEntryId": "NumMode",
+        "IsResource": true
+      },
+      {
+        "TextEntryId": "AlphaMode",
+        "IsResource": true
+      }
+    ],
+    "Name": "ATIOGUI",
+    "Resolution": {
+      "Width": 800,
+      "Height": 480
+    },
+    "SelectedColorDepth": 24,
+    "StartupScreenName": "MainScreen",
+    "SelectedStartupLanguage": "GB",
+    "Skin": "Blue",
+    "TouchGfxPath": "../Middlewares/ST/touchgfx",
+    "UIPath": ".",
+    "AvailableColorDepths": [
+      24
+    ],
+    "AvailableLCDs": {
+      "24": "LCD24bpp"
+    },
+    "AvailableSections": [
+      "ExtFlashSection",
+      "IntFlashSection"
+    ],
+    "AvailableResolutions": [
+      {
+        "Width": 800,
+        "Height": 480
+      }
+    ],
+    "PhysicalButtons": [],
+    "FrameworkFeatures": {
+      "LCD24bpp": {
+        "Id": "LCD24bpp",
+        "IsEnabled": true
+      }
+    },
+    "GenerateAssetsCommand": "make -f simulator/gcc/Makefile assets -j8",
+    "PostGenerateCommand": "touchgfx update_project --project-file=simulator/msvs/Application.vcxproj",
+    "PostGenerateTargetCommand": "touchgfx update_project --project-file=../ATIOGUI.ioc --platform=m7",
+    "CompileSimulatorCommand": "make -f simulator/gcc/Makefile -j8",
+    "RunSimulatorCommand": "build\\bin\\simulator.exe",
+    "LandscapeSkinX": 0,
+    "LandscapeSkinY": 0,
+    "PortraitSkinX": 0,
+    "PortraitSkinY": 0,
+    "DisplayOrientation": "Landscape"
+  },
+  "Version": "4.14.0"
+}
