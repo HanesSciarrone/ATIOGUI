@@ -29,6 +29,8 @@
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
+typedef StaticSemaphore_t osStaticMutexDef_t;
+typedef StaticSemaphore_t osStaticSemaphoreDef_t;
 /* USER CODE BEGIN PTD */
 
 /* USER CODE END PTD */
@@ -81,6 +83,8 @@ LTDC_HandleTypeDef hltdc;
 
 QSPI_HandleTypeDef hqspi;
 
+UART_HandleTypeDef huart5;
+
 SDRAM_HandleTypeDef hsdram1;
 
 /* Definitions for TouchGFXTask */
@@ -89,6 +93,29 @@ const osThreadAttr_t TouchGFXTask_attributes = {
   .name = "TouchGFXTask",
   .priority = (osPriority_t) osPriorityNormal,
   .stack_size = 2048 * 4
+};
+/* Definitions for TaskWifi */
+osThreadId_t TaskWifiHandle;
+const osThreadAttr_t TaskWifi_attributes = {
+  .name = "TaskWifi",
+  .priority = (osPriority_t) osPriorityNormal2,
+  .stack_size = 1024 * 4
+};
+/* Definitions for mutex_NewMsg_Wifi */
+osMutexId_t mutex_NewMsg_WifiHandle;
+osStaticMutexDef_t mutex_NewMsg_WifiControlBlock;
+const osMutexAttr_t mutex_NewMsg_Wifi_attributes = {
+  .name = "mutex_NewMsg_Wifi",
+  .cb_mem = &mutex_NewMsg_WifiControlBlock,
+  .cb_size = sizeof(mutex_NewMsg_WifiControlBlock),
+};
+/* Definitions for sem_Wifi_OpComplete */
+osSemaphoreId_t sem_Wifi_OpCompleteHandle;
+osStaticSemaphoreDef_t sem_Wifi_OpCompletControlBlock;
+const osSemaphoreAttr_t sem_Wifi_OpComplete_attributes = {
+  .name = "sem_Wifi_OpComplete",
+  .cb_mem = &sem_Wifi_OpCompletControlBlock,
+  .cb_size = sizeof(sem_Wifi_OpCompletControlBlock),
 };
 /* USER CODE BEGIN PV */
 
@@ -102,10 +129,12 @@ static void MX_CRC_Init(void);
 static void MX_DMA2D_Init(void);
 static void MX_DSIHOST_DSI_Init(void);
 static void MX_FMC_Init(void);
-void MX_I2C4_Init(void);
+static void MX_I2C4_Init(void);
 static void MX_LTDC_Init(void);
 static void MX_QUADSPI_Init(void);
+static void MX_UART5_Init(void);
 void TouchGFX_Task(void *argument);
+void ModuleWifi(void *argument);
 
 /* USER CODE BEGIN PFP */
 static void BSP_SDRAM_Initialization_Sequence(SDRAM_HandleTypeDef *hsdram, FMC_SDRAM_CommandTypeDef *Command);
@@ -169,6 +198,7 @@ int main(void)
   MX_I2C4_Init();
   MX_LTDC_Init();
   MX_QUADSPI_Init();
+  MX_UART5_Init();
   MX_TouchGFX_Init();
   /* USER CODE BEGIN 2 */
 
@@ -176,10 +206,17 @@ int main(void)
 
   /* Init scheduler */
   osKernelInitialize();
+  /* Create the mutex(es) */
+  /* creation of mutex_NewMsg_Wifi */
+  mutex_NewMsg_WifiHandle = osMutexNew(&mutex_NewMsg_Wifi_attributes);
 
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
   /* USER CODE END RTOS_MUTEX */
+
+  /* Create the semaphores(s) */
+  /* creation of sem_Wifi_OpComplete */
+  sem_Wifi_OpCompleteHandle = osSemaphoreNew(1, 1, &sem_Wifi_OpComplete_attributes);
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
@@ -196,6 +233,9 @@ int main(void)
   /* Create the thread(s) */
   /* creation of TouchGFXTask */
   TouchGFXTaskHandle = osThreadNew(TouchGFX_Task, NULL, &TouchGFXTask_attributes);
+
+  /* creation of TaskWifi */
+  TaskWifiHandle = osThreadNew(ModuleWifi, NULL, &TaskWifi_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -264,13 +304,15 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_LTDC|RCC_PERIPHCLK_I2C4;
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_LTDC|RCC_PERIPHCLK_UART5
+                              |RCC_PERIPHCLK_I2C4;
   PeriphClkInitStruct.PLLSAI.PLLSAIN = 417;
   PeriphClkInitStruct.PLLSAI.PLLSAIR = 5;
   PeriphClkInitStruct.PLLSAI.PLLSAIQ = 2;
   PeriphClkInitStruct.PLLSAI.PLLSAIP = RCC_PLLSAIP_DIV2;
   PeriphClkInitStruct.PLLSAIDivQ = 1;
   PeriphClkInitStruct.PLLSAIDivR = RCC_PLLSAIDIVR_2;
+  PeriphClkInitStruct.Uart5ClockSelection = RCC_UART5CLKSOURCE_PCLK1;
   PeriphClkInitStruct.I2c4ClockSelection = RCC_I2C4CLKSOURCE_PCLK1;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
@@ -458,7 +500,7 @@ static void MX_DSIHOST_DSI_Init(void)
   * @param None
   * @retval None
   */
-void MX_I2C4_Init(void)
+static void MX_I2C4_Init(void)
 {
 
   /* USER CODE BEGIN I2C4_Init 0 */
@@ -671,6 +713,41 @@ static void MX_QUADSPI_Init(void)
 
 }
 
+/**
+  * @brief UART5 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_UART5_Init(void)
+{
+
+  /* USER CODE BEGIN UART5_Init 0 */
+
+  /* USER CODE END UART5_Init 0 */
+
+  /* USER CODE BEGIN UART5_Init 1 */
+
+  /* USER CODE END UART5_Init 1 */
+  huart5.Instance = UART5;
+  huart5.Init.BaudRate = 115200;
+  huart5.Init.WordLength = UART_WORDLENGTH_8B;
+  huart5.Init.StopBits = UART_STOPBITS_1;
+  huart5.Init.Parity = UART_PARITY_NONE;
+  huart5.Init.Mode = UART_MODE_TX_RX;
+  huart5.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart5.Init.OverSampling = UART_OVERSAMPLING_16;
+  huart5.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+  huart5.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  if (HAL_UART_Init(&huart5) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN UART5_Init 2 */
+
+  /* USER CODE END UART5_Init 2 */
+
+}
+
 /* FMC initialization function */
 static void MX_FMC_Init(void)
 {
@@ -736,11 +813,11 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOE_CLK_ENABLE();
+  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOG_CLK_ENABLE();
   __HAL_RCC_GPIOJ_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
-  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOI_CLK_ENABLE();
   __HAL_RCC_GPIOK_CLK_ENABLE();
   __HAL_RCC_GPIOF_CLK_ENABLE();
@@ -1448,6 +1525,24 @@ __weak void TouchGFX_Task(void *argument)
     osDelay(1);
   }
   /* USER CODE END 5 */
+}
+
+/* USER CODE BEGIN Header_ModuleWifi */
+/**
+* @brief Function implementing the TaskWifi thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_ModuleWifi */
+void ModuleWifi(void *argument)
+{
+  /* USER CODE BEGIN ModuleWifi */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END ModuleWifi */
 }
 
 /* MPU Configuration */
