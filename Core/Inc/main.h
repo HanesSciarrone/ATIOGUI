@@ -113,7 +113,7 @@ void Error_Handler(void);
 #define ARD_D2_Pin GPIO_PIN_1
 #define ARD_D2_GPIO_Port GPIOJ
 /* USER CODE BEGIN Private defines */
-
+void MX_I2C4_Init(void);
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

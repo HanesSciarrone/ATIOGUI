@@ -29,8 +29,6 @@
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
-typedef StaticSemaphore_t osStaticMutexDef_t;
-typedef StaticSemaphore_t osStaticSemaphoreDef_t;
 /* USER CODE BEGIN PTD */
 
 /* USER CODE END PTD */
@@ -94,29 +92,6 @@ const osThreadAttr_t TouchGFXTask_attributes = {
   .priority = (osPriority_t) osPriorityNormal,
   .stack_size = 2048 * 4
 };
-/* Definitions for TaskWifi */
-osThreadId_t TaskWifiHandle;
-const osThreadAttr_t TaskWifi_attributes = {
-  .name = "TaskWifi",
-  .priority = (osPriority_t) osPriorityNormal2,
-  .stack_size = 1024 * 4
-};
-/* Definitions for mutex_NewMsg_Wifi */
-osMutexId_t mutex_NewMsg_WifiHandle;
-osStaticMutexDef_t mutex_NewMsg_WifiControlBlock;
-const osMutexAttr_t mutex_NewMsg_Wifi_attributes = {
-  .name = "mutex_NewMsg_Wifi",
-  .cb_mem = &mutex_NewMsg_WifiControlBlock,
-  .cb_size = sizeof(mutex_NewMsg_WifiControlBlock),
-};
-/* Definitions for sem_Wifi_OpComplete */
-osSemaphoreId_t sem_Wifi_OpCompleteHandle;
-osStaticSemaphoreDef_t sem_Wifi_OpCompletControlBlock;
-const osSemaphoreAttr_t sem_Wifi_OpComplete_attributes = {
-  .name = "sem_Wifi_OpComplete",
-  .cb_mem = &sem_Wifi_OpCompletControlBlock,
-  .cb_size = sizeof(sem_Wifi_OpCompletControlBlock),
-};
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -129,12 +104,11 @@ static void MX_CRC_Init(void);
 static void MX_DMA2D_Init(void);
 static void MX_DSIHOST_DSI_Init(void);
 static void MX_FMC_Init(void);
-static void MX_I2C4_Init(void);
+void MX_I2C4_Init(void);
 static void MX_LTDC_Init(void);
 static void MX_QUADSPI_Init(void);
 static void MX_UART5_Init(void);
 void TouchGFX_Task(void *argument);
-void ModuleWifi(void *argument);
 
 /* USER CODE BEGIN PFP */
 static void BSP_SDRAM_Initialization_Sequence(SDRAM_HandleTypeDef *hsdram, FMC_SDRAM_CommandTypeDef *Command);
@@ -206,17 +180,10 @@ int main(void)
 
   /* Init scheduler */
   osKernelInitialize();
-  /* Create the mutex(es) */
-  /* creation of mutex_NewMsg_Wifi */
-  mutex_NewMsg_WifiHandle = osMutexNew(&mutex_NewMsg_Wifi_attributes);
 
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
   /* USER CODE END RTOS_MUTEX */
-
-  /* Create the semaphores(s) */
-  /* creation of sem_Wifi_OpComplete */
-  sem_Wifi_OpCompleteHandle = osSemaphoreNew(1, 1, &sem_Wifi_OpComplete_attributes);
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
@@ -233,9 +200,6 @@ int main(void)
   /* Create the thread(s) */
   /* creation of TouchGFXTask */
   TouchGFXTaskHandle = osThreadNew(TouchGFX_Task, NULL, &TouchGFXTask_attributes);
-
-  /* creation of TaskWifi */
-  TaskWifiHandle = osThreadNew(ModuleWifi, NULL, &TaskWifi_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -500,7 +464,7 @@ static void MX_DSIHOST_DSI_Init(void)
   * @param None
   * @retval None
   */
-static void MX_I2C4_Init(void)
+void MX_I2C4_Init(void)
 {
 
   /* USER CODE BEGIN I2C4_Init 0 */
@@ -1525,24 +1489,6 @@ __weak void TouchGFX_Task(void *argument)
     osDelay(1);
   }
   /* USER CODE END 5 */
-}
-
-/* USER CODE BEGIN Header_ModuleWifi */
-/**
-* @brief Function implementing the TaskWifi thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_ModuleWifi */
-void ModuleWifi(void *argument)
-{
-  /* USER CODE BEGIN ModuleWifi */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END ModuleWifi */
 }
 
 /* MPU Configuration */

@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-//#define WIFI_RTOS
+#define WIFI_RTOS
 
 ///  Time of wait to start read response of command send.
 #define TIME_MS_MSG_RESPONSE	250

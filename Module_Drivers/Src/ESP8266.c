@@ -28,7 +28,7 @@
 
 #define KEEPALIVE_CONNECTION	60UL
 
-static typedef enum
+typedef enum
 {
 	ESP8266_FALSE = 0,
 	ESP8266_TRUE
@@ -43,48 +43,23 @@ uint32_t templength = 0;
 const ESP8266_CommInterface_s *commInterface;
 /* -------------------------------------- */
 
-static char* itoa(int value, char* result, int base);
 static void ESP8266_Delay(uint32_t delay);
 static uint16_t ESP8266_ParseLengthData(uint8_t *command, uint16_t size, const uint32_t lengthData);
 static ESP8266_StatusTypeDef_t ESP8266_Sent(uint8_t *data, uint16_t length, const uint8_t *pattern);
 static ESP8266_StatusTypeDef_t ESP8266_SendCommand(uint16_t length, const uint8_t *pattern);
 
 
-static char* itoa(int value, char* result, int base) 
-{
-   // check that the base if valid
-   if (base < 2 || base > 36) 
-   	{ 
-   		*result = '\0'; return result; 
-	}
-
-   char* ptr = result, *ptr1 = result, tmp_char;
-   int tmp_value;
-
-   do 
-   {
-      tmp_value = value;
-      value /= base;
-      *ptr++ = "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz" [35 + (tmp_value - value * base)];
-   } while ( value );
-
-   // Apply negative sign
-   if (tmp_value < 0) *ptr++ = '-';
-   *ptr-- = '\0';
-   while(ptr1 < ptr) 
-   {
-      tmp_char = *ptr;
-      *ptr--= *ptr1;
-      *ptr1++ = tmp_char;
-   }
-   return result;
-}
 
 static void ESP8266_Delay(uint32_t delay)
 {
-	uint32_t i;
+#ifdef WIFI_RTOS
+	osDelay(delay/portTICK_PERIOD_MS);
+#else
+	uint32_t startTick;
 
-	for (i = 0; i < delay*100000; i++);
+	startTick = HAL_GetTick();
+	while( HAL_GetTick() - startTick < delay );
+#endif
 }
 
 static uint16_t ESP8266_ParseLengthData(uint8_t *command, uint16_t size, const uint32_t lengthData)
@@ -154,7 +129,7 @@ static ESP8266_StatusTypeDef_t ESP8266_SendCommand(uint16_t length, const uint8_
 	offset = 0;
 	while( commInterface->recv(&charRx, 1) != 0 )
 	{
-		buffSSerRx[offset++] = charRx;
+		bufferRx[offset++] = charRx;
 
 		if( offset == MAX_BUFFER_SIZE )
 		{
