@@ -4,7 +4,7 @@
  *  Created on: 30 ago. 2020
  *      Author: Hanes
  */
-#include <UART.h>
+#include "UART.h"
 
 #ifdef WIFI_UART_RTOS
 #include "cmsis_os.h"
@@ -71,7 +71,7 @@ bool_t WifiUART_Operation_Init(void)
 	return TRUE;
 }
 
-int8_t WifiUART_Send(uint8_t* data, uint32_t length)
+int8_t WifiUART_Send(const uint8_t* data, uint32_t length)
 {
 #ifdef WIFI_UART_RTOS
 	if (HAL_UART_Transmit_IT(uartWifi, (uint8_t*)data, length) != HAL_OK)

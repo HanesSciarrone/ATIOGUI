@@ -25,6 +25,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "UART.h"
+#include "ModuleWifi.h"
 
 #include "mx25l512.h"
 #include "otm8009a.h"
@@ -203,7 +204,10 @@ int main(void)
   TouchGFXTaskHandle = osThreadNew(TouchGFX_Task, NULL, &TouchGFXTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
-  /* add threads, ... */
+  if (ModuleWifi_Started() == FALSE)
+  {
+	  Error_Handler();
+  }
   /* USER CODE END RTOS_THREADS */
 
   /* Start scheduler */

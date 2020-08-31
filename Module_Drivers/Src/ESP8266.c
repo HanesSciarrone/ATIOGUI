@@ -213,6 +213,14 @@ ESP8266_StatusTypeDef_t ESP8266_SetListNeetwork(void)
 	return ESP8266_SendCommand(17, (const uint8_t *)AT_OK);
 }
 
+ESP8266_StatusTypeDef_t ESP8266_ScanNetwork(void)
+{
+	strncpy((char *)bufferCmd, "\0", MAX_BUFFER_SIZE);
+	strncpy((char *)bufferCmd, "AT+CWLAP\r\n", strlen("AT+CWLAP\r\n"));
+
+	return ESP8266_SendCommand(10, (const uint8_t *)AT_OK);
+}
+
 
 ESP8266_StatusTypeDef_t ESP8266_StatusNetwork(void)
 {

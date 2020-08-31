@@ -5,10 +5,13 @@
  *      Author: Hanes
  */
 
+#include <stdlib.h>
+#include <string.h>
 #include <stddef.h>
 
 #include "cmsis_os.h"
 #include "ModuleWifi.h"
+#include "UART.h"
 
 /* Include of module driver */
 #include "ESP8266.h"
@@ -45,6 +48,8 @@ const osSemaphoreAttr_t sem_Wifi_OpComplete_attributes = {
 
 /* Private variable ----------------------------------------------------------*/
 static ESP8266_CommInterface_s commInterface;
+static WifiModule_Operation operation;	// Variable used to indicate to task what must do
+static ListNetwork_t listNetwork[MAX_COUNT_LIST];
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -70,10 +75,81 @@ static bool_t WifiModule_Comm_Init(void);
  */
 static bool_t WifiModule_Init(void);
 
+/**
+ * @brief Function used to configure information will give Wi-Fi module
+ * about nearby network and search that.
+ *
+ * @param[in, out] Structure with all data saved
+ *
+ * @return Return 1 if operation is success or 0 in otherwise
+ */
+static bool_t ModuleWifi_ScanNetwork(void);
+
 
 
 
 /* Private function implementation --------------------------------------------*/
+static bool_t ModuleWifi_ScanNetwork(void)
+{
+	uint8_t buffer[MAX_BUFFER_SIZE], *ptrStart, *ptrEnd;
+	uint8_t lvl_signal[4];
+	uint8_t index = 0;
+
+	memset(listNetwork, 0, MAX_COUNT_LIST*sizeof(ListNetwork_t));
+	if (ESP8266_SetListNeetwork() != ESP8266_OK)
+	{
+		return FALSE;
+	}
+
+	if (ESP8266_ScanNetwork() != ESP8266_OK)
+	{
+		return FALSE;
+	}
+
+	ESP8266_GetModuleResponse(buffer, MAX_BUFFER_SIZE);
+	ptrStart = buffer;
+
+	while((ptrStart = (uint8_t *)strstr((const char *)ptrStart, "+CWLAP:")) != NULL)
+	{
+		ptrStart += 9;	// Start of network name
+		ptrEnd = (uint8_t *)strstr((const char *)ptrStart, "\",-"); //Looking for network name end
+
+		// If string is cut so exit of loop
+		if (ptrEnd == NULL)
+		{
+			break;
+		}
+		// Ask of larger than buffer
+		if (ptrEnd-ptrStart < 21)
+		{
+			strncpy((char *)listNetwork[index].ssid, (char *)ptrStart, ptrEnd-ptrStart);
+		}
+		else
+		{
+			strncpy((char *)listNetwork[index].ssid, (char *)ptrStart, 20);
+		}
+		listNetwork[index].ssid[21] = '\0';
+
+		//Move pointer to end of name
+		ptrStart = ptrEnd;
+		ptrEnd = (uint8_t *)strstr((const char *)ptrStart, ")\r\n"); //Looking for network name end
+		if (ptrEnd == NULL)
+		{
+			break;
+		}
+
+		// Move pointer to divisor between name and signal strength
+		ptrStart += 2;
+		memset(lvl_signal, 0, 4);
+		strncpy((char *)lvl_signal, (char *)ptrStart, 3);
+		listNetwork[index].rssi = atoi((char *)lvl_signal);
+
+		index++;
+	}
+
+	return TRUE;
+}
+
 static bool_t WifiModule_Init(void)
 {
 	// Configure module for avoid echo
@@ -99,17 +175,15 @@ static bool_t WifiModule_Init(void)
 
 static bool_t WifiModule_Comm_Init(void)
 {
-	//commInterface.send = &WIFI_UART_Send;
-	//commInterface.recv = &WIFI_UART_Receive;
+	commInterface.send = &WifiUART_Send;
+	commInterface.recv = &WifiUART_Receive;
 
 	return (ESP8266_CommInterface_Init(&commInterface) == ESP8266_OK) ? TRUE : FALSE;
 }
 
 static void ModuleWifi(void *argument)
 {
-	ESP8266_StatusTypeDef_t status;
-
-
+	bool_t result_Operation = TRUE;
 	/* Initialization of library ESP8266 */
 	if (!WifiModule_Comm_Init())
 	{
@@ -126,9 +200,27 @@ static void ModuleWifi(void *argument)
 		osThreadTerminate(TaskWifiHandle);
 	}
 
+	operation = SCAN_NETWORK;
+
 	while(1)
 	{
-		osDelay(1/portTICK_PERIOD_MS);
+		switch(operation)
+		{
+			case SCAN_NETWORK:
+			{
+				result_Operation = ModuleWifi_ScanNetwork();
+			}
+			break;
+
+			default:
+			{
+				result_Operation = FALSE;
+			}
+		}
+
+		osSemaphoreRelease(sem_Wifi_OpCompleteHandle);
+
+		osDelay(1000/portTICK_PERIOD_MS);
 	}
 	/* USER CODE END ModuleWifi */
 }

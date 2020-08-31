@@ -59,8 +59,18 @@ ESP8266_StatusTypeDef_t ESP8266_SetMultipleConnection(uint8_t *mode);
 /**
  * @brief Set which parameters will be shown when you list all network near.
  * This implementation only set ssid and rssi as parameters.
+ *
+ * @return Return ESP8266_OK if operation was success or ESP8266_ERROR in otherwise
  */
 ESP8266_StatusTypeDef_t ESP8266_SetListNeetwork(void);
+
+/**
+ * @brief Scan nearby network.
+ *
+ * @return Return ESP8266_OK if operation was success or ESP8266_ERROR in otherwise
+ */
+ESP8266_StatusTypeDef_t ESP8266_ScanNetwork(void);
+
 ESP8266_StatusTypeDef_t ESP8266_StatusNetwork(void);
 ESP8266_StatusTypeDef_t ESP8266_DisconnectAllNetwork(void);
 ESP8266_StatusTypeDef_t ESP8266_ConnectionNetwork(const ESP8266_NetworkParameters_s *network);

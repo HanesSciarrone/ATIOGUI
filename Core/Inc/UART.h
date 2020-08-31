@@ -39,7 +39,7 @@ bool_t WifiUART_Operation_Init(void);
   *
   * @return Return 0 if operation was success or -1 in otherwise.
   */
-int8_t WifiUART_Send(uint8_t* data, uint32_t length);
+int8_t WifiUART_Send(const uint8_t* data, uint32_t length);
 
 /**
   * @brief  Receive Data from the Wi-Fi module over the UART interface.
