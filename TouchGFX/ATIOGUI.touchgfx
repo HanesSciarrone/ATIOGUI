@@ -903,6 +903,18 @@
               "FunctionName": "PopupClickAccept",
               "Type": "ActionCustom"
             }
+          },
+          {
+            "InteractionName": "Scan",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "btnSearch",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "FunctionName": "ScanNetwork",
+              "Type": "ActionCustom"
+            }
           }
         ],
         "Name": "SetupWifiScreen",

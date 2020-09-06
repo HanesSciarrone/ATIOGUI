@@ -1,5 +1,7 @@
 #include <gui/containers/ItemList.hpp>
 
+/* Include added for user */
+#include "string.h"
 
 ItemList::ItemList()
 {
@@ -11,12 +13,12 @@ void ItemList::initialize()
     ItemListBase::initialize();
 }
 
-void ItemList::SetupListElement(const Bitmap &iconBMP, const string text)
+void ItemList::SetupListElement(const Bitmap &iconBMP, const char *text)
 {
 	uint8_t index;
 
 	// If network name is greater than buffer I ignore it
-	if (text.length() >= LABEL_SIZE-1)
+	if (strlen(text) >= LABEL_SIZE-1)
 	{
 		return;
 	}
@@ -24,9 +26,9 @@ void ItemList::SetupListElement(const Bitmap &iconBMP, const string text)
 	image.setBitmap(iconBMP);
 
 	// Set text on label
-	for (index = 0; index < text.length(); index++)
+	for (index = 0; index < strlen(text); index++)
 	{
-		labelBuffer[index] = text.at(index);
+		labelBuffer[index] = text[index];
 	}
 	labelBuffer[index] = '\0';
 

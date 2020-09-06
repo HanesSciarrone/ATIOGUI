@@ -35,6 +35,11 @@ public:
         // Override and implement this function in SetupWifiScreen
     }
 
+    virtual void ScanNetwork()
+    {
+        // Override and implement this function in SetupWifiScreen
+    }
+
 protected:
     FrontendApplication& application() {
         return *static_cast<FrontendApplication*>(touchgfx::Application::getInstance());

@@ -16,3 +16,13 @@ void SetupWifiScreenPresenter::deactivate()
 {
 
 }
+
+void SetupWifiScreenPresenter::MsgScanNetwork()
+{
+	model->MsgScanNetwork();
+}
+
+void SetupWifiScreenPresenter::ResultScandNetwork(WifiMessage_t *networks)
+{
+	view.FillOptionNetwork(networks);
+}

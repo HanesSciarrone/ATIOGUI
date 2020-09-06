@@ -22,6 +22,7 @@ SetupWifiScreenViewBase::SetupWifiScreenViewBase() :
     btnSearch.setXY(738, 1);
     btnSearch.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_ICON_BUTTON_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_ICON_BUTTON_PRESSED_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_SEARCH_32_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_SEARCH_32_ID));
     btnSearch.setIconXY(15, 15);
+    btnSearch.setAction(buttonCallback);
 
     bckScroll.setXY(376, 130);
     bckScroll.setBitmap(touchgfx::Bitmap(BITMAP_BACKGROUND_SCROLL_LIST_ID));
@@ -129,7 +130,14 @@ void SetupWifiScreenViewBase::setupScreen()
 
 void SetupWifiScreenViewBase::buttonCallbackHandler(const touchgfx::AbstractButton& src)
 {
-    if (&src == &btnCancel)
+    if (&src == &btnSearch)
+    {
+        //Scan
+        //When btnSearch clicked call virtual function
+        //Call ScanNetwork
+        ScanNetwork();
+    }
+    else if (&src == &btnCancel)
     {
         //BackMain
         //When btnCancel clicked change screen to MainScreen

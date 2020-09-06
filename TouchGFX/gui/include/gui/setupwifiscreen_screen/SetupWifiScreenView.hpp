@@ -7,6 +7,7 @@
 /* Include added for user */
 #include "gui/containers/ItemList.hpp"
 #include "gui/common/CustomKeyboard.hpp"
+#include "ModuleWifi.h"
 
 class SetupWifiScreenView : public SetupWifiScreenViewBase
 {
@@ -22,6 +23,12 @@ public:
     void textAreaClickHandler(const TextAreaWithOneWildcard& object, const ClickEvent& event);
 
     virtual void PopupClickAccept();
+
+    /* Action of search button */
+    virtual void ScanNetwork();
+
+    /* Action when you have result of scan network */
+    virtual void FillOptionNetwork(WifiMessage_t *networks);
 
 protected:
 

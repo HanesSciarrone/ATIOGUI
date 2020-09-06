@@ -13,6 +13,8 @@ public:
         modelListener = listener;
     }
 
+    void MsgScanNetwork();
+
     void tick();
 protected:
     ModelListener* modelListener;

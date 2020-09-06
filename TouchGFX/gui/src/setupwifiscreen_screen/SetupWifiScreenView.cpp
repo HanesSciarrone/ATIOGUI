@@ -16,32 +16,8 @@ SetupWifiScreenView::SetupWifiScreenView()
 
 void SetupWifiScreenView::setupScreen()
 {
-	int index;
-
 	// Setup action of click listener on textPassword
 	textPassword.setClickAction(textAreaClickedCallback);
-
-	for (index = 0; index < numberOfListElements; index++)
-	{
-		if (index%2 == 0)
-		{
-			elements[index].SetupListElement(Bitmap(BITMAP_SIGNAL_2_ID), "Hanes y Euge");
-		}
-		else if (index%3 == 0)
-		{
-			elements[index].SetupListElement(Bitmap(BITMAP_SIGNAL_4_ID), "Hanes ama a Euge");
-		}
-		else
-		{
-			elements[index].SetupListElement(Bitmap(BITMAP_SIGNAL_0_ID), "No se si Euge me ama");
-		}
-	}
-
-	for (index = 0; index < numberOfListElements; index++)
-	{
-		elements[index].setAction(itemListClickedCallback);
-		list.add(elements[index]);
-	}
 }
 
 void SetupWifiScreenView::tearDownScreen()
@@ -70,4 +46,44 @@ void SetupWifiScreenView::PopupClickAccept()
 	textPassword.invalidate();
 	Pop_up.setVisible(false);
 	Pop_up.invalidate();
+}
+
+void SetupWifiScreenView::ScanNetwork()
+{
+	presenter->MsgScanNetwork();
+}
+
+void SetupWifiScreenView::FillOptionNetwork(WifiMessage_t *networks)
+{
+	int index;
+
+	for (index = 0; index < numberOfListElements; index++)
+	{
+		if ( networks->listNetwork[index].rssi > -50 && networks->listNetwork[index].rssi <= -30)
+		{
+			elements[index].SetupListElement(Bitmap(BITMAP_SIGNAL_4_ID), (char *)networks->listNetwork[index].ssid);
+		}
+		else if (networks->listNetwork[index].rssi > -67 && networks->listNetwork[index].rssi <= -50)
+		{
+			elements[index].SetupListElement(Bitmap(BITMAP_SIGNAL_3_ID), (char *)networks->listNetwork[index].ssid);
+		}
+		else if (networks->listNetwork[index].rssi > -80 && networks->listNetwork[index].rssi <= -67)
+		{
+			elements[index].SetupListElement(Bitmap(BITMAP_SIGNAL_2_ID), (char *)networks->listNetwork[index].ssid);
+		}
+		else if (networks->listNetwork[index].rssi > -90 && networks->listNetwork[index].rssi <= -80)
+		{
+			elements[index].SetupListElement(Bitmap(BITMAP_SIGNAL_1_ID), (char *)networks->listNetwork[index].ssid);
+		}
+		else
+		{
+			elements[index].SetupListElement(Bitmap(BITMAP_SIGNAL_0_ID), (char *)networks->listNetwork[index].ssid);
+		}
+	}
+
+	for (index = 0; index < numberOfListElements; index++)
+	{
+		elements[index].setAction(itemListClickedCallback);
+		list.add(elements[index]);
+	}
 }
