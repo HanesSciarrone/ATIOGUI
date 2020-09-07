@@ -18,6 +18,7 @@
 #include <touchgfx/containers/ModalWindow.hpp>
 #include <touchgfx/Color.hpp>
 #include <touchgfx/widgets/ButtonWithLabel.hpp>
+#include <touchgfx/containers/progress_indicators/ImageProgress.hpp>
 #include <touchgfx/mixins/ClickListener.hpp>
 
 class SetupWifiScreenViewBase : public touchgfx::View<SetupWifiScreenPresenter>
@@ -36,6 +37,11 @@ public:
     }
 
     virtual void ScanNetwork()
+    {
+        // Override and implement this function in SetupWifiScreen
+    }
+
+    virtual void SetDataNetwork()
     {
         // Override and implement this function in SetupWifiScreen
     }
@@ -67,6 +73,8 @@ protected:
     touchgfx::ModalWindow Pop_up;
     touchgfx::ButtonWithLabel PopupCancel;
     touchgfx::ButtonWithLabel PopupAccept;
+    touchgfx::Box BackgroundProgress;
+    touchgfx::ImageProgress ProgressBar;
 
     /*
      * Wildcard Buffers

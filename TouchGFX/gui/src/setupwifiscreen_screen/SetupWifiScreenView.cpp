@@ -3,6 +3,7 @@
 /* Include added for user */
 #include "touchgfx/Bitmap.hpp"
 #include "BitmapDatabase.hpp"
+#include <string.h>
 
 SetupWifiScreenView::SetupWifiScreenView()
 	: keyboard(),
@@ -16,6 +17,13 @@ SetupWifiScreenView::SetupWifiScreenView()
 
 void SetupWifiScreenView::setupScreen()
 {
+	tickCounter = 0;
+
+	list.removeAll();
+	list.invalidate();
+
+	ProgressBar.getRange(boxProgressMin, boxProgressMax);
+
 	// Setup action of click listener on textPassword
 	textPassword.setClickAction(textAreaClickedCallback);
 }
@@ -42,7 +50,11 @@ void SetupWifiScreenView::textAreaClickHandler(const TextAreaWithOneWildcard& ob
 
 void SetupWifiScreenView::PopupClickAccept()
 {
-	textPassword.setWildcard(keyboard.GetBuffer());
+	uint8_t buffer[TEXTPASSWORD_SIZE];
+
+	memset(buffer, 0, TEXTPASSWORD_SIZE);
+	keyboard.GetBuffer(buffer);
+	Unicode::fromUTF8(buffer, textPasswordBuffer, strlen((char *)buffer));
 	textPassword.invalidate();
 	Pop_up.setVisible(false);
 	Pop_up.invalidate();
@@ -53,9 +65,24 @@ void SetupWifiScreenView::ScanNetwork()
 	presenter->MsgScanNetwork();
 }
 
+void SetupWifiScreenView::SetDataNetwork()
+{
+	uint8_t bufferSSID[TEXTSSID_SIZE];
+	uint8_t bufferPassword[TEXTPASSWORD_SIZE];
+
+	memset(bufferSSID, 0, TEXTPASSWORD_SIZE);
+	memset(bufferPassword, 0, TEXTPASSWORD_SIZE);
+	Unicode::toUTF8(textSSIDBuffer, bufferSSID, TEXTSSID_SIZE);
+	Unicode::toUTF8(textPasswordBuffer, bufferPassword, TEXTPASSWORD_SIZE);
+
+	presenter->MsgConnectNetwork(bufferSSID, bufferPassword);
+}
+
 void SetupWifiScreenView::FillOptionNetwork(WifiMessage_t *networks)
 {
 	int index;
+
+	list.removeAll();
 
 	for (index = 0; index < numberOfListElements; index++)
 	{
@@ -86,4 +113,53 @@ void SetupWifiScreenView::FillOptionNetwork(WifiMessage_t *networks)
 		elements[index].setAction(itemListClickedCallback);
 		list.add(elements[index]);
 	}
+
+	list.invalidate();
+
+	BackgroundProgress.setVisible(false);
+	BackgroundProgress.invalidate();
+	ProgressBar.setVisible(false);
+	ProgressBar.setValue(0);
+	ProgressBar.invalidate();
+	tickCounter = 0;
 }
+
+void SetupWifiScreenView::ShowStatusConnection(uint8_t value)
+{
+	BackgroundProgress.setVisible(false);
+	BackgroundProgress.invalidate();
+	ProgressBar.setVisible(false);
+	ProgressBar.setValue(0);
+	tickCounter = 0;
+}
+
+/* Operation of progress bar */
+void SetupWifiScreenView::ShowProgress()
+{
+	BackgroundProgress.setVisible(true);
+	ProgressBar.setVisible(true);
+	BackgroundProgress.invalidate();
+	ProgressBar.invalidate();
+}
+
+void SetupWifiScreenView::updateProgress(uint16_t tick)
+{
+	ProgressBar.setValue(tick % (boxProgressMax+1));
+
+	if (ProgressBar.getValue() == 100)
+	{
+		ProgressBar.setValue(0);
+	}
+}
+
+void SetupWifiScreenView::handleTickEvent()
+{
+	if (BackgroundProgress.isVisible() && ProgressBar.isVisible())
+	{
+	    tickCounter++;
+	    updateProgress(tickCounter);
+	}
+}
+
+
+

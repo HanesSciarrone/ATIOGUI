@@ -59,6 +59,7 @@ SetupWifiScreenViewBase::SetupWifiScreenViewBase() :
     btnAccept.setXY(288, 342);
     btnAccept.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_ICON_BUTTON_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_ICON_BUTTON_PRESSED_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_DONE_32_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_DONE_32_ID));
     btnAccept.setIconXY(15, 15);
+    btnAccept.setAction(buttonCallback);
 
     background_SSID.setPosition(14, 192, 351, 40);
     background_SSID.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
@@ -105,6 +106,21 @@ SetupWifiScreenViewBase::SetupWifiScreenViewBase() :
     PopupAccept.setAction(buttonCallback);
     Pop_up.add(PopupAccept);
 
+    BackgroundProgress.setPosition(0, 0, 800, 480);
+    BackgroundProgress.setVisible(false);
+    BackgroundProgress.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    BackgroundProgress.setAlpha(114);
+
+    ProgressBar.setXY(198, 223);
+    ProgressBar.setProgressIndicatorPosition(2, 2, 400, 30);
+    ProgressBar.setRange(0, 100);
+    ProgressBar.setDirection(touchgfx::AbstractDirectionProgress::RIGHT);
+    ProgressBar.setBackground(touchgfx::Bitmap(BITMAP_BLUE_PROGRESSINDICATORS_BG_LARGE_PROGRESS_INDICATOR_BG_SQUARE_0_DEGREES_ID));
+    ProgressBar.setBitmap(BITMAP_BLUE_PROGRESSINDICATORS_FILL_TILING_PROGRESS_INDICATOR_FILL_STRIPED_WIDE_HORIZONTAL_ID);
+    ProgressBar.setValue(58);
+    ProgressBar.setAnchorAtZero(false);
+    ProgressBar.setVisible(false);
+
     add(background);
     add(ToolBar);
     add(logo);
@@ -121,6 +137,8 @@ SetupWifiScreenViewBase::SetupWifiScreenViewBase() :
     add(textSSID);
     add(textPassword);
     add(Pop_up);
+    add(BackgroundProgress);
+    add(ProgressBar);
 }
 
 void SetupWifiScreenViewBase::setupScreen()
@@ -143,6 +161,13 @@ void SetupWifiScreenViewBase::buttonCallbackHandler(const touchgfx::AbstractButt
         //When btnCancel clicked change screen to MainScreen
         //Go to MainScreen with screen transition towards North
         application().gotoMainScreenScreenCoverTransitionNorth();
+    }
+    else if (&src == &btnAccept)
+    {
+        //SetNetwork
+        //When btnAccept clicked call virtual function
+        //Call SetDataNetwork
+        SetDataNetwork();
     }
     else if (&src == &PopupCancel)
     {

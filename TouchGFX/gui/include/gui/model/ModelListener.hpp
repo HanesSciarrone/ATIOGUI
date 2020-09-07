@@ -15,6 +15,10 @@ public:
 
     virtual void ResultScandNetwork(WifiMessage_t *networks) {}
 
+    virtual void ShowStatusConnectionNetwork(uint8_t value) {}
+
+    virtual void ShowProgreessBar() {}
+
     void bind(Model* m)
     {
         model = m;

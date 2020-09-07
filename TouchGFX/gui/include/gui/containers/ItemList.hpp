@@ -27,6 +27,10 @@ public:
     void setAction(GenericCallback< ItemList& >& callback);
 
     /**
+     * @brief Function to clear buffer of label element
+     */
+
+    /**
      * @brief Override function from ItemListBase
      */
     virtual void SelectItem();

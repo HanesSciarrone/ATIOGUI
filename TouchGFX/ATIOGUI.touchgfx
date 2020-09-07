@@ -863,6 +863,53 @@
             "Clickable": false,
             "Fadeable": false,
             "Moveable": false
+          },
+          {
+            "Color": {
+              "Red": 0,
+              "Green": 0,
+              "Blue": 0
+            },
+            "Alpha": 114,
+            "Name": "BackgroundProgress",
+            "X": 0,
+            "Y": 0,
+            "Width": 800,
+            "Height": 480,
+            "Type": "Box",
+            "Visible": false,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "FileNameProgress": "__designer\\Blue_ProgressIndicators_fill_tiling_progress_indicator_fill_striped_wide_horizontal.png",
+            "AnchorAtZero": false,
+            "Direction": "Right",
+            "Alpha": 255,
+            "Style": "Style5",
+            "FileNameBackground": "__designer\\Blue_ProgressIndicators_bg_large_progress_indicator_bg_square_0_degrees.png",
+            "IndicatorPositionX": 2,
+            "IndicatorPositionY": 2,
+            "IndicatorPositionWidth": 400,
+            "IndicatorPositionHeight": 30,
+            "ProgressRangeMin": 0,
+            "ProgressRangeMax": 100,
+            "ProgressRangeSteps": 0,
+            "ProgressRangeStepsMin": 0,
+            "ProgressInitialValue": 58,
+            "Name": "ProgressBar",
+            "X": 198,
+            "Y": 223,
+            "Width": 404,
+            "Height": 34,
+            "Type": "ImageProgress",
+            "Visible": false,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
           }
         ],
         "Interactions": [
@@ -913,6 +960,18 @@
             },
             "Action": {
               "FunctionName": "ScanNetwork",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "SetNetwork",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "btnAccept",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "FunctionName": "SetDataNetwork",
               "Type": "ActionCustom"
             }
           }

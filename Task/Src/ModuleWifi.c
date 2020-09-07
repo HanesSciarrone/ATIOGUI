@@ -92,7 +92,7 @@ static bool_t ModuleWifi_ScanNetwork(void);
 /* Private function implementation --------------------------------------------*/
 static bool_t ModuleWifi_ScanNetwork(void)
 {
-	uint8_t buffer[MAX_BUFFER_SIZE], *ptrStart, *ptrEnd;
+	uint8_t buffer[MAX_BUFFER_SIZE], *ptrStart = NULL, *ptrEnd = NULL;
 	uint8_t lvl_signal[4];
 	uint8_t index = 0;
 
@@ -224,6 +224,29 @@ static void ModuleWifi(void *argument)
 
 			case CONNECT_NETWORK:
 			{
+				ESP8266_NetworkParameters_s network;
+				ESP8266_StatusTypeDef_t status;
+
+				status = ESP8266_DisconnectAllNetwork();
+				osMutexAcquire(mutex_NewMsg_WifiHandle, osWaitForever);
+
+				network.ssid = wifiParameters.ssid;
+				network.password = wifiParameters.password;
+				status = ESP8266_ConnectionNetwork(&network);
+
+				if (status == ESP8266_OK)
+				{
+					wifiParameters.resultOperation = 1;
+				}
+				else
+				{
+					wifiParameters.resultOperation = 0;
+				}
+
+				osMutexRelease(mutex_NewMsg_WifiHandle);
+
+				msgGUI = 1;
+				osMessageQueuePut(queue_NewMsg_GUI, &msgGUI, 0L, osWaitForever);
 			}
 			break;
 

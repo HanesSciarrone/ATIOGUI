@@ -14,6 +14,7 @@ public:
     }
 
     void MsgScanNetwork();
+    void MsgConnectNetwork(char *ssid, char *password);
 
     void tick();
 protected:

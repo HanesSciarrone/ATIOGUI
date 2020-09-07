@@ -121,7 +121,7 @@ void CustomKeyboard::setTouchable(bool touch)
     keyboard.setTouchable(touch);
 }
 
-Unicode::UnicodeChar* CustomKeyboard::GetBuffer()
+void CustomKeyboard::GetBuffer(uint8_t *buffer)
 {
-	return buffer;
+	Unicode::toUTF8(this->buffer, buffer, BUFFER_SIZE);
 }

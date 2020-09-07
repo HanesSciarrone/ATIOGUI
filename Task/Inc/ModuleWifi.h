@@ -49,6 +49,7 @@ typedef struct
 	ListNetwork_t listNetwork[MAX_COUNT_LIST];
 	uint8_t ssid[MAX_LENGTH_CONNECTION_NETWORK];
 	uint8_t password[MAX_LENGTH_CONNECTION_NETWORK];
+	uint8_t resultOperation;
 }WifiMessage_t;
 
 

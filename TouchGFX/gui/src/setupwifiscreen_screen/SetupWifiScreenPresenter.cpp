@@ -22,7 +22,23 @@ void SetupWifiScreenPresenter::MsgScanNetwork()
 	model->MsgScanNetwork();
 }
 
+void SetupWifiScreenPresenter::MsgConnectNetwork(uint8_t *ssid, uint8_t *password)
+{
+	model->MsgConnectNetwork((char *)ssid, (char *)password);
+}
+
+
 void SetupWifiScreenPresenter::ResultScandNetwork(WifiMessage_t *networks)
 {
 	view.FillOptionNetwork(networks);
+}
+
+void SetupWifiScreenPresenter::ShowStatusConnectionNetwork(uint8_t value)
+{
+	view.ShowStatusConnection(value);
+}
+
+void SetupWifiScreenPresenter::ShowProgreessBar()
+{
+	view.ShowProgress();
 }

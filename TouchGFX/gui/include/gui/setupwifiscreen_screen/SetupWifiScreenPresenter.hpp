@@ -33,8 +33,14 @@ public:
     /* Function to do action from View to Model */
     virtual void MsgScanNetwork();
 
+    virtual void MsgConnectNetwork(uint8_t *ssid, uint8_t *password);
+
     /* Function to do action from Model to View */
     virtual void ResultScandNetwork(WifiMessage_t *networks);
+
+    virtual void ShowStatusConnectionNetwork(uint8_t value);
+
+    virtual void ShowProgreessBar();
 
 private:
     SetupWifiScreenPresenter();

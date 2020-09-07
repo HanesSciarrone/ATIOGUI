@@ -30,7 +30,12 @@ public:
      */
     void setTouchable(bool touch);
 
-    Unicode::UnicodeChar* GetBuffer();
+    /**
+     * @brief Get string of buffer
+     *
+     * @param[in,out]	buffer  Buffer where will be storage string
+     */
+    void GetBuffer(uint8_t *buffer);
 
 private:
     /*
