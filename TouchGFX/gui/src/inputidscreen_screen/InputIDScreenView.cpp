@@ -29,6 +29,8 @@ void InputIDScreenView::ShowProgreessBar()
 {
 	background_progress.setVisible(true);
 	progress_bar.setVisible(true);
+	background_progress.invalidate();
+	progress_bar.invalidate();
 }
 
 void InputIDScreenView::update_progress(uint16_t tick)

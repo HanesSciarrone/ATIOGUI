@@ -27,6 +27,9 @@ private:
     /** Update value of progress bar */
     void update_progress(uint16_t count);
 
+    /** Call function to update progress bar for each tick time */
+    virtual void handleTickEvent();
+
 protected:
 
 };

@@ -19,10 +19,10 @@ void InputIDScreenPresenter::deactivate()
 
 void InputIDScreenPresenter::sent_credential_to_IoT(uint8_t *buffer, uint16_t length)
 {
-	model->sent_credential_to_IoT(buffer);
+	model->sent_credential_to_IoT(buffer, length);
 }
 
-virtual void InputIDScreenPresenter::ShowProgreessBar()
+void InputIDScreenPresenter::ShowProgreessBar()
 {
 	view.ShowProgreessBar();
 }

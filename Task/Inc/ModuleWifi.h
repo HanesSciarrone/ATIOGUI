@@ -22,8 +22,11 @@
 /** Macro define maximum length of strings on ssid and password variable. This value depend of GUI */
 #define MAX_LENGTH_CONNECTION_NETWORK	22
 
-/** Macro define maximum length of strings on credential variable. This value depend of GUI */
+/** This value depend of GUI */
 #define MAX_LENGTH_CREDENTIAL	20
+
+/** Macro define maximum length of strings on credential variable */
+#define MAX_LENGTH_MESSAGE_CREDENTIAL	MAX_LENGTH_CREDENTIAL + 4
 
 /** @} */
 
@@ -50,7 +53,7 @@ typedef struct
 	ListNetwork_t listNetwork[MAX_COUNT_LIST];
 	uint8_t ssid[MAX_LENGTH_CONNECTION_NETWORK];
 	uint8_t password[MAX_LENGTH_CONNECTION_NETWORK];
-	uint8_t credential[MAX_LENGTH_CREDENTIAL];
+	uint8_t data[MAX_LENGTH_MESSAGE_CREDENTIAL];
 	uint8_t resultOperation;
 }WifiMessage_t;
 
@@ -63,12 +66,5 @@ typedef struct
  * @return Return 1 if was success or 0 in other case
  */
 bool_t ModuleWifi_Started(void);
-
-/**
- * @brief Sent message for scan nearby network.
- *
- * @return Return 1 is operation was success or 0 in otherwise.
- */
-bool_t ModuleWifi_MsgScanNetwork(void);
 
 #endif /* INC_MODULEWIFI_H_ */

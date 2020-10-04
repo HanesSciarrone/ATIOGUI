@@ -95,8 +95,9 @@ void Model::sent_credential_to_IoT(uint8_t *buffer, uint16_t length)
 
 	osMutexAcquire(mutex_NewMsg_WifiHandle, osWaitForever);
 
-	memset(wifiParameters.credential, 0, MAX_LENGTH_CREDENTIAL);
-	strncpy((char *)wifiParameters.credential, (char *)buffer, strlen((char *)buffer));
+	memset(wifiParameters.data, 0, MAX_LENGTH_MESSAGE_CREDENTIAL*sizeof(uint8_t));
+	strncpy((char *)wifiParameters.data, "C|", strlen("C|"));
+	strncat((char *)wifiParameters.data, (char *)buffer, length);
 
 	osMutexRelease(mutex_NewMsg_WifiHandle);
 
