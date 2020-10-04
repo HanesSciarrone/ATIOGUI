@@ -12,6 +12,7 @@
 #include <gui/containers/PadNumeric.hpp>
 #include <touchgfx/widgets/TextArea.hpp>
 #include <touchgfx/widgets/ButtonWithLabel.hpp>
+#include <touchgfx/containers/progress_indicators/ImageProgress.hpp>
 
 class InputIDScreenViewBase : public touchgfx::View<InputIDScreenPresenter>
 {
@@ -19,6 +20,14 @@ public:
     InputIDScreenViewBase();
     virtual ~InputIDScreenViewBase() {}
     virtual void setupScreen();
+
+    /*
+     * Virtual Action Handlers
+     */
+    virtual void send_credential()
+    {
+        // Override and implement this function in InputIDScreen
+    }
 
 protected:
     FrontendApplication& application() {
@@ -35,6 +44,8 @@ protected:
     touchgfx::TextArea titleInputID;
     touchgfx::ButtonWithLabel BtnAccept;
     touchgfx::ButtonWithLabel BtnCancel;
+    touchgfx::Box background_progress;
+    touchgfx::ImageProgress progress_bar;
 
 private:
 

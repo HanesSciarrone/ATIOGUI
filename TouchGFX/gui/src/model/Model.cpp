@@ -80,11 +80,28 @@ void Model::MsgConnectNetwork(char *ssid, char *password)
 
 	osMutexRelease(mutex_NewMsg_WifiHandle);
 
-	msg= CONNECT_NETWORK;
+	msg = CONNECT_NETWORK;
 	status = osMessageQueuePut(queue_Wifi_operationHandle, &msg, 0L, 0);
 
 	if (status == osOK)
 	{
+		modelListener->ShowProgreessBar();
+	}
+}
+
+void Model::sent_credential_to_IoT(uint8_t *buffer, uint16_t length)
+{
+	WifiModule_Operation msg;
+
+	osMutexAcquire(mutex_NewMsg_WifiHandle, osWaitForever);
+
+	memset(wifiParameters.credential, 0, MAX_LENGTH_CREDENTIAL);
+	strncpy((char *)wifiParameters.credential, (char *)buffer, strlen((char *)buffer));
+
+	osMutexRelease(mutex_NewMsg_WifiHandle);
+
+	msg = SEND_PACKET;
+	if (osMessageQueuePut(queue_Wifi_operationHandle, &msg, 0L, 0) == osOK) {
 		modelListener->ShowProgreessBar();
 	}
 }

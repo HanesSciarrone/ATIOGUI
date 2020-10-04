@@ -143,3 +143,14 @@ void PadNumeric::BtnDeleteClick()
 		textArea.invalidate();
 	}
 }
+
+int PadNumeric::get_buffer_length()
+{
+	return TEXTAREA_SIZE;
+}
+
+void PadNumeric::get_buffer(uint8_t *buffer)
+{
+	memset(buffer, 0, TEXTAREA_SIZE*sizeof(uint8_t));
+	Unicode::toUTF8(textAreaBuffer, buffer, TEXTAREA_SIZE);
+}

@@ -250,20 +250,12 @@ static void ModuleWifi(void *argument)
 			}
 			break;
 
-			case CONNECT_SERVER:
-			{
-			}
-			break;
-
 			case SEND_PACKET:
 			{
+
 			}
 			break;
 
-			case CLOSE_SERVER:
-			{
-			}
-			break;
 		}
 	}
 }

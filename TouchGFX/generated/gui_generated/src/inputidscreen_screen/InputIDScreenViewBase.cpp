@@ -32,6 +32,7 @@ InputIDScreenViewBase::InputIDScreenViewBase() :
     BtnAccept.setLabelText(touchgfx::TypedText(T_SINGLEUSEID17));
     BtnAccept.setLabelColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     BtnAccept.setLabelColorPressed(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    BtnAccept.setAction(buttonCallback);
 
     BtnCancel.setXY(68, 308);
     BtnCancel.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID));
@@ -40,6 +41,21 @@ InputIDScreenViewBase::InputIDScreenViewBase() :
     BtnCancel.setLabelColorPressed(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     BtnCancel.setAction(buttonCallback);
 
+    background_progress.setPosition(0, 0, 800, 480);
+    background_progress.setVisible(false);
+    background_progress.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    background_progress.setAlpha(114);
+
+    progress_bar.setXY(198, 235);
+    progress_bar.setProgressIndicatorPosition(2, 2, 400, 30);
+    progress_bar.setRange(0, 100);
+    progress_bar.setDirection(touchgfx::AbstractDirectionProgress::RIGHT);
+    progress_bar.setBackground(touchgfx::Bitmap(BITMAP_BLUE_PROGRESSINDICATORS_BG_LARGE_PROGRESS_INDICATOR_BG_SQUARE_0_DEGREES_ID));
+    progress_bar.setBitmap(BITMAP_BLUE_PROGRESSINDICATORS_FILL_TILING_PROGRESS_INDICATOR_FILL_STRIPED_WIDE_HORIZONTAL_ID);
+    progress_bar.setValue(58);
+    progress_bar.setAnchorAtZero(false);
+    progress_bar.setVisible(false);
+
     add(Background);
     add(ToolBar);
     add(logo);
@@ -47,6 +63,8 @@ InputIDScreenViewBase::InputIDScreenViewBase() :
     add(titleInputID);
     add(BtnAccept);
     add(BtnCancel);
+    add(background_progress);
+    add(progress_bar);
 }
 
 void InputIDScreenViewBase::setupScreen()
@@ -56,7 +74,14 @@ void InputIDScreenViewBase::setupScreen()
 
 void InputIDScreenViewBase::buttonCallbackHandler(const touchgfx::AbstractButton& src)
 {
-    if (&src == &BtnCancel)
+    if (&src == &BtnAccept)
+    {
+        //SendCredential
+        //When BtnAccept clicked call virtual function
+        //Call send_credential
+        send_credential();
+    }
+    else if (&src == &BtnCancel)
     {
         //GoMainScreen
         //When BtnCancel clicked change screen to MainScreen

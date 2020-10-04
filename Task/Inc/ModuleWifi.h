@@ -19,8 +19,11 @@
 /** Quantity maximum supported on list , must same element  quantity of list on GUI */
 #define MAX_COUNT_LIST	30
 
-/** Macro define maximum length of strings on Connect_Network_t variable. This value depend of GUI */
+/** Macro define maximum length of strings on ssid and password variable. This value depend of GUI */
 #define MAX_LENGTH_CONNECTION_NETWORK	22
+
+/** Macro define maximum length of strings on credential variable. This value depend of GUI */
+#define MAX_LENGTH_CREDENTIAL	20
 
 /** @} */
 
@@ -29,9 +32,7 @@ typedef enum
 {
 	SCAN_NETWORK,		/*!< Search for nearby networks */
 	CONNECT_NETWORK,	/*!< Connect to specific network */
-	CONNECT_SERVER,		/*!< Connect to server */
 	SEND_PACKET,		/*!< Send packet to server */
-	CLOSE_SERVER		/*!< Close connection with server */
 }WifiModule_Operation;
 
 /// Type of variable that data's network
@@ -49,6 +50,7 @@ typedef struct
 	ListNetwork_t listNetwork[MAX_COUNT_LIST];
 	uint8_t ssid[MAX_LENGTH_CONNECTION_NETWORK];
 	uint8_t password[MAX_LENGTH_CONNECTION_NETWORK];
+	uint8_t credential[MAX_LENGTH_CREDENTIAL];
 	uint8_t resultOperation;
 }WifiMessage_t;
 
