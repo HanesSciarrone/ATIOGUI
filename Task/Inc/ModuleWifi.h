@@ -30,12 +30,26 @@
 
 /** @} */
 
+enum command_type{
+	EVENT_SEND_CREDENTIAL = 'A',
+	EVENT_SEND_QUANTITY_SALE,
+	EVENT_SEND_SALE_FINALIZATION,
+	CMD_RESULT_CREDENTIAL,
+	CMD_RESULT_SALE
+};
+
+enum result_validation_user{
+	ERROR_DATA_RECEIVED,
+	VALID_USER,
+	INVALID_USER
+};
+
 /// Type of operation used on WifiModule
 typedef enum
 {
 	SCAN_NETWORK,		/*!< Search for nearby networks */
 	CONNECT_NETWORK,	/*!< Connect to specific network */
-	SEND_PACKET,		/*!< Send packet to server */
+	SEND_CREDENTIAL,	/*!< Send credential to server */
 	ANY_OPERATION		/*!< Don't any operation */
 }WifiModule_Operation;
 

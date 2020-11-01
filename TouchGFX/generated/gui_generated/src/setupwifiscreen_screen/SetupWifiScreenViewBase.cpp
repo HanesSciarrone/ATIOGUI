@@ -51,12 +51,12 @@ SetupWifiScreenViewBase::SetupWifiScreenViewBase() :
     titlePassword.setLinespacing(0);
     titlePassword.setTypedText(touchgfx::TypedText(T_SINGLEUSEID23));
 
-    btnCancel.setXY(30, 342);
+    btnCancel.setXY(30, 365);
     btnCancel.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_ICON_BUTTON_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_ICON_BUTTON_PRESSED_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_REMOVE_32_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_REMOVE_32_ID));
     btnCancel.setIconXY(16, 16);
     btnCancel.setAction(buttonCallback);
 
-    btnAccept.setXY(288, 342);
+    btnAccept.setXY(288, 365);
     btnAccept.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_ICON_BUTTON_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_ICON_BUTTON_PRESSED_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_DONE_32_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_DONE_32_ID));
     btnAccept.setIconXY(15, 15);
     btnAccept.setAction(buttonCallback);
@@ -71,14 +71,14 @@ SetupWifiScreenViewBase::SetupWifiScreenViewBase() :
     background_Password.setBorderColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
     background_Password.setBorderSize(5);
 
-    textSSID.setPosition(22, 203, 335, 20);
+    textSSID.setPosition(19, 198, 341, 29);
     textSSID.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
     textSSID.setLinespacing(0);
     textSSIDBuffer[0] = 0;
     textSSID.setWildcard(textSSIDBuffer);
     textSSID.setTypedText(touchgfx::TypedText(T_SINGLEUSEID24));
 
-    textPassword.setPosition(22, 301, 335, 20);
+    textPassword.setPosition(18, 296, 343, 30);
     textPassword.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
     textPassword.setLinespacing(0);
     textPasswordBuffer[0] = 0;
@@ -121,6 +121,25 @@ SetupWifiScreenViewBase::SetupWifiScreenViewBase() :
     ProgressBar.setAnchorAtZero(false);
     ProgressBar.setVisible(false);
 
+    warning_connection.setBackground(touchgfx::BitmapId(BITMAP_BACKGROUND_QWERTY_ID), 150, 105);
+    warning_connection.setShadeColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    warning_connection.setShadeAlpha(166);
+    warning_connection.hide();
+
+    btn_warning_ok.setXY(321, 200);
+    btn_warning_ok.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID));
+    btn_warning_ok.setLabelText(touchgfx::TypedText(T_SINGLEUSEID34));
+    btn_warning_ok.setLabelColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    btn_warning_ok.setLabelColorPressed(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    btn_warning_ok.setAction(buttonCallback);
+    warning_connection.add(btn_warning_ok);
+
+    text_warning_connection.setXY(27, 66);
+    text_warning_connection.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    text_warning_connection.setLinespacing(0);
+    text_warning_connection.setTypedText(touchgfx::TypedText(T_SINGLEUSEID35));
+    warning_connection.add(text_warning_connection);
+
     add(background);
     add(ToolBar);
     add(logo);
@@ -139,6 +158,7 @@ SetupWifiScreenViewBase::SetupWifiScreenViewBase() :
     add(Pop_up);
     add(BackgroundProgress);
     add(ProgressBar);
+    add(warning_connection);
 }
 
 void SetupWifiScreenViewBase::setupScreen()
@@ -183,5 +203,13 @@ void SetupWifiScreenViewBase::buttonCallbackHandler(const touchgfx::AbstractButt
         //When PopupAccept clicked call virtual function
         //Call PopupClickAccept
         PopupClickAccept();
+    }
+    else if (&src == &btn_warning_ok)
+    {
+        //HideWarningConnection
+        //When btn_warning_ok clicked hide warning_connection
+        //Hide warning_connection
+        warning_connection.setVisible(false);
+        warning_connection.invalidate();
     }
 }

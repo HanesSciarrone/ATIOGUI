@@ -132,11 +132,18 @@ static enum mqtt_state sent_subcribe_mqtt(void);
 static enum mqtt_state sent_connect_mqtt(void);
 
 /**
- * @brief Send data to broker MQTT
+ * @brief Parse message received of response to credential from broker MQTT.
+ *
+ * @return Return type of user
+ */
+static enum result_validation_user parse_result_credential(void);
+
+/**
+ * @brief Send credential to broker MQTT
  *
  * @param[in]	data	Data that will be send to broker
  */
-static void sent_data_iot(uint8_t *data);
+static void send_credential(uint8_t *data);
 
 /**
  * @brief All functionality of task that control Module Wi-fi is here
@@ -407,7 +414,43 @@ static enum mqtt_state sent_connect_mqtt(void)
 	return state;
 }
 
-static void sent_data_iot(uint8_t *data)
+static enum result_validation_user parse_result_credential(void)
+{
+	uint8_t index, offset, liters[21];
+	/*
+	 * Format of mesage is:
+	 *
+	 * [CommandID]|[Valid user]|[Quantity liters available]
+	 *
+	 * Where each data is separate for |
+	 */
+
+	// Ask if command received is correct
+	if (wifiParameters.data[0] != CMD_RESULT_CREDENTIAL) {
+		return ERROR_DATA_RECEIVED;
+	}
+
+	//Ask if user if invalid
+	if (wifiParameters.data[2] == '0') {
+		return INVALID_USER;
+	}
+
+	index = 4;
+	offset = 0;
+	strncpy((char *)liters, "\0", 21);
+	while(wifiParameters.data[index] >= '0' && wifiParameters.data[index] <= '9' && index < 23) {
+		liters[offset] = wifiParameters.data[index];
+		index++;
+		offset++;
+	}
+
+	memset(wifiParameters.data, 0, MAX_LENGTH_MESSAGE_CREDENTIAL);
+	strncpy((char *)wifiParameters.data, (char *)liters, strlen((char *)liters));
+
+	return VALID_USER;
+}
+
+static void send_credential(uint8_t *data)
 {
 	ESP8266_StatusTypeDef_t status;
 	enum mqtt_state state = STATUS_CONNECTION;
@@ -671,22 +714,12 @@ static void ModuleWifi(void *argument)
 			}
 			break;
 
-			case SEND_PACKET: {
+			case SEND_CREDENTIAL: {
 				osMutexAcquire(mutex_NewMsg_WifiHandle, osWaitForever);
-				sent_data_iot(wifiParameters.data);
-
-				// Operation was success
-				if (strlen((char *)wifiParameters.data) != 0) {
-					msgGUI = 2;
-					wifiParameters.resultOperation = 1;
-					osMessageQueuePut(queue_NewMsg_GUI, &msgGUI, 0L, osWaitForever);
-				}
-				// Operation failed
-				else {
-					msgGUI = 2;
-					wifiParameters.resultOperation = 0;
-					osMessageQueuePut(queue_NewMsg_GUI, &msgGUI, 0L, osWaitForever);
-				}
+				send_credential(wifiParameters.data);
+				msgGUI = 2;
+				wifiParameters.resultOperation = parse_result_credential();
+				osMessageQueuePut(queue_NewMsg_GUI, &msgGUI, 0L, osWaitForever);
 				osMutexRelease(mutex_NewMsg_WifiHandle);
 			}
 			break;

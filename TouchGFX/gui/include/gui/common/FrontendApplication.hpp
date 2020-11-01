@@ -18,7 +18,14 @@ public:
         model.tick();
         FrontendApplicationBase::handleTickEvent();
     }
+
+    void gotoInputSaleScreenScreenCoverTransitionSouth();
+    void gotoInputSaleScreenScreenCoverTransitionSouthImpl();
 private:
+
+    touchgfx::Callback<FrontendApplication> transitionCallback_custom;
+    FrontendHeap& frontendHeap_custom;
+    Model& model_custom;
 };
 
 #endif // FRONTENDAPPLICATION_HPP

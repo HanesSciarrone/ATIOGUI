@@ -75,6 +75,9 @@ protected:
     touchgfx::ButtonWithLabel PopupAccept;
     touchgfx::Box BackgroundProgress;
     touchgfx::ImageProgress ProgressBar;
+    touchgfx::ModalWindow warning_connection;
+    touchgfx::ButtonWithLabel btn_warning_ok;
+    touchgfx::TextArea text_warning_connection;
 
     /*
      * Wildcard Buffers

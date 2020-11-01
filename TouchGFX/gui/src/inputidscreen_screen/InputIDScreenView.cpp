@@ -2,6 +2,9 @@
 #include <gui_generated/inputsalescreen_screen/InputSaleScreenViewBase.hpp>
 
 #include <gui/inputsalescreen_screen/InputSaleScreenView.hpp>
+#include "ModuleWifi.h"
+
+
 
 InputIDScreenView::InputIDScreenView()
 {
@@ -38,18 +41,28 @@ void InputIDScreenView::ShowProgreessBar()
 
 void InputIDScreenView::show_status_credential(uint8_t result)
 {
-	InputSaleScreenView sale_screen;
-
 	background_progress.setVisible(false);
 	progress_bar.setVisible(false);
 	progress_bar.setValue(0);
 	background_progress.invalidate();
 	progress_bar.invalidate();
 
-	if (result == 1) {
-		sale_screen.setupScreen();
+	if (result == VALID_USER) {
+		application().gotoInputSaleScreenScreenCoverTransitionSouth();
+	}
+	else if (result == INVALID_USER){
+		label1_pop_up.setVisible(true);
+		label2_pop_up.setVisible(false);
+		label1_pop_up.invalidate();
+		label2_pop_up.invalidate();
+		pop_up.setVisible(true);
+		pop_up.invalidate();
 	}
 	else {
+		label1_pop_up.setVisible(false);
+		label2_pop_up.setVisible(true);
+		label1_pop_up.invalidate();
+		label2_pop_up.invalidate();
 		pop_up.setVisible(true);
 		pop_up.invalidate();
 	}

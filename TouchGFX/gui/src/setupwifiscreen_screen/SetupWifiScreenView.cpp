@@ -135,6 +135,14 @@ void SetupWifiScreenView::ShowStatusConnection(uint8_t value)
 	ProgressBar.setVisible(false);
 	ProgressBar.setValue(0);
 	tickCounter = 0;
+
+	if (value == 1) {
+		application().gotoMainScreenScreenCoverTransitionNorth();
+	}
+	else {
+		warning_connection.setVisible(true);
+		warning_connection.invalidate();
+	}
 }
 
 /* Operation of progress bar */

@@ -2,10 +2,13 @@
 #include <gui/model/ModelListener.hpp>
 
 /* Include used to model for communicative with backend */
+#include <stdlib.h>
 #include <string.h>
 
 #include "cmsis_os.h"
 #include "ModuleWifi.h"
+
+#define MAXBUFFER_LITERS	20
 
 // Global variable declared on ModuleWifi.c
 extern osMessageQueueId_t queue_Wifi_operationHandle;
@@ -17,6 +20,8 @@ osMessageQueueId_t	queue_NewMsg_GUI;
 const osMessageQueueAttr_t queue_GUI_attributes = {
   .name = "wifiqueue_operation"
 };
+
+static uint32_t liters_available;
 
 Model::Model() : modelListener(0)
 {
@@ -51,7 +56,15 @@ void Model::tick()
 			// Resulting operation of send credential
 			case 2:{
 				osMutexAcquire(mutex_NewMsg_WifiHandle, osWaitForever);
+				if(wifiParameters.resultOperation == VALID_USER) {
+					liters_available = atoi((char *)wifiParameters.data);
+				}
+				else {
+					liters_available = 0;
+				}
+
 				modelListener->show_status_credential(wifiParameters.resultOperation);
+
 				osMutexRelease(mutex_NewMsg_WifiHandle);
 			}
 		}
@@ -103,12 +116,13 @@ void Model::sent_credential_to_IoT(uint8_t *buffer, uint16_t length)
 	osMutexAcquire(mutex_NewMsg_WifiHandle, osWaitForever);
 
 	memset(wifiParameters.data, 0, MAX_LENGTH_MESSAGE_CREDENTIAL*sizeof(uint8_t));
-	strncpy((char *)wifiParameters.data, "C|", strlen("C|"));
+	wifiParameters.data[0] = EVENT_SEND_CREDENTIAL;
+	wifiParameters.data[1] = '|';
 	strncat((char *)wifiParameters.data, (char *)buffer, length);
 
 	osMutexRelease(mutex_NewMsg_WifiHandle);
 
-	msg = SEND_PACKET;
+	msg = SEND_CREDENTIAL;
 	if (osMessageQueuePut(queue_Wifi_operationHandle, &msg, 0L, 0) == osOK) {
 		modelListener->ShowProgreessBar();
 	}

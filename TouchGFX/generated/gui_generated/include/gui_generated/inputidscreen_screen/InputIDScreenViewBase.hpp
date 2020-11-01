@@ -49,8 +49,9 @@ protected:
     touchgfx::Box background_progress;
     touchgfx::ImageProgress progress_bar;
     touchgfx::ModalWindow pop_up;
-    touchgfx::TextArea label_pop_up;
+    touchgfx::TextArea label1_pop_up;
     touchgfx::ButtonWithLabel button_ok_pop_up;
+    touchgfx::TextArea label2_pop_up;
 
 private:
 

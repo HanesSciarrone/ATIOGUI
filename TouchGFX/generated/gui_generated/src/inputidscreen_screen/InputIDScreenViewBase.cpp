@@ -61,11 +61,11 @@ InputIDScreenViewBase::InputIDScreenViewBase() :
     pop_up.setShadeAlpha(200);
     pop_up.hide();
 
-    label_pop_up.setXY(108, 67);
-    label_pop_up.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
-    label_pop_up.setLinespacing(0);
-    label_pop_up.setTypedText(touchgfx::TypedText(T_SINGLEUSEID28));
-    pop_up.add(label_pop_up);
+    label1_pop_up.setXY(114, 72);
+    label1_pop_up.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    label1_pop_up.setLinespacing(0);
+    label1_pop_up.setTypedText(touchgfx::TypedText(T_SINGLEUSEID28));
+    pop_up.add(label1_pop_up);
 
     button_ok_pop_up.setXY(315, 190);
     button_ok_pop_up.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID));
@@ -74,6 +74,13 @@ InputIDScreenViewBase::InputIDScreenViewBase() :
     button_ok_pop_up.setLabelColorPressed(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     button_ok_pop_up.setAction(buttonCallback);
     pop_up.add(button_ok_pop_up);
+
+    label2_pop_up.setXY(106, 72);
+    label2_pop_up.setVisible(false);
+    label2_pop_up.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    label2_pop_up.setLinespacing(0);
+    label2_pop_up.setTypedText(touchgfx::TypedText(T_SINGLEUSEID36));
+    pop_up.add(label2_pop_up);
 
     add(Background);
     add(ToolBar);
