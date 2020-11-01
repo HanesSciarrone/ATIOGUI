@@ -87,7 +87,7 @@ SetupWifiScreenViewBase::SetupWifiScreenViewBase() :
 
     Pop_up.setBackground(touchgfx::BitmapId(BITMAP_BACKGROUND_QWERTY_ID), 150, 105);
     Pop_up.setShadeColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
-    Pop_up.setShadeAlpha(178);
+    Pop_up.setShadeAlpha(200);
     Pop_up.hide();
 
     PopupCancel.setXY(9, 206);

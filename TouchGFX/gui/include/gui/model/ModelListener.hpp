@@ -17,6 +17,8 @@ public:
 
     virtual void ShowStatusConnectionNetwork(uint8_t value) {}
 
+    virtual void show_status_credential(uint8_t result) {}
+
     virtual void ShowProgreessBar() {}
 
     void bind(Model* m)

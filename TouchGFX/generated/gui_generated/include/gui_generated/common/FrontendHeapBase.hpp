@@ -12,6 +12,7 @@
 #include <touchgfx/transitions/CoverTransition.hpp>
 #include <touchgfx/transitions/CoverTransition.hpp>
 #include <touchgfx/transitions/CoverTransition.hpp>
+#include <touchgfx/transitions/CoverTransition.hpp>
 
 #include <gui/common/FrontendApplication.hpp>
 #include <gui/model/Model.hpp>
@@ -22,6 +23,8 @@
 #include <gui/inputidscreen_screen/InputIDScreenPresenter.hpp>
 #include <gui/setupwifiscreen_screen/SetupWifiScreenView.hpp>
 #include <gui/setupwifiscreen_screen/SetupWifiScreenPresenter.hpp>
+#include <gui/inputsalescreen_screen/InputSaleScreenView.hpp>
+#include <gui/inputsalescreen_screen/InputSaleScreenPresenter.hpp>
 
 
 /**
@@ -47,7 +50,8 @@ public:
     typedef touchgfx::meta::TypeList< MainScreenView,
             touchgfx::meta::TypeList< InputIDScreenView,
             touchgfx::meta::TypeList< SetupWifiScreenView,
-            touchgfx::meta::Nil > >
+            touchgfx::meta::TypeList< InputSaleScreenView,
+            touchgfx::meta::Nil > > >
             > GeneratedViewTypes;
 
     /**
@@ -62,7 +66,8 @@ public:
     typedef touchgfx::meta::TypeList< MainScreenPresenter,
             touchgfx::meta::TypeList< InputIDScreenPresenter,
             touchgfx::meta::TypeList< SetupWifiScreenPresenter,
-            touchgfx::meta::Nil > >
+            touchgfx::meta::TypeList< InputSaleScreenPresenter,
+            touchgfx::meta::Nil > > >
             > GeneratedPresenterTypes;
 
     /**

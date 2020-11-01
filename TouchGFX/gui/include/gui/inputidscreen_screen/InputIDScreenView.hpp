@@ -15,6 +15,9 @@ public:
     /** Function when you press button accept */
     virtual void send_credential();
 
+    /** Function that show result of sent credential to broker */
+    virtual void show_status_credential(uint8_t result);
+
     /** Shows progress bar */
     virtual void ShowProgreessBar();
 

@@ -1,4 +1,7 @@
 #include <gui/inputidscreen_screen/InputIDScreenView.hpp>
+#include <gui_generated/inputsalescreen_screen/InputSaleScreenViewBase.hpp>
+
+#include <gui/inputsalescreen_screen/InputSaleScreenView.hpp>
 
 InputIDScreenView::InputIDScreenView()
 {
@@ -31,6 +34,25 @@ void InputIDScreenView::ShowProgreessBar()
 	progress_bar.setVisible(true);
 	background_progress.invalidate();
 	progress_bar.invalidate();
+}
+
+void InputIDScreenView::show_status_credential(uint8_t result)
+{
+	InputSaleScreenView sale_screen;
+
+	background_progress.setVisible(false);
+	progress_bar.setVisible(false);
+	progress_bar.setValue(0);
+	background_progress.invalidate();
+	progress_bar.invalidate();
+
+	if (result == 1) {
+		sale_screen.setupScreen();
+	}
+	else {
+		pop_up.setVisible(true);
+		pop_up.invalidate();
+	}
 }
 
 void InputIDScreenView::update_progress(uint16_t tick)

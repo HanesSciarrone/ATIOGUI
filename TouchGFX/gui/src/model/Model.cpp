@@ -47,6 +47,13 @@ void Model::tick()
 				modelListener->ShowStatusConnectionNetwork(wifiParameters.resultOperation);
 				osMutexRelease(mutex_NewMsg_WifiHandle);
 			}
+
+			// Resulting operation of send credential
+			case 2:{
+				osMutexAcquire(mutex_NewMsg_WifiHandle, osWaitForever);
+				modelListener->show_status_credential(wifiParameters.resultOperation);
+				osMutexRelease(mutex_NewMsg_WifiHandle);
+			}
 		}
 	}
 }

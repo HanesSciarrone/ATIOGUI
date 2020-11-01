@@ -1,17 +1,17 @@
-#ifndef INPUTIDSCREENPRESENTER_HPP
-#define INPUTIDSCREENPRESENTER_HPP
+#ifndef INPUTSALESCREENPRESENTER_HPP
+#define INPUTSALESCREENPRESENTER_HPP
 
 #include <gui/model/ModelListener.hpp>
 #include <mvp/Presenter.hpp>
 
 using namespace touchgfx;
 
-class InputIDScreenView;
+class InputSaleScreenView;
 
-class InputIDScreenPresenter : public touchgfx::Presenter, public ModelListener
+class InputSaleScreenPresenter : public touchgfx::Presenter, public ModelListener
 {
 public:
-    InputIDScreenPresenter(InputIDScreenView& v);
+    InputSaleScreenPresenter(InputSaleScreenView& v);
 
     /**
      * The activate function is called automatically when this screen is "switched in"
@@ -25,16 +25,12 @@ public:
      */
     virtual void deactivate();
 
-    virtual ~InputIDScreenPresenter() {};
-
-    virtual void sent_credential_to_IoT(uint8_t *buffer, uint16_t length);
-    virtual void show_status_credential(uint8_t result);
-    virtual void ShowProgreessBar();
+    virtual ~InputSaleScreenPresenter() {};
 
 private:
-    InputIDScreenPresenter();
+    InputSaleScreenPresenter();
 
-    InputIDScreenView& view;
+    InputSaleScreenView& view;
 };
 
-#endif // INPUTIDSCREENPRESENTER_HPP
+#endif // INPUTSALESCREENPRESENTER_HPP

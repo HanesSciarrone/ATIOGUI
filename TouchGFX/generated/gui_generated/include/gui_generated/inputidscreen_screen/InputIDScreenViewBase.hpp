@@ -13,6 +13,8 @@
 #include <touchgfx/widgets/TextArea.hpp>
 #include <touchgfx/widgets/ButtonWithLabel.hpp>
 #include <touchgfx/containers/progress_indicators/ImageProgress.hpp>
+#include <touchgfx/containers/ModalWindow.hpp>
+#include <touchgfx/Color.hpp>
 
 class InputIDScreenViewBase : public touchgfx::View<InputIDScreenPresenter>
 {
@@ -46,6 +48,9 @@ protected:
     touchgfx::ButtonWithLabel BtnCancel;
     touchgfx::Box background_progress;
     touchgfx::ImageProgress progress_bar;
+    touchgfx::ModalWindow pop_up;
+    touchgfx::TextArea label_pop_up;
+    touchgfx::ButtonWithLabel button_ok_pop_up;
 
 private:
 

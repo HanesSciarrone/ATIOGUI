@@ -4,6 +4,8 @@
  *  Created on: 30 ago. 2020
  *      Author: Hanes
  */
+#include <string.h>
+
 #include "UART.h"
 
 #ifdef WIFI_UART_RTOS
@@ -65,9 +67,8 @@ bool_t WifiUART_Operation_Init(void)
 	   call the former to read another char.  */
 	bufferWifi.index = 0;
 	bufferWifi.position = 0;
-
+	strncpy((char *)bufferWifi.data, "\0", UART_BUFFER_SIZE);
 	HAL_UART_Receive_IT(uartWifi, (uint8_t *)&bufferWifi.data[bufferWifi.index], 1);
-
 	return TRUE;
 }
 
@@ -87,7 +88,7 @@ int8_t WifiUART_Send(const uint8_t* data, uint32_t length)
 	return 0;
 }
 
-int32_t WifiUART_Receive(uint8_t* buffer, uint32_t length)
+int32_t WifiUART_Receive(uint8_t* buffer, uint32_t length, uint32_t timeout)
 {
 	uint32_t readData = 0;
 
@@ -97,7 +98,7 @@ int32_t WifiUART_Receive(uint8_t* buffer, uint32_t length)
 
 	while (length--)
 	{
-		status = osSemaphoreAcquire(wifi_Sem_ReceptionDataHandle, DEFAULT_TIME_OUT/portTICK_PERIOD_MS);
+		status = osSemaphoreAcquire(wifi_Sem_ReceptionDataHandle, timeout/portTICK_PERIOD_MS);
 		if (status != osOK )
 		{
 			break;

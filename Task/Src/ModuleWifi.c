@@ -28,7 +28,8 @@ enum mqtt_state {
 	RECEIVE_DATA_MQTT,
 	UNSUBSCRIBE_MQTT,
 	SEND_DISCONNECT_BROKER,
-	CLOSE_CONNECTION
+	CLOSE_CONNECTION,
+	END_OPERATION
 };
 
 /* Private macros ----------------------------------------------------------- */
@@ -411,7 +412,7 @@ static void sent_data_iot(uint8_t *data)
 	ESP8266_StatusTypeDef_t status;
 	enum mqtt_state state = STATUS_CONNECTION;
 
-	while(state >= 0) {
+	while(state != END_OPERATION) {
 		switch(state) {
 		// Check status connection
 		case STATUS_CONNECTION: {
@@ -503,12 +504,12 @@ static void sent_data_iot(uint8_t *data)
 
 		case CLOSE_CONNECTION: {
 			status = ESP8266_ConnectionClose();
-			state = -1;
+			state = END_OPERATION;
 		}
 		break;
 
 		default:
-			state = -1;
+			state = END_OPERATION;
 
 		}
 	}
@@ -623,6 +624,8 @@ static void ModuleWifi(void *argument)
 		osThreadTerminate(TaskWifiHandle);
 	}
 
+	osDelay(5000/portTICK_PERIOD_MS);
+
 	/* Initialization of module ESP8266 */
 	if (!WifiModule_Init())
 	{
@@ -630,24 +633,20 @@ static void ModuleWifi(void *argument)
 		osThreadTerminate(TaskWifiHandle);
 	}
 
-	operation = SCAN_NETWORK;
+	operation = ANY_OPERATION;
 
-	while(1)
-	{
+	while(1) {
 		osMessageQueueGet(queue_Wifi_operationHandle,&operation, 0L, osWaitForever);
 
-		switch(operation)
-		{
-			case SCAN_NETWORK:
-			{
+		switch(operation) {
+			case SCAN_NETWORK: {
 				ModuleWifi_ScanNetwork();
 				msgGUI = 0;
 				osMessageQueuePut(queue_NewMsg_GUI, &msgGUI, 0L, osWaitForever);
 			}
 			break;
 
-			case CONNECT_NETWORK:
-			{
+			case CONNECT_NETWORK: {
 				ESP8266_NetworkParameters_s network;
 				ESP8266_StatusTypeDef_t status;
 
@@ -658,12 +657,10 @@ static void ModuleWifi(void *argument)
 				network.password = wifiParameters.password;
 				status = ESP8266_ConnectionNetwork(&network);
 
-				if (status == ESP8266_OK)
-				{
+				if (status == ESP8266_OK) {
 					wifiParameters.resultOperation = 1;
 				}
-				else
-				{
+				else {
 					wifiParameters.resultOperation = 0;
 				}
 
@@ -674,18 +671,28 @@ static void ModuleWifi(void *argument)
 			}
 			break;
 
-			case SEND_PACKET:
-			{
+			case SEND_PACKET: {
 				osMutexAcquire(mutex_NewMsg_WifiHandle, osWaitForever);
 				sent_data_iot(wifiParameters.data);
 
+				// Operation was success
 				if (strlen((char *)wifiParameters.data) != 0) {
-					// Comunicarse con la GUI
+					msgGUI = 2;
+					wifiParameters.resultOperation = 1;
+					osMessageQueuePut(queue_NewMsg_GUI, &msgGUI, 0L, osWaitForever);
+				}
+				// Operation failed
+				else {
+					msgGUI = 2;
+					wifiParameters.resultOperation = 0;
+					osMessageQueuePut(queue_NewMsg_GUI, &msgGUI, 0L, osWaitForever);
 				}
 				osMutexRelease(mutex_NewMsg_WifiHandle);
 			}
 			break;
 
+			default:
+				operation = ANY_OPERATION;
 		}
 	}
 }

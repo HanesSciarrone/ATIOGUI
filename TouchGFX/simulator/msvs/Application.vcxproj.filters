@@ -208,6 +208,18 @@
     <Filter Include="Header Files\generated\gui_generated\setupwifiscreen_screen">
       <UniqueIdentifier>1F00BF5C-A455-9A10-964E-BE82540909D0</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\gui\inputsalescreen_screen">
+      <UniqueIdentifier>D05B2EE5-CB75-A4E5-FEB3-8B610969BE05</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gui\inputsalescreen_screen">
+      <UniqueIdentifier>0C715EBA-B91C-1F7D-6BF7-5B9BF32790F5</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\generated\gui_generated\inputsalescreen_screen">
+      <UniqueIdentifier>7003B746-D60C-9F5D-BCA5-4ABD9EDC9579</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\generated\gui_generated\inputsalescreen_screen">
+      <UniqueIdentifier>1A7B6972-A54B-2736-9090-23AE1D08078F</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(TouchGFXReleasePath)\framework\source\platform\driver\touch\SDL2TouchController.cpp">
@@ -278,6 +290,15 @@
     </ClCompile>
     <ClCompile Include="..\..\gui\src\common\CustomKeyboard.cpp">
       <Filter>Source Files\gui\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gui\src\inputsalescreen_screen\InputSaleScreenPresenter.cpp">
+      <Filter>Source Files\gui\inputsalescreen_screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gui\src\inputsalescreen_screen\InputSaleScreenView.cpp">
+      <Filter>Source Files\gui\inputsalescreen_screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\generated\gui_generated\src\inputsalescreen_screen\InputSaleScreenViewBase.cpp">
+      <Filter>Source Files\generated\gui_generated\inputsalescreen_screen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -759,6 +780,15 @@
     </ClInclude>
     <ClInclude Include="..\..\gui\include\gui\common\KeyboardLayout.hpp">
       <Filter>Header Files\gui\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gui\include\gui\inputsalescreen_screen\InputSaleScreenPresenter.hpp">
+      <Filter>Header Files\gui\inputsalescreen_screen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gui\include\gui\inputsalescreen_screen\InputSaleScreenView.hpp">
+      <Filter>Header Files\gui\inputsalescreen_screen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\inputsalescreen_screen\InputSaleScreenViewBase.hpp">
+      <Filter>Header Files\generated\gui_generated\inputsalescreen_screen</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

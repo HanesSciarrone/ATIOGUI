@@ -56,6 +56,25 @@ InputIDScreenViewBase::InputIDScreenViewBase() :
     progress_bar.setAnchorAtZero(false);
     progress_bar.setVisible(false);
 
+    pop_up.setBackground(touchgfx::BitmapId(BITMAP_BACKGROUND_QWERTY_ID), 150, 105);
+    pop_up.setShadeColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    pop_up.setShadeAlpha(200);
+    pop_up.hide();
+
+    label_pop_up.setXY(108, 67);
+    label_pop_up.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    label_pop_up.setLinespacing(0);
+    label_pop_up.setTypedText(touchgfx::TypedText(T_SINGLEUSEID28));
+    pop_up.add(label_pop_up);
+
+    button_ok_pop_up.setXY(315, 190);
+    button_ok_pop_up.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID));
+    button_ok_pop_up.setLabelText(touchgfx::TypedText(T_SINGLEUSEID29));
+    button_ok_pop_up.setLabelColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    button_ok_pop_up.setLabelColorPressed(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    button_ok_pop_up.setAction(buttonCallback);
+    pop_up.add(button_ok_pop_up);
+
     add(Background);
     add(ToolBar);
     add(logo);
@@ -65,6 +84,7 @@ InputIDScreenViewBase::InputIDScreenViewBase() :
     add(BtnCancel);
     add(background_progress);
     add(progress_bar);
+    add(pop_up);
 }
 
 void InputIDScreenViewBase::setupScreen()
@@ -87,5 +107,13 @@ void InputIDScreenViewBase::buttonCallbackHandler(const touchgfx::AbstractButton
         //When BtnCancel clicked change screen to MainScreen
         //Go to MainScreen with screen transition towards North
         application().gotoMainScreenScreenCoverTransitionNorth();
+    }
+    else if (&src == &button_ok_pop_up)
+    {
+        //hide_pop_up
+        //When button_ok_pop_up clicked hide pop_up
+        //Hide pop_up
+        pop_up.setVisible(false);
+        pop_up.invalidate();
     }
 }

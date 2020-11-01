@@ -46,9 +46,10 @@ int8_t WifiUART_Send(const uint8_t* data, uint32_t length);
   *
   * @param[in,out]  buffer 	Buffer used to storage data read.
   * @param[in]  	length 	Maximum size of the data to receive.
+  * @param[in]		timeout	Timeout until function return.
   *
   * @return The actual data size that has been received.
   */
-int32_t WifiUART_Receive(uint8_t* buffer, uint32_t length);
+int32_t WifiUART_Receive(uint8_t* buffer, uint32_t length, uint32_t timeout);
 
 #endif /* INC_UART_H_ */
