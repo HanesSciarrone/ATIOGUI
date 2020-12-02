@@ -5,10 +5,6 @@
 
 /* Include added for user */
 #include "touchgfx/Bitmap.hpp"
-#include <iostream>
-#include <string>
-
-using namespace std;
 
 class ItemList : public ItemListBase
 {
@@ -18,7 +14,7 @@ public:
 
     virtual void initialize();
 
-    void SetupListElement(const Bitmap &iconBMP, const string text);
+    void SetupListElement(const Bitmap &iconBMP, const char *text);
 
     /**
      * @brief Function to get buffer of label element.
@@ -29,6 +25,10 @@ public:
      * @brief Function used to set callback of class
      */
     void setAction(GenericCallback< ItemList& >& callback);
+
+    /**
+     * @brief Function to clear buffer of label element
+     */
 
     /**
      * @brief Override function from ItemListBase

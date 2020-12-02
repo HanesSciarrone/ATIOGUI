@@ -15,6 +15,8 @@
 #include <gui/inputidscreen_screen/InputIDScreenPresenter.hpp>
 #include <gui/setupwifiscreen_screen/SetupWifiScreenView.hpp>
 #include <gui/setupwifiscreen_screen/SetupWifiScreenPresenter.hpp>
+#include <gui/inputsalescreen_screen/InputSaleScreenView.hpp>
+#include <gui/inputsalescreen_screen/InputSaleScreenPresenter.hpp>
 
 using namespace touchgfx;
 

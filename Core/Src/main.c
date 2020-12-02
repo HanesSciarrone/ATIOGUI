@@ -24,6 +24,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "UART.h"
+#include "ModuleWifi.h"
+
 #include "mx25l512.h"
 #include "otm8009a.h"
 /* USER CODE END Includes */
@@ -104,7 +107,6 @@ static void MX_CRC_Init(void);
 static void MX_DMA2D_Init(void);
 static void MX_DSIHOST_DSI_Init(void);
 static void MX_FMC_Init(void);
-void MX_I2C4_Init(void);
 static void MX_LTDC_Init(void);
 static void MX_QUADSPI_Init(void);
 static void MX_UART5_Init(void);
@@ -202,7 +204,10 @@ int main(void)
   TouchGFXTaskHandle = osThreadNew(TouchGFX_Task, NULL, &TouchGFXTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
-  /* add threads, ... */
+  if (ModuleWifi_Started() == FALSE)
+  {
+	  Error_Handler();
+  }
   /* USER CODE END RTOS_THREADS */
 
   /* Start scheduler */
@@ -707,7 +712,11 @@ static void MX_UART5_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN UART5_Init 2 */
-
+	WifiUART_SetHandlerUart(&huart5);
+	if (WifiUART_Operation_Init() == FALSE)
+	{
+		Error_Handler();
+	}
   /* USER CODE END UART5_Init 2 */
 
 }

@@ -32,6 +32,7 @@ InputIDScreenViewBase::InputIDScreenViewBase() :
     BtnAccept.setLabelText(touchgfx::TypedText(T_SINGLEUSEID17));
     BtnAccept.setLabelColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     BtnAccept.setLabelColorPressed(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    BtnAccept.setAction(buttonCallback);
 
     BtnCancel.setXY(68, 308);
     BtnCancel.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID));
@@ -40,6 +41,47 @@ InputIDScreenViewBase::InputIDScreenViewBase() :
     BtnCancel.setLabelColorPressed(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     BtnCancel.setAction(buttonCallback);
 
+    background_progress.setPosition(0, 0, 800, 480);
+    background_progress.setVisible(false);
+    background_progress.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    background_progress.setAlpha(114);
+
+    progress_bar.setXY(198, 235);
+    progress_bar.setProgressIndicatorPosition(2, 2, 400, 30);
+    progress_bar.setRange(0, 100);
+    progress_bar.setDirection(touchgfx::AbstractDirectionProgress::RIGHT);
+    progress_bar.setBackground(touchgfx::Bitmap(BITMAP_BLUE_PROGRESSINDICATORS_BG_LARGE_PROGRESS_INDICATOR_BG_SQUARE_0_DEGREES_ID));
+    progress_bar.setBitmap(BITMAP_BLUE_PROGRESSINDICATORS_FILL_TILING_PROGRESS_INDICATOR_FILL_STRIPED_WIDE_HORIZONTAL_ID);
+    progress_bar.setValue(58);
+    progress_bar.setAnchorAtZero(false);
+    progress_bar.setVisible(false);
+
+    pop_up.setBackground(touchgfx::BitmapId(BITMAP_BACKGROUND_QWERTY_ID), 150, 105);
+    pop_up.setShadeColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    pop_up.setShadeAlpha(200);
+    pop_up.hide();
+
+    label1_pop_up.setXY(114, 72);
+    label1_pop_up.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    label1_pop_up.setLinespacing(0);
+    label1_pop_up.setTypedText(touchgfx::TypedText(T_SINGLEUSEID28));
+    pop_up.add(label1_pop_up);
+
+    button_ok_pop_up.setXY(315, 190);
+    button_ok_pop_up.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID));
+    button_ok_pop_up.setLabelText(touchgfx::TypedText(T_SINGLEUSEID29));
+    button_ok_pop_up.setLabelColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    button_ok_pop_up.setLabelColorPressed(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    button_ok_pop_up.setAction(buttonCallback);
+    pop_up.add(button_ok_pop_up);
+
+    label2_pop_up.setXY(106, 72);
+    label2_pop_up.setVisible(false);
+    label2_pop_up.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    label2_pop_up.setLinespacing(0);
+    label2_pop_up.setTypedText(touchgfx::TypedText(T_SINGLEUSEID36));
+    pop_up.add(label2_pop_up);
+
     add(Background);
     add(ToolBar);
     add(logo);
@@ -47,6 +89,9 @@ InputIDScreenViewBase::InputIDScreenViewBase() :
     add(titleInputID);
     add(BtnAccept);
     add(BtnCancel);
+    add(background_progress);
+    add(progress_bar);
+    add(pop_up);
 }
 
 void InputIDScreenViewBase::setupScreen()
@@ -56,11 +101,26 @@ void InputIDScreenViewBase::setupScreen()
 
 void InputIDScreenViewBase::buttonCallbackHandler(const touchgfx::AbstractButton& src)
 {
-    if (&src == &BtnCancel)
+    if (&src == &BtnAccept)
+    {
+        //SendCredential
+        //When BtnAccept clicked call virtual function
+        //Call send_credential
+        send_credential();
+    }
+    else if (&src == &BtnCancel)
     {
         //GoMainScreen
         //When BtnCancel clicked change screen to MainScreen
         //Go to MainScreen with screen transition towards North
         application().gotoMainScreenScreenCoverTransitionNorth();
+    }
+    else if (&src == &button_ok_pop_up)
+    {
+        //hide_pop_up
+        //When button_ok_pop_up clicked hide pop_up
+        //Hide pop_up
+        pop_up.setVisible(false);
+        pop_up.invalidate();
     }
 }

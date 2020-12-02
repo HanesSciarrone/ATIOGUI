@@ -36,6 +36,9 @@ public:
 
     virtual void BtnDeleteClick();
 
+    int get_buffer_length();
+    void get_buffer(uint8_t *buffer);
+
 protected:
 
      uint8_t position;

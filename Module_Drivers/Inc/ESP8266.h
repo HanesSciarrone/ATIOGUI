@@ -8,8 +8,6 @@
 #ifndef INC_ESP8266_H_
 #define INC_ESP8266_H_
 
-#include <stdint.h>
-
 #define WIFI_RTOS
 
 ///  Time of wait to start read response of command send.
@@ -46,12 +44,17 @@ typedef struct
  */
 typedef struct
 {
-	int8_t(*send)(const uint8_t*, uint32_t);		///< Pointer to function to sent data to ESP8266
-	int32_t(*recv)(uint8_t*, uint32_t);		///< Pointer to function to receive data from ESP8266
+	int8_t(*send)(const uint8_t*, uint32_t);				///< Pointer to function to sent data to ESP8266
+	int32_t(*recv)(uint8_t*, uint32_t, uint32_t);	///< Pointer to function to receive data from ESP8266
 }ESP8266_CommInterface_s;
 
 
-ESP8266_StatusTypeDef_t ESP8266_CommInterface_Init(const ESP8266_CommInterface_s *interface);
+ESP8266_StatusTypeDef_t ESP8266_CommInterface_Init(ESP8266_CommInterface_s *interface);
+
+/**
+ * @brief Restart module.
+ */
+ESP8266_StatusTypeDef_t ESP8266_restart(void);
 ESP8266_StatusTypeDef_t ESP8266_SetEcho(const uint8_t mode);
 ESP8266_StatusTypeDef_t ESP8266_SetModeWIFI(uint8_t *mode);
 ESP8266_StatusTypeDef_t ESP8266_SetMultipleConnection(uint8_t *mode);
@@ -61,6 +64,12 @@ ESP8266_StatusTypeDef_t ESP8266_SetMultipleConnection(uint8_t *mode);
  * This implementation only set ssid and rssi as parameters.
  */
 ESP8266_StatusTypeDef_t ESP8266_SetListNeetwork(void);
+
+/**
+ * @brief List of all available AP's detected by ESP8266
+ */
+ESP8266_StatusTypeDef_t ESP8266_ScanNetwork(void);
+
 ESP8266_StatusTypeDef_t ESP8266_StatusNetwork(void);
 ESP8266_StatusTypeDef_t ESP8266_DisconnectAllNetwork(void);
 ESP8266_StatusTypeDef_t ESP8266_ConnectionNetwork(const ESP8266_NetworkParameters_s *network);

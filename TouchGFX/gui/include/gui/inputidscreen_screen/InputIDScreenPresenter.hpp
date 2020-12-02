@@ -27,6 +27,10 @@ public:
 
     virtual ~InputIDScreenPresenter() {};
 
+    virtual void sent_credential_to_IoT(uint8_t *buffer, uint16_t length);
+    virtual void show_status_credential(uint8_t result);
+    virtual void ShowProgreessBar();
+
 private:
     InputIDScreenPresenter();
 
