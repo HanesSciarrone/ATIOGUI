@@ -44,6 +44,27 @@ InputSaleScreenViewBase::InputSaleScreenViewBase() :
     label_title.resizeToCurrentText();
     label_title.setTypedText(touchgfx::TypedText(T_SINGLEUSEID32));
 
+    pop_up.setBackground(touchgfx::BitmapId(BITMAP_BACKGROUND_QWERTY_ID), 150, 105);
+    pop_up.setShadeColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    pop_up.setShadeAlpha(174);
+    pop_up.hide();
+
+    btn_popup.setXY(317, 196);
+    btn_popup.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID));
+    btn_popup.setLabelText(touchgfx::TypedText(T_SINGLEUSEID37));
+    btn_popup.setLabelColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    btn_popup.setLabelColorPressed(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    btn_popup.setAction(buttonCallback);
+    pop_up.add(btn_popup);
+
+    text_pupup.setPosition(7, 78, 487, 80);
+    text_pupup.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    text_pupup.setLinespacing(0);
+    text_pupupBuffer[0] = 0;
+    text_pupup.setWildcard(text_pupupBuffer);
+    text_pupup.setTypedText(touchgfx::TypedText(T_SINGLEUSEID38));
+    pop_up.add(text_pupup);
+
     add(backgroud);
     add(tool_bar);
     add(logo);
@@ -51,6 +72,7 @@ InputSaleScreenViewBase::InputSaleScreenViewBase() :
     add(button_accept_operation);
     add(button_cancel_operation);
     add(label_title);
+    add(pop_up);
 }
 
 void InputSaleScreenViewBase::setupScreen()
@@ -64,8 +86,8 @@ void InputSaleScreenViewBase::buttonCallbackHandler(const touchgfx::AbstractButt
     {
         //dispatch_operation
         //When button_accept_operation clicked call virtual function
-        //Call sent_dispatch_operation
-        sent_dispatch_operation();
+        //Call send_dispatch_operation
+        send_dispatch_operation();
     }
     else if (&src == &button_cancel_operation)
     {
@@ -73,5 +95,13 @@ void InputSaleScreenViewBase::buttonCallbackHandler(const touchgfx::AbstractButt
         //When button_cancel_operation clicked change screen to MainScreen
         //Go to MainScreen with screen transition towards North
         application().gotoMainScreenScreenCoverTransitionNorth();
+    }
+    else if (&src == &btn_popup)
+    {
+        //Interaction1
+        //When btn_popup clicked hide pop_up
+        //Hide pop_up
+        pop_up.setVisible(false);
+        pop_up.invalidate();
     }
 }

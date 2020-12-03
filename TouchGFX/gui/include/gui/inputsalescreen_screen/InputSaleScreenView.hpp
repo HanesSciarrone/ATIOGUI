@@ -11,7 +11,12 @@ public:
     virtual ~InputSaleScreenView() {}
     virtual void setupScreen();
     virtual void tearDownScreen();
+
+    void send_dispatch_operation();
+
 protected:
+
+    uint32_t liters;
 };
 
 #endif // INPUTSALESCREENVIEW_HPP

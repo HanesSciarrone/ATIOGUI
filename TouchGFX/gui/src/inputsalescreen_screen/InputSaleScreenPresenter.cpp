@@ -16,3 +16,8 @@ void InputSaleScreenPresenter::deactivate()
 {
 
 }
+
+uint32_t InputSaleScreenPresenter::get_liters_fuel_available(void)
+{
+	return model->get_liters_fuel_available();
+}

@@ -127,3 +127,8 @@ void Model::sent_credential_to_IoT(uint8_t *buffer, uint16_t length)
 		modelListener->ShowProgreessBar();
 	}
 }
+
+uint32_t Model::get_liters_fuel_available(void)
+{
+	return liters_available;
+}

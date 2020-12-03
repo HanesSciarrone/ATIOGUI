@@ -12,6 +12,8 @@
 #include <gui/containers/PadNumeric.hpp>
 #include <touchgfx/widgets/ButtonWithLabel.hpp>
 #include <touchgfx/widgets/TextAreaWithWildcard.hpp>
+#include <touchgfx/containers/ModalWindow.hpp>
+#include <touchgfx/Color.hpp>
 
 class InputSaleScreenViewBase : public touchgfx::View<InputSaleScreenPresenter>
 {
@@ -23,7 +25,7 @@ public:
     /*
      * Virtual Action Handlers
      */
-    virtual void sent_dispatch_operation()
+    virtual void send_dispatch_operation()
     {
         // Override and implement this function in InputSaleScreen
     }
@@ -43,12 +45,17 @@ protected:
     touchgfx::ButtonWithLabel button_accept_operation;
     touchgfx::ButtonWithLabel button_cancel_operation;
     touchgfx::TextAreaWithOneWildcard label_title;
+    touchgfx::ModalWindow pop_up;
+    touchgfx::ButtonWithLabel btn_popup;
+    touchgfx::TextAreaWithOneWildcard text_pupup;
 
     /*
      * Wildcard Buffers
      */
     static const uint16_t LABEL_TITLE_SIZE = 20;
     touchgfx::Unicode::UnicodeChar label_titleBuffer[LABEL_TITLE_SIZE];
+    static const uint16_t TEXT_PUPUP_SIZE = 100;
+    touchgfx::Unicode::UnicodeChar text_pupupBuffer[TEXT_PUPUP_SIZE];
 
 private:
 

@@ -26,6 +26,7 @@ public:
     virtual void deactivate();
 
     virtual ~InputSaleScreenPresenter() {};
+    virtual uint32_t get_liters_fuel_available(void);
 
 private:
     InputSaleScreenPresenter();
