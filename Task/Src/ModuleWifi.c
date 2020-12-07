@@ -757,3 +757,12 @@ bool_t ModuleWifi_Started(void)
 
 	return TRUE;
 }
+
+void module_wifi_send_id(uint8_t *id, uint32_t length_id)
+{
+	osMutexAcquire(mutex_NewMsg_WifiHandle, timeout);
+	memset(wifiParameters.data, id, length_id);
+	osMessageQueuePut(queue_Wifi_operationHandle, SEND_CREDENTIAL, 0L, 500);
+	osMutexAcquire(mutex_NewMsg_WifiHandle, timeout);
+
+}

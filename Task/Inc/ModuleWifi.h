@@ -82,4 +82,12 @@ typedef struct
  */
 bool_t ModuleWifi_Started(void);
 
+/**
+ * @brief Send uid got of NFC card to server.
+ *
+ * @param[in]	id			ID got of NFC card.
+ * @param[in]	length_id	Length ID string.
+ */
+void module_wifi_send_id(uint8_t *id, uint32_t length_id);
+
 #endif /* INC_MODULEWIFI_H_ */

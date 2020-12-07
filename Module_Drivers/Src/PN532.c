@@ -22,12 +22,12 @@ static uint8_t pn532_buffer[PN532_BUFFERSIZE];
 
 /* ----------------- Prototype of private method ---------------- */
 static void pn532_delay(const uint32_t time);
-static void pn532_read_data(ncf_interface *obj, uint8_t *buffer, uint32_t amount);
-static void pn532_write_command(ncf_interface *obj, uint8_t *cmd, uint16_t cmd_length);
-static bool pn532_isready(ncf_interface *obj);
-static bool pn532_wait_ready(ncf_interface *obj, const uint16_t timeout);
-static bool pn532_read_ack(ncf_interface *obj);
-static bool pn532_send_command_check_ack(ncf_interface *obj, uint8_t *cmd, const uint16_t cmd_length, const uint16_t timeout);
+static void pn532_read_data(pn532_interface *obj, uint8_t *buffer, uint32_t amount);
+static void pn532_write_command(pn532_interface *obj, uint8_t *cmd, uint16_t cmd_length);
+static bool pn532_isready(pn532_interface *obj);
+static bool pn532_wait_ready(pn532_interface *obj, const uint16_t timeout);
+static bool pn532_read_ack(pn532_interface *obj);
+static bool pn532_send_command_check_ack(pn532_interface *obj, uint8_t *cmd, const uint16_t cmd_length, const uint16_t timeout);
 
 /* -------------- Implementation of private method -------------- */
 static void pn532_delay(const uint32_t time)
@@ -40,7 +40,7 @@ static void pn532_delay(const uint32_t time)
 #endif
 }
 
-static void pn532_read_data(ncf_interface *obj, uint8_t *buffer, uint32_t amount)
+static void pn532_read_data(pn532_interface *obj, uint8_t *buffer, uint32_t amount)
 {
 	uint32_t index;
 
@@ -60,7 +60,7 @@ static void pn532_read_data(ncf_interface *obj, uint8_t *buffer, uint32_t amount
 	obj->set_select(false);
 }
 
-static void pn532_write_command(ncf_interface *obj, uint8_t *cmd, uint16_t cmd_length)
+static void pn532_write_command(pn532_interface *obj, uint8_t *cmd, uint16_t cmd_length)
 {
 	uint8_t checksum;	// variable to store checksum
 	uint16_t index;
@@ -95,7 +95,7 @@ static void pn532_write_command(ncf_interface *obj, uint8_t *cmd, uint16_t cmd_l
 	obj->set_select(false);
 }
 
-static bool pn532_isready(ncf_interface *obj)
+static bool pn532_isready(pn532_interface *obj)
 {
 	if( !obj->get_irq() )
 	{
@@ -105,7 +105,7 @@ static bool pn532_isready(ncf_interface *obj)
 	return true;
 }
 
-static bool pn532_wait_ready(ncf_interface *obj, const uint16_t timeout)
+static bool pn532_wait_ready(pn532_interface *obj, const uint16_t timeout)
 {
 #ifdef PN532_RTOS
 
@@ -136,7 +136,7 @@ static bool pn532_wait_ready(ncf_interface *obj, const uint16_t timeout)
 	return false;
 }
 
-static bool pn532_read_ack(ncf_interface *obj)
+static bool pn532_read_ack(pn532_interface *obj)
 {
 	uint8_t ack_buffer[6];		// Array to store read message form PN532
 
@@ -146,7 +146,7 @@ static bool pn532_read_ack(ncf_interface *obj)
 	return !strncmp((const char *)ack_buffer, (const char *)pn532ack, 6) ? true : false;
 }
 
-static bool pn532_send_command_check_ack(ncf_interface *obj, uint8_t *cmd, const uint16_t cmd_length, const uint16_t timeout)
+static bool pn532_send_command_check_ack(pn532_interface *obj, uint8_t *cmd, const uint16_t cmd_length, const uint16_t timeout)
 {
 	// write the command
 	pn532_write_command(obj, cmd, cmd_length);
@@ -173,7 +173,7 @@ static bool pn532_send_command_check_ack(ncf_interface *obj, uint8_t *cmd, const
 }
 
 /* ---------------- Implementation public method ---------------- */
-uint32_t pn532_get_firmware_version(ncf_interface *obj)
+uint32_t pn532_get_firmware_version(pn532_interface *obj)
 {
 	uint32_t response = 0;
 	uint8_t offset = 0;
@@ -183,7 +183,7 @@ uint32_t pn532_get_firmware_version(ncf_interface *obj)
 	// Send command with length of 1 byte, when result is false byte is not send.
 	if (!pn532_send_command_check_ack(obj, pn532_buffer, 1, 2))
 	{
-		return false;
+		return 0;
 	}
 
 	// Data was successfully send now retrieve data read data packet
@@ -192,7 +192,7 @@ uint32_t pn532_get_firmware_version(ncf_interface *obj)
 	// When buffer is not equal firmware version return
 	if (strncmp((char *)pn532_buffer, (char *)pn532response_firmwarevers, 6) != 0)
 	{
-		return false;
+		return 0;
 	}
 
 
@@ -212,7 +212,7 @@ uint32_t pn532_get_firmware_version(ncf_interface *obj)
 	 return response;
 }
 
-bool pn532_sam_configuration(ncf_interface *obj)
+bool pn532_sam_configuration(pn532_interface *obj)
 {
 	pn532_buffer[0] = PN532_COMMAND_SAMCONFIGURATION;
 	pn532_buffer[1] = 0x01;		// Normal Mode
@@ -231,7 +231,7 @@ bool pn532_sam_configuration(ncf_interface *obj)
 	return (pn532_buffer[6] == 0x15) ? true : false;
 }
 
-bool pn532_set_passive_activation_retries(ncf_interface *obj, uint8_t max_retries)
+bool pn532_set_passive_activation_retries(pn532_interface *obj, uint8_t max_retries)
 {
 	pn532_buffer[0] = PN532_COMMAND_RFCONFIGURATION;
 	pn532_buffer[1] = 0x05;		// Config item 5 (MaxRetries)
@@ -242,7 +242,7 @@ bool pn532_set_passive_activation_retries(ncf_interface *obj, uint8_t max_retrie
 	return pn532_send_command_check_ack(obj, pn532_buffer, 5, 2);
 }
 
-bool pn532_read_passive_target_id(ncf_interface *obj, const uint8_t card_baudrate, uint8_t *uid, uint8_t *length_uid, const uint16_t timeout)
+bool pn532_read_passive_target_id(pn532_interface *obj, const uint8_t card_baudrate, uint8_t *uid, uint8_t *length_uid, const uint16_t timeout)
 {
 	pn532_buffer[0] = PN532_COMMAND_INLISTPASSIVETARGET;
 	pn532_buffer[1] = 0x01;	// Maximum 1 card at once (We can set a 0x02 as maximum)

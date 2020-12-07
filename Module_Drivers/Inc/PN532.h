@@ -135,7 +135,7 @@ typedef struct
 	void (*send_byte)(uint8_t);		///< Pointer to function to sent single byte to PN532
 	void (*set_select)(uint8_t);	///< Pointer to function to enable o disable interface communication
 	uint8_t (*get_irq)(void);		///< Pointer to function to test pin IRQ of PN532
-}ncf_interface;
+}pn532_interface;
 
 
 /// Generic PN532 functions
@@ -154,7 +154,7 @@ typedef struct
  *  @return Return variable containing hardware and software version from PN532
  *  or 0 in otherwise.
  */
-uint32_t pn532_get_firmware_version(ncf_interface *obj);
+uint32_t pn532_get_firmware_version(pn532_interface *obj);
 
 /**
  * 	@brief Configures the SAM (Secure Access Module)
@@ -163,7 +163,7 @@ uint32_t pn532_get_firmware_version(ncf_interface *obj);
  *
  * 	@return Return true if everything executed properly, false for an error
  */
-bool pn532_sam_configuration(ncf_interface *obj);
+bool pn532_sam_configuration(pn532_interface *obj);
 
 /**
  * @brief Set retries of PN532. Sets the MxRtyPassiveActivation byte
@@ -174,7 +174,7 @@ bool pn532_sam_configuration(ncf_interface *obj);
  *
  * @return Return true if everything executed properly, false for an error
  */
-bool pn532_set_passive_activation_retries(ncf_interface *obj, uint8_t max_retries);
+bool pn532_set_passive_activation_retries(pn532_interface *obj, uint8_t max_retries);
 
 /// Functions to ISO14443A
 
@@ -196,6 +196,6 @@ bool pn532_set_passive_activation_retries(ncf_interface *obj, uint8_t max_retrie
  *
  * @return Return state of real action. true was success, false in otherwise.
  */
-bool pn532_read_passive_target_id(ncf_interface *obj, const uint8_t card_baudrate, uint8_t *uid, uint8_t *length_uid, const uint16_t timeout);
+bool pn532_read_passive_target_id(pn532_interface *obj, const uint8_t card_baudrate, uint8_t *uid, uint8_t *length_uid, const uint16_t timeout);
 
 #endif /* INC_PN532_H_ */

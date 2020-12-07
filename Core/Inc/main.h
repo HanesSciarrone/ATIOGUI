@@ -78,6 +78,8 @@ void Error_Handler(void);
 #define WIFI_RST_GPIO_Port GPIOJ
 #define RMII_RXER_Pin GPIO_PIN_5
 #define RMII_RXER_GPIO_Port GPIOD
+#define SPI2_CS_Pin GPIO_PIN_11
+#define SPI2_CS_GPIO_Port GPIOA
 #define NC8_Pin GPIO_PIN_4
 #define NC8_GPIO_Port GPIOK
 #define NC7_Pin GPIO_PIN_3
@@ -108,6 +110,8 @@ void Error_Handler(void);
 #define B_USER_GPIO_Port GPIOA
 #define ARD_D7_Pin GPIO_PIN_3
 #define ARD_D7_GPIO_Port GPIOJ
+#define PN532_IRQ_Pin_Pin GPIO_PIN_6
+#define PN532_IRQ_Pin_GPIO_Port GPIOH
 #define ARD_D4_Pin GPIO_PIN_0
 #define ARD_D4_GPIO_Port GPIOJ
 #define ARD_D2_Pin GPIO_PIN_1
