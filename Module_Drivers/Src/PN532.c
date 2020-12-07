@@ -97,12 +97,7 @@ static void pn532_write_command(pn532_interface *obj, uint8_t *cmd, uint16_t cmd
 
 static bool pn532_isready(pn532_interface *obj)
 {
-	if( !obj->get_irq() )
-	{
-		return false;
-	}
-
-	return true;
+	return obj->get_irq();
 }
 
 static bool pn532_wait_ready(pn532_interface *obj, const uint16_t timeout)

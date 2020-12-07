@@ -88,6 +88,6 @@ bool_t ModuleWifi_Started(void);
  * @param[in]	id			ID got of NFC card.
  * @param[in]	length_id	Length ID string.
  */
-void module_wifi_send_id(uint8_t *id, uint32_t length_id);
+void module_wifi_send_id(uint8_t *id, uint8_t length_id);
 
 #endif /* INC_MODULEWIFI_H_ */

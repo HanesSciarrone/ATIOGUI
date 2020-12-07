@@ -4,7 +4,8 @@
  *  Created on: Dec 6, 2020
  *      Author: Hanes
  */
-
+#include <string.h>
+#include "SPI.h"
 #include "cmsis_os.h"
 #include "PN532.h"
 #include "ModuleWifi.h"
@@ -37,7 +38,7 @@ void nfc_task(void *argument)
 
 	for(;;)
 	{
-		if (pn532_read_passive_target_id(&nfc_interface, PN532_MIFARE_ISO14443A, uid, &uid, 1000))
+		if (pn532_read_passive_target_id(&nfc_interface, PN532_MIFARE_ISO14443A, uid, &length_uid, 1000))
 		{
 			module_wifi_send_id(uid, length_uid);
 			strncpy((char *)uid, "\0", 8);
@@ -53,10 +54,10 @@ static bool module_nfc_init(void)
 	uint32_t success;
 	uint8_t retry = 2;
 
-	nfc_interface.get_byte = &spi2_get_byte;
-	nfc_interface.get_irq = &spi2_get_irq;
-	nfc_interface.send_byte = &spi2_send_byte;
-	nfc_interface.set_select = &spi2_set_select;
+	nfc_interface.get_byte = &nfc_spi_get_byte;
+	nfc_interface.get_irq = &nfc_spi_get_irq;
+	nfc_interface.send_byte = &nfc_spi_send_byte;
+	nfc_interface.set_select = &nfc_spi_set_select;
 
 	do {
 		success = pn532_get_firmware_version(&nfc_interface);

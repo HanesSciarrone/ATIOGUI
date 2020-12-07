@@ -679,7 +679,7 @@ static void ModuleWifi(void *argument)
 	operation = ANY_OPERATION;
 
 	while(1) {
-		osMessageQueueGet(queue_Wifi_operationHandle,&operation, 0L, osWaitForever);
+		osMessageQueueGet(queue_Wifi_operationHandle, &operation, 0L, osWaitForever);
 
 		switch(operation) {
 			case SCAN_NETWORK: {
@@ -758,11 +758,14 @@ bool_t ModuleWifi_Started(void)
 	return TRUE;
 }
 
-void module_wifi_send_id(uint8_t *id, uint32_t length_id)
+void module_wifi_send_id(uint8_t *id, uint8_t length_id)
 {
-	osMutexAcquire(mutex_NewMsg_WifiHandle, timeout);
-	memset(wifiParameters.data, id, length_id);
-	osMessageQueuePut(queue_Wifi_operationHandle, SEND_CREDENTIAL, 0L, 500);
-	osMutexAcquire(mutex_NewMsg_WifiHandle, timeout);
+	WifiModule_Operation operation;
+
+	osMutexAcquire(mutex_NewMsg_WifiHandle, osWaitForever);
+	operation = SEND_CREDENTIAL;
+	strncpy((char *)wifiParameters.data, (char *)id, length_id);
+	osMessageQueuePut(queue_Wifi_operationHandle, &operation, 0L, 500/portTICK_PERIOD_MS);
+	osMutexRelease(mutex_NewMsg_WifiHandle);
 
 }

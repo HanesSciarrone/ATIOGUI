@@ -133,8 +133,8 @@ typedef struct
 {
 	uint8_t (*get_byte)(void);		///< Pointer to function to receive single byte from PN532
 	void (*send_byte)(uint8_t);		///< Pointer to function to sent single byte to PN532
-	void (*set_select)(uint8_t);	///< Pointer to function to enable o disable interface communication
-	uint8_t (*get_irq)(void);		///< Pointer to function to test pin IRQ of PN532
+	void (*set_select)(bool);		///< Pointer to function to enable o disable interface communication
+	bool (*get_irq)(void);		///< Pointer to function to test pin IRQ of PN532
 }pn532_interface;
 
 

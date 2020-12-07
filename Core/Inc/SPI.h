@@ -9,7 +9,7 @@
 #define INC_SPI_H_
 
 #include <stdbool.h>
-#include "stm32f7xx_hal_spi.h"
+#include "main.h"
 
 /// Comment this #define if you don't work with RTOS
 #define NFC_SPI_RTOS
@@ -60,8 +60,8 @@ void nfc_spi_set_select(const bool state);
  *  @brief Test PN532 IRQ signal. The PN532 will toggle the IRQ to active
  *  when data is ready to be received from PN532
  *
- *  @return Return 1 if IRQ signal is active, 0 if not active.
+ *  @return Return true if IRQ signal is active, false if not active.
  */
-uint8_t nfc_spi_get_irq(void);
+bool nfc_spi_get_irq(void);
 
 #endif /* INC_SPI_H_ */
