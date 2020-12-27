@@ -1,7 +1,7 @@
 /*
  * ModuleNFC.h
  *
- *  Created on: Dec 6, 2020
+ *  Created on: 24 dic. 2020
  *      Author: Hanes
  */
 
@@ -11,10 +11,17 @@
 #include "main.h"
 
 /**
- * @brief Initialize module of NFC and create task to work this.
+ * @brief Function to initialize semaphore, queue and task
+ * used for drive module NFC.
  *
- * @return 1 if operations was success or 0 in otherwise.
+ * @return Return 1 if was success or 0 in other case
  */
-bool_t module_nfc_starter(void);
+bool_t ModuleNFC_Started(void);
+
+/**
+ * @brief Function to release semaphore to start initialize
+ * module and task.
+ */
+void module_nfc_release_initialization(void);
 
 #endif /* INC_MODULENFC_H_ */

@@ -13,6 +13,8 @@
 #include <touchgfx/transitions/CoverTransition.hpp>
 #include <touchgfx/transitions/CoverTransition.hpp>
 #include <touchgfx/transitions/CoverTransition.hpp>
+#include <touchgfx/transitions/CoverTransition.hpp>
+#include <touchgfx/transitions/CoverTransition.hpp>
 
 #include <gui/common/FrontendApplication.hpp>
 #include <gui/model/Model.hpp>
@@ -25,6 +27,8 @@
 #include <gui/setupwifiscreen_screen/SetupWifiScreenPresenter.hpp>
 #include <gui/inputsalescreen_screen/InputSaleScreenView.hpp>
 #include <gui/inputsalescreen_screen/InputSaleScreenPresenter.hpp>
+#include <gui/setupmqttscreen_screen/SetupMQTTScreenView.hpp>
+#include <gui/setupmqttscreen_screen/SetupMQTTScreenPresenter.hpp>
 
 
 /**
@@ -51,7 +55,8 @@ public:
             touchgfx::meta::TypeList< InputIDScreenView,
             touchgfx::meta::TypeList< SetupWifiScreenView,
             touchgfx::meta::TypeList< InputSaleScreenView,
-            touchgfx::meta::Nil > > >
+            touchgfx::meta::TypeList< SetupMQTTScreenView,
+            touchgfx::meta::Nil > > > >
             > GeneratedViewTypes;
 
     /**
@@ -67,7 +72,8 @@ public:
             touchgfx::meta::TypeList< InputIDScreenPresenter,
             touchgfx::meta::TypeList< SetupWifiScreenPresenter,
             touchgfx::meta::TypeList< InputSaleScreenPresenter,
-            touchgfx::meta::Nil > > >
+            touchgfx::meta::TypeList< SetupMQTTScreenPresenter,
+            touchgfx::meta::Nil > > > >
             > GeneratedPresenterTypes;
 
     /**
@@ -81,8 +87,10 @@ public:
      */
     typedef touchgfx::meta::TypeList< touchgfx::NoTransition,
             touchgfx::meta::TypeList< CoverTransition<SOUTH>,
+            touchgfx::meta::TypeList< CoverTransition<EAST>,
             touchgfx::meta::TypeList< CoverTransition<NORTH>,
-            touchgfx::meta::Nil > >
+            touchgfx::meta::TypeList< CoverTransition<WEST>,
+            touchgfx::meta::Nil > > > >
             > GeneratedTransitionTypes;
 
     /**

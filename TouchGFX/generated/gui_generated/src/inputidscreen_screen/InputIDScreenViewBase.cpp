@@ -10,6 +10,8 @@ InputIDScreenViewBase::InputIDScreenViewBase() :
     buttonCallback(this, &InputIDScreenViewBase::buttonCallbackHandler)
 {
 
+    touchgfx::CanvasWidgetRenderer::setupBuffer(canvasBuffer, CANVAS_BUFFER_SIZE);
+
     Background.setPosition(0, 0, 800, 480);
     Background.setColor(touchgfx::Color::getColorFrom24BitRGB(41, 73, 105));
 
@@ -46,17 +48,7 @@ InputIDScreenViewBase::InputIDScreenViewBase() :
     background_progress.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
     background_progress.setAlpha(114);
 
-    progress_bar.setXY(198, 235);
-    progress_bar.setProgressIndicatorPosition(2, 2, 400, 30);
-    progress_bar.setRange(0, 100);
-    progress_bar.setDirection(touchgfx::AbstractDirectionProgress::RIGHT);
-    progress_bar.setBackground(touchgfx::Bitmap(BITMAP_BLUE_PROGRESSINDICATORS_BG_LARGE_PROGRESS_INDICATOR_BG_SQUARE_0_DEGREES_ID));
-    progress_bar.setBitmap(BITMAP_BLUE_PROGRESSINDICATORS_FILL_TILING_PROGRESS_INDICATOR_FILL_STRIPED_WIDE_HORIZONTAL_ID);
-    progress_bar.setValue(58);
-    progress_bar.setAnchorAtZero(false);
-    progress_bar.setVisible(false);
-
-    pop_up.setBackground(touchgfx::BitmapId(BITMAP_BACKGROUND_QWERTY_ID), 150, 105);
+    pop_up.setBackground(touchgfx::BitmapId(BITMAP_BACKGROUND_QWERTY_ID), 300, 140);
     pop_up.setShadeColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
     pop_up.setShadeAlpha(200);
     pop_up.hide();
@@ -75,12 +67,26 @@ InputIDScreenViewBase::InputIDScreenViewBase() :
     button_ok_pop_up.setAction(buttonCallback);
     pop_up.add(button_ok_pop_up);
 
-    label2_pop_up.setXY(106, 72);
+    label2_pop_up.setXY(81, 87);
     label2_pop_up.setVisible(false);
     label2_pop_up.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     label2_pop_up.setLinespacing(0);
     label2_pop_up.setTypedText(touchgfx::TypedText(T_SINGLEUSEID36));
     pop_up.add(label2_pop_up);
+
+    progress_bar.setXY(348, 188);
+    progress_bar.setProgressIndicatorPosition(0, 0, 104, 104);
+    progress_bar.setRange(0, 100);
+    progress_bar.setCenter(52, 52);
+    progress_bar.setRadius(42);
+    progress_bar.setLineWidth(16);
+    progress_bar.setStartEndAngle(0, 360);
+    progress_bar.setCapPrecision(10);
+    progress_bar.setBackground(touchgfx::Bitmap(BITMAP_BLUE_PROGRESSINDICATORS_BG_MEDIUM_CIRCLE_INDICATOR_BG_LINE_FULL_ID));
+    progress_barPainter.setBitmap(touchgfx::Bitmap(BITMAP_BLUE_PROGRESSINDICATORS_FILL_MEDIUM_CIRCLE_INDICATOR_FILL_LINE_FULL_ID));
+    progress_bar.setPainter(progress_barPainter);
+    progress_bar.setValue(58);
+    progress_bar.setVisible(false);
 
     add(Background);
     add(ToolBar);
@@ -90,8 +96,8 @@ InputIDScreenViewBase::InputIDScreenViewBase() :
     add(BtnAccept);
     add(BtnCancel);
     add(background_progress);
-    add(progress_bar);
     add(pop_up);
+    add(progress_bar);
 }
 
 void InputIDScreenViewBase::setupScreen()

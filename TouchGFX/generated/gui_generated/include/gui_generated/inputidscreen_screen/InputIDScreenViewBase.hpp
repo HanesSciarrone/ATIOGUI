@@ -12,9 +12,10 @@
 #include <gui/containers/PadNumeric.hpp>
 #include <touchgfx/widgets/TextArea.hpp>
 #include <touchgfx/widgets/ButtonWithLabel.hpp>
-#include <touchgfx/containers/progress_indicators/ImageProgress.hpp>
 #include <touchgfx/containers/ModalWindow.hpp>
 #include <touchgfx/Color.hpp>
+#include <touchgfx/containers/progress_indicators/CircleProgress.hpp>
+#include <touchgfx/widgets/canvas/PainterRGB888Bitmap.hpp>
 
 class InputIDScreenViewBase : public touchgfx::View<InputIDScreenPresenter>
 {
@@ -47,11 +48,12 @@ protected:
     touchgfx::ButtonWithLabel BtnAccept;
     touchgfx::ButtonWithLabel BtnCancel;
     touchgfx::Box background_progress;
-    touchgfx::ImageProgress progress_bar;
     touchgfx::ModalWindow pop_up;
     touchgfx::TextArea label1_pop_up;
     touchgfx::ButtonWithLabel button_ok_pop_up;
     touchgfx::TextArea label2_pop_up;
+    touchgfx::CircleProgress progress_bar;
+    touchgfx::PainterRGB888Bitmap progress_barPainter;
 
 private:
 
@@ -65,6 +67,11 @@ private:
      */
     void buttonCallbackHandler(const touchgfx::AbstractButton& src);
 
+    /*
+     * Canvas Buffer Size
+     */
+    static const uint16_t CANVAS_BUFFER_SIZE = 12000;
+    uint8_t canvasBuffer[CANVAS_BUFFER_SIZE];
 };
 
 #endif // INPUTIDSCREENVIEWBASE_HPP

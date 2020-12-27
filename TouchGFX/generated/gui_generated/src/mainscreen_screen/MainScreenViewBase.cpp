@@ -7,8 +7,10 @@
 #include <texts/TextKeysAndLanguages.hpp>
 
 MainScreenViewBase::MainScreenViewBase() :
-    flexButtonCallback(this, &MainScreenViewBase::flexButtonCallbackHandler)
+    buttonCallback(this, &MainScreenViewBase::buttonCallbackHandler)
 {
+
+    touchgfx::CanvasWidgetRenderer::setupBuffer(canvasBuffer, CANVAS_BUFFER_SIZE);
 
     Background.setPosition(0, 0, 800, 480);
     Background.setColor(touchgfx::Color::getColorFrom24BitRGB(41, 73, 105));
@@ -20,39 +22,77 @@ MainScreenViewBase::MainScreenViewBase() :
     logo.setPosition(0, 1, 153, 60);
     logo.setScalingAlgorithm(touchgfx::ScalableImage::NEAREST_NEIGHBOR);
 
-    textArea1.setXY(199, 129);
+    textArea1.setXY(76, 202);
     textArea1.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     textArea1.setLinespacing(0);
     textArea1.setTypedText(touchgfx::TypedText(T_SINGLEUSEID11));
 
-    btnOptionID.setBoxWithBorderPosition(0, 0, 90, 90);
-    btnOptionID.setBorderSize(3);
-    btnOptionID.setBoxWithBorderColors(touchgfx::Color::getColorFrom24BitRGB(71, 77, 80), touchgfx::Color::getColorFrom24BitRGB(45, 53, 55), touchgfx::Color::getColorFrom24BitRGB(0, 0, 0), touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
-    btnOptionID.setIconBitmaps(Bitmap(BITMAP_DARK_ICONS_USER_48_ID), Bitmap(BITMAP_DARK_ICONS_USER_48_ID));
-    btnOptionID.setIconXY(21, 7);
-    btnOptionID.setText(TypedText(T_SINGLEUSEID12));
-    btnOptionID.setTextPosition(0, 58, 90, 90);
-    btnOptionID.setTextColors(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255), touchgfx::Color::getColorFrom24BitRGB(184, 184, 184));
-    btnOptionID.setPosition(199, 317, 90, 90);
-    btnOptionID.setAction(flexButtonCallback);
+    background_progress.setPosition(0, 0, 800, 480);
+    background_progress.setVisible(false);
+    background_progress.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    background_progress.setAlpha(114);
 
-    btnSetupWifi.setBoxWithBorderPosition(0, 0, 90, 90);
-    btnSetupWifi.setBorderSize(3);
-    btnSetupWifi.setBoxWithBorderColors(touchgfx::Color::getColorFrom24BitRGB(71, 77, 80), touchgfx::Color::getColorFrom24BitRGB(45, 53, 55), touchgfx::Color::getColorFrom24BitRGB(0, 0, 0), touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
-    btnSetupWifi.setIconBitmaps(Bitmap(BITMAP_DARK_ICONS_TOOLS_48_ID), Bitmap(BITMAP_DARK_ICONS_TOOLS_48_ID));
-    btnSetupWifi.setIconXY(21, 7);
-    btnSetupWifi.setText(TypedText(T_SINGLEUSEID13));
-    btnSetupWifi.setTextPosition(0, 58, 90, 90);
-    btnSetupWifi.setTextColors(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255), touchgfx::Color::getColorFrom24BitRGB(184, 184, 184));
-    btnSetupWifi.setPosition(511, 317, 90, 90);
-    btnSetupWifi.setAction(flexButtonCallback);
+    progress_bar.setXY(348, 188);
+    progress_bar.setProgressIndicatorPosition(0, 0, 104, 104);
+    progress_bar.setRange(0, 100);
+    progress_bar.setCenter(52, 52);
+    progress_bar.setRadius(42);
+    progress_bar.setLineWidth(16);
+    progress_bar.setStartEndAngle(0, 360);
+    progress_bar.setCapPrecision(10);
+    progress_bar.setBackground(touchgfx::Bitmap(BITMAP_BLUE_PROGRESSINDICATORS_BG_MEDIUM_CIRCLE_INDICATOR_BG_LINE_FULL_ID));
+    progress_barPainter.setBitmap(touchgfx::Bitmap(BITMAP_BLUE_PROGRESSINDICATORS_FILL_MEDIUM_CIRCLE_INDICATOR_FILL_LINE_FULL_ID));
+    progress_bar.setPainter(progress_barPainter);
+    progress_bar.setValue(58);
+    progress_bar.setVisible(false);
+
+    label_popup.setXY(387, 204);
+    label_popup.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    label_popup.setLinespacing(0);
+    label_popupBuffer[0] = 0;
+    label_popup.setWildcard(label_popupBuffer);
+    label_popup.resizeToCurrentText();
+    label_popup.setTypedText(touchgfx::TypedText(T_SINGLEUSEID39));
+
+    Popup_windows.setBackground(touchgfx::BitmapId(BITMAP_BACKGROUND_QWERTY_ID), 150, 105);
+    Popup_windows.setShadeColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    Popup_windows.setShadeAlpha(150);
+    Popup_windows.hide();
+
+    button_poopup.setXY(327, 201);
+    button_poopup.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID));
+    button_poopup.setLabelText(touchgfx::TypedText(T_SINGLEUSEID41));
+    button_poopup.setLabelColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    button_poopup.setLabelColorPressed(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    button_poopup.setAction(buttonCallback);
+    Popup_windows.add(button_poopup);
+
+    btnSeputMQTT.setXY(576, 232);
+    btnSeputMQTT.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_SETTINGS_48_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_SETTINGS_48_ID));
+    btnSeputMQTT.setIconXY(62, 7);
+    btnSeputMQTT.setAction(buttonCallback);
+
+    btnSetupWifi.setXY(576, 337);
+    btnSetupWifi.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID), touchgfx::Bitmap(BITMAP_SIGNAL_3_ID), touchgfx::Bitmap(BITMAP_SIGNAL_3_ID));
+    btnSetupWifi.setIconXY(55, 3);
+    btnSetupWifi.setAction(buttonCallback);
+
+    btnOptionID.setXY(576, 129);
+    btnOptionID.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_USER_48_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_USER_48_ID));
+    btnOptionID.setIconXY(62, 7);
+    btnOptionID.setAction(buttonCallback);
 
     add(Background);
     add(Toolbar);
     add(logo);
     add(textArea1);
-    add(btnOptionID);
+    add(background_progress);
+    add(progress_bar);
+    add(label_popup);
+    add(Popup_windows);
+    add(btnSeputMQTT);
     add(btnSetupWifi);
+    add(btnOptionID);
 }
 
 void MainScreenViewBase::setupScreen()
@@ -60,14 +100,22 @@ void MainScreenViewBase::setupScreen()
 
 }
 
-void MainScreenViewBase::flexButtonCallbackHandler(const touchgfx::AbstractButtonContainer& src)
+void MainScreenViewBase::buttonCallbackHandler(const touchgfx::AbstractButton& src)
 {
-    if (&src == &btnOptionID)
+    if (&src == &button_poopup)
     {
-        //ChangeIDScreen
-        //When btnOptionID clicked change screen to InputIDScreen
-        //Go to InputIDScreen with screen transition towards South
-        application().gotoInputIDScreenScreenCoverTransitionSouth();
+        //Hide_popup_windons
+        //When button_poopup clicked hide Popup_windows
+        //Hide Popup_windows
+        Popup_windows.setVisible(false);
+        Popup_windows.invalidate();
+    }
+    else if (&src == &btnSeputMQTT)
+    {
+        //ChangeSetupMQTT
+        //When btnSeputMQTT clicked change screen to SetupMQTTScreen
+        //Go to SetupMQTTScreen with screen transition towards East
+        application().gotoSetupMQTTScreenScreenCoverTransitionEast();
     }
     else if (&src == &btnSetupWifi)
     {
@@ -75,5 +123,12 @@ void MainScreenViewBase::flexButtonCallbackHandler(const touchgfx::AbstractButto
         //When btnSetupWifi clicked change screen to SetupWifiScreen
         //Go to SetupWifiScreen with screen transition towards South
         application().gotoSetupWifiScreenScreenCoverTransitionSouth();
+    }
+    else if (&src == &btnOptionID)
+    {
+        //ChangeIDScreen
+        //When btnOptionID clicked change screen to InputIDScreen
+        //Go to InputIDScreen with screen transition towards South
+        application().gotoInputIDScreenScreenCoverTransitionSouth();
     }
 }

@@ -67,6 +67,12 @@ void Model::tick()
 
 				osMutexRelease(mutex_NewMsg_WifiHandle);
 			}
+
+			// Show progress bar
+			case 3: {
+				modelListener->ShowProgreessBar();
+			}
+			break;
 		}
 	}
 }

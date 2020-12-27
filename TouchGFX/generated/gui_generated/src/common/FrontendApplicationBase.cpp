@@ -17,6 +17,8 @@
 #include <gui/setupwifiscreen_screen/SetupWifiScreenPresenter.hpp>
 #include <gui/inputsalescreen_screen/InputSaleScreenView.hpp>
 #include <gui/inputsalescreen_screen/InputSaleScreenPresenter.hpp>
+#include <gui/setupmqttscreen_screen/SetupMQTTScreenView.hpp>
+#include <gui/setupmqttscreen_screen/SetupMQTTScreenPresenter.hpp>
 
 using namespace touchgfx;
 
@@ -59,6 +61,17 @@ void FrontendApplicationBase::gotoMainScreenScreenCoverTransitionNorthImpl()
     touchgfx::makeTransition<MainScreenView, MainScreenPresenter, touchgfx::CoverTransition<NORTH>, Model >(&currentScreen, &currentPresenter, frontendHeap, &currentTransition, &model);
 }
 
+void FrontendApplicationBase::gotoMainScreenScreenCoverTransitionWest()
+{
+    transitionCallback = touchgfx::Callback<FrontendApplicationBase>(this, &FrontendApplication::gotoMainScreenScreenCoverTransitionWestImpl);
+    pendingScreenTransitionCallback = &transitionCallback;
+}
+
+void FrontendApplicationBase::gotoMainScreenScreenCoverTransitionWestImpl()
+{
+    touchgfx::makeTransition<MainScreenView, MainScreenPresenter, touchgfx::CoverTransition<WEST>, Model >(&currentScreen, &currentPresenter, frontendHeap, &currentTransition, &model);
+}
+
 // InputIDScreen
 
 void FrontendApplicationBase::gotoInputIDScreenScreenCoverTransitionSouth()
@@ -83,4 +96,17 @@ void FrontendApplicationBase::gotoSetupWifiScreenScreenCoverTransitionSouth()
 void FrontendApplicationBase::gotoSetupWifiScreenScreenCoverTransitionSouthImpl()
 {
     touchgfx::makeTransition<SetupWifiScreenView, SetupWifiScreenPresenter, touchgfx::CoverTransition<SOUTH>, Model >(&currentScreen, &currentPresenter, frontendHeap, &currentTransition, &model);
+}
+
+// SetupMQTTScreen
+
+void FrontendApplicationBase::gotoSetupMQTTScreenScreenCoverTransitionEast()
+{
+    transitionCallback = touchgfx::Callback<FrontendApplicationBase>(this, &FrontendApplication::gotoSetupMQTTScreenScreenCoverTransitionEastImpl);
+    pendingScreenTransitionCallback = &transitionCallback;
+}
+
+void FrontendApplicationBase::gotoSetupMQTTScreenScreenCoverTransitionEastImpl()
+{
+    touchgfx::makeTransition<SetupMQTTScreenView, SetupMQTTScreenPresenter, touchgfx::CoverTransition<EAST>, Model >(&currentScreen, &currentPresenter, frontendHeap, &currentTransition, &model);
 }

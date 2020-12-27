@@ -220,6 +220,18 @@
     <Filter Include="Source Files\generated\gui_generated\inputsalescreen_screen">
       <UniqueIdentifier>1A7B6972-A54B-2736-9090-23AE1D08078F</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\gui\setupmqttscreen_screen">
+      <UniqueIdentifier>96CCDED8-38C9-FA26-D689-F2DC379FCD69</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\gui\setupmqttscreen_screen">
+      <UniqueIdentifier>D52594E6-2D3A-EDC0-F8E9-5A364E83E591</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\generated\gui_generated\setupmqttscreen_screen">
+      <UniqueIdentifier>C5E8083F-D433-883B-E3B0-4F362B5663F0</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\generated\gui_generated\setupmqttscreen_screen">
+      <UniqueIdentifier>48538EF2-B294-40AC-16F9-88D613D5858B</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(TouchGFXReleasePath)\framework\source\platform\driver\touch\SDL2TouchController.cpp">
@@ -299,6 +311,15 @@
     </ClCompile>
     <ClCompile Include="..\..\generated\gui_generated\src\inputsalescreen_screen\InputSaleScreenViewBase.cpp">
       <Filter>Source Files\generated\gui_generated\inputsalescreen_screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gui\src\setupmqttscreen_screen\SetupMQTTScreenPresenter.cpp">
+      <Filter>Source Files\gui\setupmqttscreen_screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gui\src\setupmqttscreen_screen\SetupMQTTScreenView.cpp">
+      <Filter>Source Files\gui\setupmqttscreen_screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\generated\gui_generated\src\setupmqttscreen_screen\SetupMQTTScreenViewBase.cpp">
+      <Filter>Source Files\generated\gui_generated\setupmqttscreen_screen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -789,6 +810,15 @@
     </ClInclude>
     <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\inputsalescreen_screen\InputSaleScreenViewBase.hpp">
       <Filter>Header Files\generated\gui_generated\inputsalescreen_screen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gui\include\gui\setupmqttscreen_screen\SetupMQTTScreenPresenter.hpp">
+      <Filter>Header Files\gui\setupmqttscreen_screen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gui\include\gui\setupmqttscreen_screen\SetupMQTTScreenView.hpp">
+      <Filter>Header Files\gui\setupmqttscreen_screen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\setupmqttscreen_screen\SetupMQTTScreenViewBase.hpp">
+      <Filter>Header Files\generated\gui_generated\setupmqttscreen_screen</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

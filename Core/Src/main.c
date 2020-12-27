@@ -25,7 +25,9 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "UART.h"
+#include "SPI.h"
 #include "ModuleWifi.h"
+#include "ModuleNFC.h"
 
 #include "mx25l512.h"
 #include "otm8009a.h"
@@ -97,10 +99,8 @@ const osThreadAttr_t TouchGFXTask_attributes = {
   .priority = (osPriority_t) osPriorityNormal,
   .stack_size = 2048 * 4
 };
-/* Definitions for nfc_service */
 
 /* USER CODE BEGIN PV */
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -116,7 +116,6 @@ static void MX_QUADSPI_Init(void);
 static void MX_UART5_Init(void);
 static void MX_SPI2_Init(void);
 void TouchGFX_Task(void *argument);
-
 
 /* USER CODE BEGIN PFP */
 static void BSP_SDRAM_Initialization_Sequence(SDRAM_HandleTypeDef *hsdram, FMC_SDRAM_CommandTypeDef *Command);
@@ -143,7 +142,6 @@ static uint8_t BSP_QSPI_EnableMemoryMappedMode(QSPI_HandleTypeDef *hqspi);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
   /* USER CODE END 1 */
 
   /* MPU Configuration--------------------------------------------------------*/
@@ -194,6 +192,8 @@ int main(void)
   /* add mutexes, ... */
   /* USER CODE END RTOS_MUTEX */
 
+  /* Create the semaphores(s) */
+
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
   /* USER CODE END RTOS_SEMAPHORES */
@@ -201,6 +201,9 @@ int main(void)
   /* USER CODE BEGIN RTOS_TIMERS */
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
+
+  /* Create the queue(s) */
+
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
@@ -210,11 +213,13 @@ int main(void)
   /* creation of TouchGFXTask */
   TouchGFXTaskHandle = osThreadNew(TouchGFX_Task, NULL, &TouchGFXTask_attributes);
 
-
-
   /* USER CODE BEGIN RTOS_THREADS */
   if (ModuleWifi_Started() == FALSE)
   {
+	  Error_Handler();
+  }
+
+  if (ModuleNFC_Started() == FALSE) {
 	  Error_Handler();
   }
   /* USER CODE END RTOS_THREADS */
@@ -256,7 +261,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 25;
-  RCC_OscInitStruct.PLL.PLLN = 400;
+  RCC_OscInitStruct.PLL.PLLN = 432;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 2;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
@@ -278,7 +283,7 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_6) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_7) != HAL_OK)
   {
     Error_Handler();
   }
@@ -489,7 +494,7 @@ void MX_I2C4_Init(void)
 
   /* USER CODE END I2C4_Init 1 */
   hi2c4.Instance = I2C4;
-  hi2c4.Init.Timing = 0x00C0EAFF;
+  hi2c4.Init.Timing = 0x20404768;
   hi2c4.Init.OwnAddress1 = 0;
   hi2c4.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c4.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
@@ -726,7 +731,7 @@ static void MX_SPI2_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN SPI2_Init 2 */
-
+  handler_spi_init(&hspi2);
   /* USER CODE END SPI2_Init 2 */
 
 }
@@ -847,15 +852,22 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOH_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(SPI2_CS_GPIO_Port, SPI2_CS_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOJ, LED_USER1_Pin|DSI_RESET_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(DSI_RESET_GPIO_Port, DSI_RESET_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(SPI2_CS_GPIO_Port, SPI2_CS_Pin, GPIO_PIN_SET);
 
-  /*Configure GPIO pins : LD_USER1_Pin Audio_INT_Pin WIFI_RST_Pin ARD_D8_Pin
-                           LD_USER2_Pin ARD_D7_Pin ARD_D4_Pin ARD_D2_Pin */
-  GPIO_InitStruct.Pin = LD_USER1_Pin|Audio_INT_Pin|WIFI_RST_Pin|ARD_D8_Pin
-                          |LD_USER2_Pin|ARD_D7_Pin|ARD_D4_Pin|ARD_D2_Pin;
+  /*Configure GPIO pin : LED_USER1_Pin */
+  GPIO_InitStruct.Pin = LED_USER1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  HAL_GPIO_Init(LED_USER1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : Audio_INT_Pin WIFI_RST_Pin ARD_D8_Pin LD_USER2_Pin
+                           ARD_D7_Pin ARD_D4_Pin ARD_D2_Pin */
+  GPIO_InitStruct.Pin = Audio_INT_Pin|WIFI_RST_Pin|ARD_D8_Pin|LD_USER2_Pin
+                          |ARD_D7_Pin|ARD_D4_Pin|ARD_D2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOJ, &GPIO_InitStruct);
@@ -912,8 +924,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B_USER_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PH7 PN532_IRQ_Pin_Pin */
-  GPIO_InitStruct.Pin = GPIO_PIN_7|PN532_IRQ_Pin_Pin;
+  /*Configure GPIO pins : PH7 NFC_IRQ_Pin */
+  GPIO_InitStruct.Pin = GPIO_PIN_7|NFC_IRQ_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
@@ -1675,7 +1687,10 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
-
+	while(1) {
+		HAL_GPIO_TogglePin(LED_USER1_GPIO_Port, LED_USER1_Pin);
+		HAL_Delay(500);
+	}
   /* USER CODE END Error_Handler_Debug */
 }
 

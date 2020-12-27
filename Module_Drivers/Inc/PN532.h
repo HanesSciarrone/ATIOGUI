@@ -1,23 +1,25 @@
 /*
  * PN532.h
  *
- *  Created on: 2 dic. 2020
+ *  Created on: Dec 19, 2020
  *      Author: Hanes
  */
 
 #ifndef INC_PN532_H_
 #define INC_PN532_H_
 
-#include <stdint.h>
+#include "stm32f7xx_hal.h"
 #include <stdbool.h>
 
-/** \brief Comment this #define if you don't work with RTOS */
+/**@brief Comment this #define if you don't work with RTOS */
 #define PN532_RTOS
+
 
 #define PN532_PREAMBLE 		(0x00)
 #define PN532_STARTCODE1 	(0x00)
 #define PN532_STARTCODE2 	(0xFF)
 #define PN532_POSTAMBLE 	(0x00)
+
 #define PN532_HOSTTOPN532 	(0xD4)
 #define PN532_PN532TOHOST 	(0xD5)
 
@@ -122,6 +124,7 @@
 #define NDEF_URIPREFIX_URN_EPC 					(0x22)
 #define NDEF_URIPREFIX_URN_NFC 					(0x23)
 
+
 /// Size maximum of buffer to store data received from PN532
 #define PN532_BUFFERSIZE 64
 
@@ -134,68 +137,69 @@ typedef struct
 	uint8_t (*get_byte)(void);		///< Pointer to function to receive single byte from PN532
 	void (*send_byte)(uint8_t);		///< Pointer to function to sent single byte to PN532
 	void (*set_select)(bool);		///< Pointer to function to enable o disable interface communication
-	bool (*get_irq)(void);		///< Pointer to function to test pin IRQ of PN532
-}pn532_interface;
-
+	bool (*get_irq)(void);			///< Pointer to function to test pin IRQ of PN532
+}pn532_drivers;
 
 /// Generic PN532 functions
 
-/** @brief Return hardware and software version from PN532.
- * 	The hardware and software version from PN532 is stored in a 32 bit variable.
+/**
+ * @brief Return hardware and software version from PN532.
+ * The hardware and software version from PN532 is stored in a 32 bit variable.
  *
- *  MSB byte has no relevant information.
+ * MSB byte has no relevant information.
  *
- *  Byte 2: Chip type: eg. PN5[32] in HEX
- * 	Byte 3: Version number before decimal point eg. [1].6
- *  Byte 4: Version number after decimal point e.g. 1.[6]
+ * Byte 2: Chip type: eg. PN5[32] in HEX
+ * Byte 3: Version number before decimal point eg. [1].6
+ * Byte 4: Version number after decimal point e.g. 1.[6]
  *
- *	@param[in]	obj	Intance of PN532.
+ *@param[in]	driver	Object with functionality for communicate with module.
  *
- *  @return Return variable containing hardware and software version from PN532
- *  or 0 in otherwise.
+ * @return Return variable containing hardware and software version from PN532
+ * or 0 the other way.
  */
-uint32_t pn532_get_firmware_version(pn532_interface *obj);
+uint32_t pn532_get_firmware_version(pn532_drivers *driver);
 
 /**
- * 	@brief Configures the SAM (Secure Access Module)
+ * @brief Configures the SAM (Secure Access Module)
  *
- *	@param[in]	obj	Intance of PN532.
+ * @param[in]	driver	Object with functionality for communicate with module.
  *
- * 	@return Return true if everything executed properly, false for an error
+ * @return Return true if everything executed properly false in otherwise.
  */
-bool pn532_sam_configuration(pn532_interface *obj);
+bool pn532_sam_config(pn532_drivers *driver);
 
 /**
  * @brief Set retries of PN532. Sets the MxRtyPassiveActivation byte
- *  of the RFConfiguration register.
+ * of the RFConfiguration register.
  *
- * @param[in]	obj			Intance of PN532.
- * @param[in] 	max_retries	Maximum retries to read.
+ * @param[in]	driver		Object with functionality for communicate with module.
+ * @param[in] 	max_retries	Maximum retries to read
  *
- * @return Return true if everything executed properly, false for an error
+ * @return Return true if everything executed properly false in otherwise.
  */
-bool pn532_set_passive_activation_retries(pn532_interface *obj, uint8_t max_retries);
+bool pn532_set_passive_activation_retries(pn532_drivers *driver, uint8_t max_retries);
 
 /// Functions to ISO14443A
 
 /**
  * @brief Read UID of an ISO14443A card
  *
- * @param[in]		obj				Intance of PN532.
- * @param[in] 		card_baudrate 	Card baud rate. Possible value this field is:
+ * @param[in]		card_baudrate	Card baud rate. Possible value this field is:
  *
- * 									0x00 - 106 kbps type A (ISO/IEC14443 Type A)
- * 									0x01 : 212 kbps (FeliCa polling)
- * 									0x02 : 424 kbps (FeliCa polling)
- * 									0x03 : 106 kbps type B (ISO/IEC14443-3B)
- * 									0x04 : 106 kbps Innovision Jewel tag
+ * 	* 0x00 - 106 kbps type A (ISO/IEC14443 Type A)
+ * 	* 0x01 : 212 kbps (FeliCa polling)
+ * 	* 0x02 : 424 kbps (FeliCa polling)
+ * 	* 0x03 : 106 kbps type B (ISO/IEC14443-3B)
+ * 	* 0x04 : 106 kbps Innovision Jewel tag
  *
+ * @param[in]		driver			Object with functionality for communicate with module.
  * @param[in,out] 	uid 			Pointer to character array to store UID.
  * @param[in,out] 	length_uid		Pointer to variable to hold UID length (4 or 7)
  * @param[in] 		timeout			Timeout in mS default to allow PN532 to receive answer form card.
  *
- * @return Return state of real action. true was success, false in otherwise.
+ * @return Return state of real action. true was success, false failed
  */
-bool pn532_read_passive_target_id(pn532_interface *obj, const uint8_t card_baudrate, uint8_t *uid, uint8_t *length_uid, const uint16_t timeout);
+bool pn532_read_passive_target_id(pn532_drivers *driver, const uint8_t card_baudrate, uint8_t *uid, uint8_t *length_uid, uint16_t timeout);
+
 
 #endif /* INC_PN532_H_ */

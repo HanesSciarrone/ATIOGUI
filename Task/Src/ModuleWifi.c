@@ -12,6 +12,7 @@
 
 #include "cmsis_os.h"
 #include "ModuleWifi.h"
+#include "ModuleNFC.h"
 #include "UART.h"
 #include "MQTTPacket.h"
 
@@ -43,6 +44,9 @@ enum mqtt_state {
 #define SUBSCRIBE_TOPIC				"SUB_CESE"
 // Publish topic
 #define PUBLISH_TOPIC				"PUB_CESE"
+
+/// Must be same size of buffer GUI.
+#define BUFFER_SIZE_TOPIC			26
 
 #define TIME_MS_CONNECTION			2000
 /* Timeout before try to connect with server or reconnect with network wi-fi */
@@ -84,6 +88,12 @@ const osMessageQueueAttr_t wifiqueue_operation_attributes = {
 /* Private variable ----------------------------------------------------------*/
 static ESP8266_CommInterface_s commInterface;
 WifiMessage_t wifiParameters;
+uint32_t keep_alive_connection = 0;
+uint8_t version_mqtt;
+uint8_t qos_mqtt;
+uint8_t	client_id[BUFFER_SIZE_TOPIC];
+uint8_t publish_topic[BUFFER_SIZE_TOPIC];
+uint8_t suscribe_topic[BUFFER_SIZE_TOPIC];
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -676,9 +686,10 @@ static void ModuleWifi(void *argument)
 		osThreadTerminate(TaskWifiHandle);
 	}
 
+	module_nfc_release_initialization();
 	operation = ANY_OPERATION;
 
-	while(1) {
+	for(;;) {
 		osMessageQueueGet(queue_Wifi_operationHandle, &operation, 0L, osWaitForever);
 
 		switch(operation) {

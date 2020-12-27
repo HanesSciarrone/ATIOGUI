@@ -1,104 +1,158 @@
 /*
  * ModuleNFC.c
  *
- *  Created on: Dec 6, 2020
+ *  Created on: 24 dic. 2020
  *      Author: Hanes
  */
+
+#include <stdbool.h>
 #include <string.h>
-#include "SPI.h"
+
 #include "cmsis_os.h"
-#include "PN532.h"
-#include "ModuleWifi.h"
+
+#include "main.h"
 #include "ModuleNFC.h"
+#include "SPI.h"
+#include "PN532.h"
 
+#define BUFFER_SIZE_UID	10
 
-/* ------------------ Private global variables ------------------ */
-static osThreadId_t nfc_serviceHandle;
-const osThreadAttr_t nfc_service_attributes = {
-  .name = "nfc_service",
-  .priority = (osPriority_t) osPriorityNormal1,
-  .stack_size = 1024 * 4
+/* ----------------------- Global private variable ---------------------- */
+/* Definitions for TaskNFC */
+static osThreadId_t TaskNFCHandle;
+static const osThreadAttr_t TaskNFC_attributes = {
+  .name = "TaskNFC",
+  .priority = (osPriority_t) osPriorityBelowNormal1,
+  .stack_size = 256 * 4
 };
-static pn532_interface nfc_interface;
 
-/* ----------------- Prototype private functionz ---------------- */
-static void nfc_task(void *argument);
-static bool module_nfc_init(void);
+/* Definitions for queue_nfc */
+static osMessageQueueId_t queue_nfcHandle;
+static const osMessageQueueAttr_t queue_nfc_attributes = {
+  .name = "queue_nfc"
+};
+/* Definitions for nfc_init */
+static osSemaphoreId_t nfc_initHandle;
+static const osSemaphoreAttr_t nfc_init_attributes = {
+  .name = "nfc_init"
+};
 
-/* USER CODE BEGIN Header_nfc_task */
+
+/* ---------------------- Prototype private method ---------------------- */
 /**
-* @brief Function implementing the nfc_service thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_nfc_task */
-void nfc_task(void *argument)
-{
-	uint8_t uid[8] = {0, 0, 0, 0, 0, 0, 0, 0}, length_uid;
+ * @brief Setup PN532 IC with parameters used to work it.
+ *
+ * @param[in]	driver	PN532 object with all functionality.
+ *
+ * @return Return true if was possible set up module or false in otherwise.
+ */
+static bool module_nfc_configure(pn532_drivers *driver);
 
-	for(;;)
-	{
-		if (pn532_read_passive_target_id(&nfc_interface, PN532_MIFARE_ISO14443A, uid, &length_uid, 1000))
-		{
-			module_wifi_send_id(uid, length_uid);
-			strncpy((char *)uid, "\0", 8);
-			osDelay(1000/portTICK_PERIOD_MS);
+/**
+ * @brief Function to initialize object with pointer functions used to
+ * communicate with PN532 (Module NFC).
+ *
+ * @param[in,out]	driver	Object with pointer function to initialize.
+ */
+static void module_nfc_comunication_driver_init(pn532_drivers *driver);
+
+/**
+ * @brief Function does all funtionality of NFC.
+ */
+static void service_nfc(void *argument);
+
+/* -------------------- Implementation private method ------------------- */
+static bool module_nfc_configure(pn532_drivers *driver)
+{
+	int retry = 0, version = 0;
+
+	for (retry = 0; retry < 2; retry++) {
+		version = pn532_get_firmware_version(driver);
+		if (version != 0) {
+			break;
 		}
-
-		osDelay(20/portTICK_PERIOD_MS);
 	}
-}
 
-static bool module_nfc_init(void)
-{
-	uint32_t success;
-	uint8_t retry = 2;
-
-	nfc_interface.get_byte = &nfc_spi_get_byte;
-	nfc_interface.get_irq = &nfc_spi_get_irq;
-	nfc_interface.send_byte = &nfc_spi_send_byte;
-	nfc_interface.set_select = &nfc_spi_set_select;
-
-	do {
-		success = pn532_get_firmware_version(&nfc_interface);
-		retry--;
-	} while(success == 0 && retry);
-
-	if (success == 0)
-	{
+	if (version == 0) {
 		return false;
 	}
 
 	// Set the max number of retry attempts to read from a card
-	// This prevents us from waiting forever for a card, which is
+	// this prevents us from waiting forever for a card, which is
 	// the default behaviour of the PN532.
-	success = pn532_set_passive_activation_retries(&nfc_interface, 0xFF);
-	if( success == 0)
-	{
+
+	if(!pn532_set_passive_activation_retries(driver, 0xFF)) {
 		return false;
 	}
 
-	// configure board to read RFID tags
-	success = pn532_sam_configuration(&nfc_interface);
-	if( success == 0)
-	{
+	// Configure board to read RFID tags
+	if (!pn532_sam_config(driver)) {
 		return false;
 	}
 
 	return true;
 }
 
-bool_t module_nfc_starter(void)
+static void module_nfc_comunication_driver_init(pn532_drivers *driver)
 {
-	if(!module_nfc_init()) {
+	driver->get_byte = &spi_get_byte;
+	driver->get_irq = &spi_get_irq;
+	driver->send_byte = &spi_send_byte;
+	driver->set_select = &spi_set_select;
+}
+
+void service_nfc(void *argument)
+{
+	uint8_t uid[BUFFER_SIZE_UID], length_uid = 0;
+	pn532_drivers nfc_module;
+
+	osSemaphoreAcquire(nfc_initHandle, osWaitForever);
+	osSemaphoreDelete(nfc_initHandle);
+
+	module_nfc_comunication_driver_init(&nfc_module);
+	if (!module_nfc_configure(&nfc_module)) {
+		Error_Handler();
+	}
+
+	for(;;){
+		memset(uid, 0, BUFFER_SIZE_UID);
+		length_uid = 0;
+		if (pn532_read_passive_target_id(&nfc_module, PN532_MIFARE_ISO14443A, uid, &length_uid, 1000)) {
+			// Cambiar la pantalla de carga.
+			// LLamar a la function que envia al module Wifi.
+			osDelay(1/portTICK_PERIOD_MS);
+		}
+
+		osDelay(50/portTICK_PERIOD_MS);
+	}
+}
+
+/* -------------------- Implementation public method -------------------- */
+bool_t ModuleNFC_Started(void)
+{
+	/* Creation of nfc_init */
+	nfc_initHandle = osSemaphoreNew(1, 0, &nfc_init_attributes);
+	if (nfc_initHandle == NULL) {
 		return FALSE;
 	}
-	/* creation of nfc_service */
-	nfc_serviceHandle = osThreadNew(nfc_task, NULL, &nfc_service_attributes);
 
-	if (nfc_serviceHandle == NULL) {
+	/* Creation of queue_nfc */
+	queue_nfcHandle = osMessageQueueNew (2, sizeof(uint8_t), &queue_nfc_attributes);
+	if (queue_nfcHandle == NULL) {
+		return FALSE;
+	}
+
+	/* Creation of TaskNFC */
+	TaskNFCHandle = osThreadNew(service_nfc, NULL, &TaskNFC_attributes);
+
+	if (TaskNFCHandle == NULL) {
 		return FALSE;
 	}
 
 	return TRUE;
+}
+
+void module_nfc_release_initialization(void)
+{
+	osSemaphoreRelease(nfc_initHandle);
 }

@@ -18,7 +18,8 @@
 #include <touchgfx/containers/ModalWindow.hpp>
 #include <touchgfx/Color.hpp>
 #include <touchgfx/widgets/ButtonWithLabel.hpp>
-#include <touchgfx/containers/progress_indicators/ImageProgress.hpp>
+#include <touchgfx/containers/progress_indicators/CircleProgress.hpp>
+#include <touchgfx/widgets/canvas/PainterRGB888Bitmap.hpp>
 #include <touchgfx/mixins/ClickListener.hpp>
 
 class SetupWifiScreenViewBase : public touchgfx::View<SetupWifiScreenPresenter>
@@ -74,10 +75,11 @@ protected:
     touchgfx::ButtonWithLabel PopupCancel;
     touchgfx::ButtonWithLabel PopupAccept;
     touchgfx::Box BackgroundProgress;
-    touchgfx::ImageProgress ProgressBar;
     touchgfx::ModalWindow warning_connection;
     touchgfx::ButtonWithLabel btn_warning_ok;
     touchgfx::TextArea text_warning_connection;
+    touchgfx::CircleProgress ProgressBar;
+    touchgfx::PainterRGB888Bitmap ProgressBarPainter;
 
     /*
      * Wildcard Buffers
@@ -99,6 +101,11 @@ private:
      */
     void buttonCallbackHandler(const touchgfx::AbstractButton& src);
 
+    /*
+     * Canvas Buffer Size
+     */
+    static const uint16_t CANVAS_BUFFER_SIZE = 12000;
+    uint8_t canvasBuffer[CANVAS_BUFFER_SIZE];
 };
 
 #endif // SETUPWIFISCREENVIEWBASE_HPP

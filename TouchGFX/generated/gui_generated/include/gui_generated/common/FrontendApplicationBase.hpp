@@ -20,11 +20,16 @@ public:
 
     void gotoMainScreenScreenCoverTransitionNorth();
 
+    void gotoMainScreenScreenCoverTransitionWest();
+
     // InputIDScreen
     void gotoInputIDScreenScreenCoverTransitionSouth();
 
     // SetupWifiScreen
     void gotoSetupWifiScreenScreenCoverTransitionSouth();
+
+    // SetupMQTTScreen
+    void gotoSetupMQTTScreenScreenCoverTransitionEast();
 
 protected:
     touchgfx::Callback<FrontendApplicationBase> transitionCallback;
@@ -36,11 +41,16 @@ protected:
 
     void gotoMainScreenScreenCoverTransitionNorthImpl();
 
+    void gotoMainScreenScreenCoverTransitionWestImpl();
+
     // InputIDScreen
     void gotoInputIDScreenScreenCoverTransitionSouthImpl();
 
     // SetupWifiScreen
     void gotoSetupWifiScreenScreenCoverTransitionSouthImpl();
+
+    // SetupMQTTScreen
+    void gotoSetupMQTTScreenScreenCoverTransitionEastImpl();
 };
 
 #endif // FRONTENDAPPLICATIONBASE_HPP
