@@ -27,12 +27,6 @@ public:
 
     virtual ~MainScreenPresenter() {};
 
-    /** Shows progress bar */
-    virtual void ShowProgreessBar();
-
-    /** Function that show result of sent credential to broker */
-    virtual void show_status_credential(uint8_t result);
-
 private:
     MainScreenPresenter();
 

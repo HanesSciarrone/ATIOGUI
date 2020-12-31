@@ -124,7 +124,7 @@ SetupMQTTScreenViewBase::SetupMQTTScreenViewBase() :
     Keep_alive.setPosition(584, 361, 140, 40);
     Keep_alive.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     Keep_alive.setLinespacing(7);
-    Keep_aliveBuffer[0] = 0;
+    Unicode::snprintf(Keep_aliveBuffer, KEEP_ALIVE_SIZE, "%s", touchgfx::TypedText(T_SINGLEUSEID61).getText());
     Keep_alive.setWildcard(Keep_aliveBuffer);
     Keep_alive.setTypedText(touchgfx::TypedText(T_SINGLEUSEID55));
 

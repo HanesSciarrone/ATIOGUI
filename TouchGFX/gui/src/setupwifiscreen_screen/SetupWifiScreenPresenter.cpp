@@ -28,7 +28,7 @@ void SetupWifiScreenPresenter::MsgConnectNetwork(uint8_t *ssid, uint8_t *passwor
 }
 
 
-void SetupWifiScreenPresenter::ResultScandNetwork(WifiMessage_t *networks)
+void SetupWifiScreenPresenter::ResultScandNetwork(gui_network_t *networks)
 {
 	view.FillOptionNetwork(networks);
 }

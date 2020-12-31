@@ -5,8 +5,6 @@
 SetupMQTTScreenView::SetupMQTTScreenView()
 : keyboard(),
   text_area_event_click(this, &SetupMQTTScreenView::callback_event_click_listener)
-//  text_area_publish_topic(this, &SetupMQTTScreenView::callback_event_click_listener),
-//  text_area_suscribe_topic(this, &SetupMQTTScreenView::callback_event_click_listener)
 {
 	keyboard.setPosition(90, 15, 320, 240);
 	Pop_up.add(keyboard);
@@ -133,4 +131,19 @@ void SetupMQTTScreenView::fill_text_area_buffer()
 		strncpy((char *)suscribe_topic, (char *)buffer, strlen((char *)buffer));
 
 	}
+}
+
+void SetupMQTTScreenView::configure_parameters_mqtt()
+{
+	struct parameters_mqtt_s param_mqtt;
+
+	memset(&param_mqtt, 0, sizeof(struct parameters_mqtt_s));
+	param_mqtt.keep_alive = keepalive;
+	param_mqtt.version = version;
+	param_mqtt.qos = qos;
+	strncpy((char *)param_mqtt.client_id, (char *)client_id, strlen((char *)client_id));
+	strncpy((char *)param_mqtt.publish_topic, (char *)publish_topic, strlen((char *)publish_topic));
+	strncpy((char *)param_mqtt.suscribe_topic, (char *)suscribe_topic, strlen((char *)suscribe_topic));
+
+	presenter->configure_parameters_mqtt(param_mqtt);
 }

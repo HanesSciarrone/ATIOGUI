@@ -16,13 +16,3 @@ void MainScreenPresenter::deactivate()
 {
 
 }
-
-void MainScreenPresenter::ShowProgreessBar()
-{
-	view.ShowProgreessBar();
-}
-
-void MainScreenPresenter::show_status_credential(uint8_t result)
-{
-	view.show_status_credential(result);
-}

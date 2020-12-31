@@ -9,11 +9,20 @@
 #include "ModuleWifi.h"
 
 #define MAXBUFFER_LITERS	20
+#define BUFFER_SIZE_USER_ID	20
 
 // Global variable declared on ModuleWifi.c
 extern osMessageQueueId_t queue_Wifi_operationHandle;
+extern osSemaphoreId_t semaphore_new_msg_nfc;
 extern osMutexId_t mutex_NewMsg_WifiHandle;
 extern WifiMessage_t wifiParameters;
+extern uint32_t keep_alive_connection;
+extern uint8_t version_mqtt;
+extern uint8_t qos_mqtt;
+extern uint8_t	client_id[BUFFER_SIZE_TOPIC];
+extern uint8_t publish_topic[BUFFER_SIZE_TOPIC];
+extern uint8_t suscribe_topic[BUFFER_SIZE_TOPIC];
+extern uint8_t user_id[BUFFER_SIZE_USER_ID], length_id;
 
 /* --------------------- Global variable --------------------- */
 osMessageQueueId_t	queue_NewMsg_GUI;
@@ -22,6 +31,7 @@ const osMessageQueueAttr_t queue_GUI_attributes = {
 };
 
 static uint32_t liters_available;
+static gui_network_t list_network;
 
 Model::Model() : modelListener(0)
 {
@@ -30,6 +40,7 @@ Model::Model() : modelListener(0)
 
 void Model::tick()
 {
+	uint8_t i;
 	uint8_t message;
 
 	if (osMessageQueueGet(queue_NewMsg_GUI, &message, 0L, 0) == osOK)
@@ -40,7 +51,12 @@ void Model::tick()
 			case 0:
 			{
 				osMutexAcquire(mutex_NewMsg_WifiHandle, osWaitForever);
-				modelListener->ResultScandNetwork(&wifiParameters);
+				memset(&list_network, 0, sizeof(gui_network_t));
+				for(i = 0; i < 30; i++) {
+					strncpy((char *)list_network.listNetwork[i].ssid, (char *)wifiParameters.listNetwork[i].ssid, strlen((char *)wifiParameters.listNetwork[i].ssid));
+					list_network.listNetwork[i].rssi = wifiParameters.listNetwork[i].rssi;
+				}
+				modelListener->ResultScandNetwork(&list_network);
 				osMutexRelease(mutex_NewMsg_WifiHandle);
 			}
 			break;
@@ -71,6 +87,11 @@ void Model::tick()
 			// Show progress bar
 			case 3: {
 				modelListener->ShowProgreessBar();
+			}
+			break;
+
+			case 4: {
+				modelListener->getting_data_read_card(user_id, length_id);
 			}
 			break;
 		}
@@ -137,4 +158,21 @@ void Model::sent_credential_to_IoT(uint8_t *buffer, uint16_t length)
 uint32_t Model::get_liters_fuel_available(void)
 {
 	return liters_available;
+}
+
+void Model::configure_parameters_mqtt(struct parameters_mqtt_s param)
+{
+	osMutexAcquire(mutex_NewMsg_WifiHandle, osWaitForever);
+	keep_alive_connection = param.keep_alive;
+	version_mqtt = param.keep_alive;
+	qos_mqtt = param.qos;
+	strncpy((char *)client_id, (char *)param.client_id, strlen((char *)param.client_id));
+	strncpy((char *)publish_topic, (char *)param.publish_topic, strlen((char *)param.publish_topic));
+	strncpy((char *)suscribe_topic, (char *)param.suscribe_topic, strlen((char *)param.suscribe_topic));
+	osMutexRelease(mutex_NewMsg_WifiHandle);
+}
+
+void Model::active_reader(void)
+{
+	osSemaphoreRelease(semaphore_new_msg_nfc);
 }

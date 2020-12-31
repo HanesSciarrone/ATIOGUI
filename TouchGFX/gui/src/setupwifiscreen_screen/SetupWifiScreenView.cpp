@@ -78,7 +78,7 @@ void SetupWifiScreenView::SetDataNetwork()
 	presenter->MsgConnectNetwork(bufferSSID, bufferPassword);
 }
 
-void SetupWifiScreenView::FillOptionNetwork(WifiMessage_t *networks)
+void SetupWifiScreenView::FillOptionNetwork(gui_network_t *networks)
 {
 	int index, count = 0;
 

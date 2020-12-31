@@ -15,7 +15,8 @@
 #include "SPI.h"
 #include "PN532.h"
 
-#define BUFFER_SIZE_UID	10
+#define BUFFER_SIZE_UID		10
+#define BUFFER_SIZE_USER_ID	20
 
 /* ----------------------- Global private variable ---------------------- */
 /* Definitions for TaskNFC */
@@ -27,9 +28,9 @@ static const osThreadAttr_t TaskNFC_attributes = {
 };
 
 /* Definitions for queue_nfc */
-static osMessageQueueId_t queue_nfcHandle;
-static const osMessageQueueAttr_t queue_nfc_attributes = {
-  .name = "queue_nfc"
+osSemaphoreId_t semaphore_new_msg_nfc;
+static const osSemaphoreAttr_t semaphore_new_msg_nfc_attributes = {
+  .name = "semaphore_nfc"
 };
 /* Definitions for nfc_init */
 static osSemaphoreId_t nfc_initHandle;
@@ -37,8 +38,23 @@ static const osSemaphoreAttr_t nfc_init_attributes = {
   .name = "nfc_init"
 };
 
+extern osMessageQueueId_t	queue_NewMsg_GUI;
+
+uint8_t user_id[BUFFER_SIZE_USER_ID], length_id;
+
 
 /* ---------------------- Prototype private method ---------------------- */
+
+/**
+ * @brief Convert uid read for reader card on hexadecimal format to string.
+ *
+ * @param[in]	uid			Buffer when data is storage.
+ * @param[in]	length_uid	Length of uid.
+ *
+ * @return Return length of string.
+ */
+static uint8_t module_nfc_hex_to_string(uint8_t *uid, uint8_t length_uid);
+
 /**
  * @brief Setup PN532 IC with parameters used to work it.
  *
@@ -62,6 +78,35 @@ static void module_nfc_comunication_driver_init(pn532_drivers *driver);
 static void service_nfc(void *argument);
 
 /* -------------------- Implementation private method ------------------- */
+static uint8_t module_nfc_hex_to_string(uint8_t *uid, uint8_t length_uid)
+{
+	uint8_t i, offset, lsr_number, msr_number;
+
+	offset = 0;
+	for (i = 0; i < length_uid; i++) {
+		msr_number = (uid[i] | 0xF0) >> 4;
+		lsr_number = (uid[i] | 0x0F);
+
+		if (msr_number <= 0 && msr_number >= 9) {
+			user_id[offset] = msr_number + '0';
+		}
+		else {
+			user_id[offset] = msr_number + 55;
+		}
+		offset++;
+
+		if (lsr_number <= 0 && lsr_number >= 9) {
+			user_id[offset] = lsr_number + '0';
+		}
+		else {
+			user_id[offset] = lsr_number + 55;
+		}
+		offset++;
+	}
+
+	return length_uid*2;
+}
+
 static bool module_nfc_configure(pn532_drivers *driver)
 {
 	int retry = 0, version = 0;
@@ -104,6 +149,7 @@ static void module_nfc_comunication_driver_init(pn532_drivers *driver)
 void service_nfc(void *argument)
 {
 	uint8_t uid[BUFFER_SIZE_UID], length_uid = 0;
+	const uint8_t msg_gui = 4;
 	pn532_drivers nfc_module;
 
 	osSemaphoreAcquire(nfc_initHandle, osWaitForever);
@@ -115,15 +161,14 @@ void service_nfc(void *argument)
 	}
 
 	for(;;){
+		osSemaphoreAcquire(semaphore_new_msg_nfc, osWaitForever);
+
 		memset(uid, 0, BUFFER_SIZE_UID);
 		length_uid = 0;
-		if (pn532_read_passive_target_id(&nfc_module, PN532_MIFARE_ISO14443A, uid, &length_uid, 1000)) {
-			// Cambiar la pantalla de carga.
-			// LLamar a la function que envia al module Wifi.
-			osDelay(1/portTICK_PERIOD_MS);
+		if (pn532_read_passive_target_id(&nfc_module, PN532_MIFARE_ISO14443A, uid, &length_uid, 10000)) {
+			length_id = module_nfc_hex_to_string(uid, length_uid);
+			osMessageQueuePut(queue_NewMsg_GUI, &msg_gui, 0L, osWaitForever);
 		}
-
-		osDelay(50/portTICK_PERIOD_MS);
 	}
 }
 
@@ -137,8 +182,8 @@ bool_t ModuleNFC_Started(void)
 	}
 
 	/* Creation of queue_nfc */
-	queue_nfcHandle = osMessageQueueNew (2, sizeof(uint8_t), &queue_nfc_attributes);
-	if (queue_nfcHandle == NULL) {
+	semaphore_new_msg_nfc = osSemaphoreNew(1, 0, &semaphore_new_msg_nfc_attributes);
+	if (semaphore_new_msg_nfc == NULL) {
 		return FALSE;
 	}
 

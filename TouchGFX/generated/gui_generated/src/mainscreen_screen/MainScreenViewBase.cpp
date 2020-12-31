@@ -10,8 +10,6 @@ MainScreenViewBase::MainScreenViewBase() :
     buttonCallback(this, &MainScreenViewBase::buttonCallbackHandler)
 {
 
-    touchgfx::CanvasWidgetRenderer::setupBuffer(canvasBuffer, CANVAS_BUFFER_SIZE);
-
     Background.setPosition(0, 0, 800, 480);
     Background.setColor(touchgfx::Color::getColorFrom24BitRGB(41, 73, 105));
 
@@ -22,29 +20,10 @@ MainScreenViewBase::MainScreenViewBase() :
     logo.setPosition(0, 1, 153, 60);
     logo.setScalingAlgorithm(touchgfx::ScalableImage::NEAREST_NEIGHBOR);
 
-    textArea1.setXY(76, 202);
-    textArea1.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
-    textArea1.setLinespacing(0);
-    textArea1.setTypedText(touchgfx::TypedText(T_SINGLEUSEID11));
-
-    background_progress.setPosition(0, 0, 800, 480);
-    background_progress.setVisible(false);
-    background_progress.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
-    background_progress.setAlpha(114);
-
-    progress_bar.setXY(348, 188);
-    progress_bar.setProgressIndicatorPosition(0, 0, 104, 104);
-    progress_bar.setRange(0, 100);
-    progress_bar.setCenter(52, 52);
-    progress_bar.setRadius(42);
-    progress_bar.setLineWidth(16);
-    progress_bar.setStartEndAngle(0, 360);
-    progress_bar.setCapPrecision(10);
-    progress_bar.setBackground(touchgfx::Bitmap(BITMAP_BLUE_PROGRESSINDICATORS_BG_MEDIUM_CIRCLE_INDICATOR_BG_LINE_FULL_ID));
-    progress_barPainter.setBitmap(touchgfx::Bitmap(BITMAP_BLUE_PROGRESSINDICATORS_FILL_MEDIUM_CIRCLE_INDICATOR_FILL_LINE_FULL_ID));
-    progress_bar.setPainter(progress_barPainter);
-    progress_bar.setValue(58);
-    progress_bar.setVisible(false);
+    Title_main.setXY(76, 202);
+    Title_main.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    Title_main.setLinespacing(0);
+    Title_main.setTypedText(touchgfx::TypedText(T_SINGLEUSEID11));
 
     label_popup.setXY(387, 204);
     label_popup.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
@@ -53,19 +32,6 @@ MainScreenViewBase::MainScreenViewBase() :
     label_popup.setWildcard(label_popupBuffer);
     label_popup.resizeToCurrentText();
     label_popup.setTypedText(touchgfx::TypedText(T_SINGLEUSEID39));
-
-    Popup_windows.setBackground(touchgfx::BitmapId(BITMAP_BACKGROUND_QWERTY_ID), 150, 105);
-    Popup_windows.setShadeColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
-    Popup_windows.setShadeAlpha(150);
-    Popup_windows.hide();
-
-    button_poopup.setXY(327, 201);
-    button_poopup.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID));
-    button_poopup.setLabelText(touchgfx::TypedText(T_SINGLEUSEID41));
-    button_poopup.setLabelColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
-    button_poopup.setLabelColorPressed(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
-    button_poopup.setAction(buttonCallback);
-    Popup_windows.add(button_poopup);
 
     btnSeputMQTT.setXY(576, 232);
     btnSeputMQTT.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_SETTINGS_48_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_SETTINGS_48_ID));
@@ -85,11 +51,8 @@ MainScreenViewBase::MainScreenViewBase() :
     add(Background);
     add(Toolbar);
     add(logo);
-    add(textArea1);
-    add(background_progress);
-    add(progress_bar);
+    add(Title_main);
     add(label_popup);
-    add(Popup_windows);
     add(btnSeputMQTT);
     add(btnSetupWifi);
     add(btnOptionID);
@@ -102,15 +65,7 @@ void MainScreenViewBase::setupScreen()
 
 void MainScreenViewBase::buttonCallbackHandler(const touchgfx::AbstractButton& src)
 {
-    if (&src == &button_poopup)
-    {
-        //Hide_popup_windons
-        //When button_poopup clicked hide Popup_windows
-        //Hide Popup_windows
-        Popup_windows.setVisible(false);
-        Popup_windows.invalidate();
-    }
-    else if (&src == &btnSeputMQTT)
+    if (&src == &btnSeputMQTT)
     {
         //ChangeSetupMQTT
         //When btnSeputMQTT clicked change screen to SetupMQTTScreen

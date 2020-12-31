@@ -4,9 +4,6 @@
 #include <gui/model/ModelListener.hpp>
 #include <mvp/Presenter.hpp>
 
-/* Include added for user */
-#include "ModuleWifi.h"
-
 using namespace touchgfx;
 
 class SetupWifiScreenView;
@@ -36,7 +33,7 @@ public:
     virtual void MsgConnectNetwork(uint8_t *ssid, uint8_t *password);
 
     /* Function to do action from Model to View */
-    virtual void ResultScandNetwork(WifiMessage_t *networks);
+    virtual void ResultScandNetwork(gui_network_t *networks);
 
     virtual void ShowStatusConnectionNetwork(uint8_t value);
 

@@ -16,3 +16,8 @@ void SetupMQTTScreenPresenter::deactivate()
 {
 
 }
+
+void SetupMQTTScreenPresenter::configure_parameters_mqtt(struct parameters_mqtt_s param)
+{
+	model->configure_parameters_mqtt(param);
+}

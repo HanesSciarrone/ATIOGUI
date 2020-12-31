@@ -7,7 +7,6 @@
 /* Include added for user */
 #include "gui/containers/ItemList.hpp"
 #include "gui/common/CustomKeyboard.hpp"
-#include "ModuleWifi.h"
 
 class SetupWifiScreenView : public SetupWifiScreenViewBase
 {
@@ -32,7 +31,7 @@ public:
     virtual void SetDataNetwork();
 
     /* Action when you have result of scan network */
-    virtual void FillOptionNetwork(WifiMessage_t *networks);
+    virtual void FillOptionNetwork(gui_network_t *networks);
 
     /* Action when you have result of connection network */
     virtual void ShowStatusConnection(uint8_t value);

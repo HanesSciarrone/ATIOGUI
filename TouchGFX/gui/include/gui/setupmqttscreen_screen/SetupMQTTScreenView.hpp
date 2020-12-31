@@ -45,6 +45,9 @@ public:
     /// Fill label with different parameters used on MQTT
     void fill_text_area_buffer();
 
+    /// Set up MQTT parameters on module wi-fi task.
+    void configure_parameters_mqtt();
+
 protected:
 
     static const uint8_t BUFFER_SIZE = 26;
@@ -54,12 +57,8 @@ protected:
 
     // Declaring callback type of box and clickEvent
     Callback<SetupMQTTScreenView, const TextAreaWithOneWildcard&, const ClickEvent&> text_area_event_click;
-    Callback<SetupMQTTScreenView, const TextAreaWithOneWildcard&, const ClickEvent&> text_area_publish_topic;
-    Callback<SetupMQTTScreenView, const TextAreaWithOneWildcard&, const ClickEvent&> text_area_suscribe_topic;
-
 
     uint8_t text_area_selected;
-
     uint32_t keepalive;
     uint8_t client_id[BUFFER_SIZE];
     uint8_t publish_topic[BUFFER_SIZE];

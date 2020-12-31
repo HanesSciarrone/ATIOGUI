@@ -27,6 +27,8 @@ public:
 
     virtual ~SetupMQTTScreenPresenter() {};
 
+    void configure_parameters_mqtt(struct parameters_mqtt_s param);
+
 private:
     SetupMQTTScreenPresenter();
 

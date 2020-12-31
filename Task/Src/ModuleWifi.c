@@ -36,17 +36,8 @@ enum mqtt_state {
 /* Private macros ----------------------------------------------------------- */
 // URL where is the broker MQTT
 #define HOST						"broker.hivemq.com"
-// Port where broker is listening to
+// Port where broker is listening
 #define PORT						1883
-// Parameter connection of broker for keep alive
-#define KEEPALIVE_CONNECTION		60UL
-// Subscribe topic
-#define SUBSCRIBE_TOPIC				"SUB_CESE"
-// Publish topic
-#define PUBLISH_TOPIC				"PUB_CESE"
-
-/// Must be same size of buffer GUI.
-#define BUFFER_SIZE_TOPIC			26
 
 #define TIME_MS_CONNECTION			2000
 /* Timeout before try to connect with server or reconnect with network wi-fi */
@@ -89,8 +80,8 @@ const osMessageQueueAttr_t wifiqueue_operation_attributes = {
 static ESP8266_CommInterface_s commInterface;
 WifiMessage_t wifiParameters;
 uint32_t keep_alive_connection = 0;
-uint8_t version_mqtt;
-uint8_t qos_mqtt;
+uint8_t version_mqtt = 3;
+uint8_t qos_mqtt = 0;
 uint8_t	client_id[BUFFER_SIZE_TOPIC];
 uint8_t publish_topic[BUFFER_SIZE_TOPIC];
 uint8_t suscribe_topic[BUFFER_SIZE_TOPIC];
@@ -224,7 +215,7 @@ static enum mqtt_state sent_unsubscribe_mqtt(void)
 	ESP8266_StatusTypeDef_t status;
 	MQTTString topicSubcribeString = MQTTString_initializer;
 
-	topicSubcribeString.cstring = SUBSCRIBE_TOPIC;
+	topicSubcribeString.cstring = (char *)suscribe_topic;
 	strncpy((char *)buffer, "\0", sizeof(buffer));
 	length = MQTTSerialize_unsubscribe(buffer, sizeof(buffer), 0, 2, 1, &topicSubcribeString);
 	status = ESP8266_SentData(buffer, length);
@@ -289,7 +280,7 @@ static enum mqtt_state sent_data_mqtt(uint8_t *data)
 	ESP8266_StatusTypeDef_t status;
 	MQTTString topicString = MQTTString_initializer;
 
-	topicString.cstring = PUBLISH_TOPIC;
+	topicString.cstring = (char *)publish_topic;
 	length = MQTTSerialize_publish(buffer, sizeof(buffer), 0, 0, 0, 0, topicString, (unsigned char*)data, strlen((char *)data));
 	status = ESP8266_SentData(buffer, length);
 
@@ -313,7 +304,7 @@ static enum mqtt_state sent_subcribe_mqtt(void)
 	retry = 0;
 	while (retry < 3) {
 		MQTTString topicSubcribeString = MQTTString_initializer;
-		topicSubcribeString.cstring = SUBSCRIBE_TOPIC;
+		topicSubcribeString.cstring = (char *)suscribe_topic;
 		request_qos = 0;
 
 		// Build and sent message of subcribe
@@ -372,9 +363,9 @@ static enum mqtt_state sent_connect_mqtt(void)
 	retry = 0;
 	while(retry < 3) {
 		// Initialize data
-		dataConnection.MQTTVersion = 3;
-		dataConnection.clientID.cstring = "Hanes";
-		dataConnection.keepAliveInterval = KEEPALIVE_CONNECTION;
+		dataConnection.MQTTVersion = version_mqtt;
+		dataConnection.clientID.cstring = (char *)client_id;
+		dataConnection.keepAliveInterval = keep_alive_connection;
 		dataConnection.will.qos = 0;
 		strncpy((char *)buffer, "0", sizeof(buffer));
 

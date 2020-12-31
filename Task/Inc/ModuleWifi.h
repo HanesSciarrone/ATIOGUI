@@ -9,6 +9,7 @@
 #define INC_MODULEWIFI_H_
 
 #include "main.h"
+#include "cmsis_os.h"
 
 /**
  * @defgroup DEFINE Define Wi-Fi
@@ -17,13 +18,16 @@
  */
 
 /** Quantity maximum supported on list , must same element  quantity of list on GUI */
-#define MAX_COUNT_LIST	30
+#define MAX_COUNT_LIST					30
 
 /** Macro define maximum length of strings on ssid and password variable. This value depend of GUI */
 #define MAX_LENGTH_CONNECTION_NETWORK	22
 
 /** This value depend of GUI */
-#define MAX_LENGTH_CREDENTIAL	20
+#define MAX_LENGTH_CREDENTIAL			30
+
+/// Must be same size of buffer GUI.
+#define BUFFER_SIZE_TOPIC				26
 
 /** Macro define maximum length of strings on credential variable */
 #define MAX_LENGTH_MESSAGE_CREDENTIAL	MAX_LENGTH_CREDENTIAL + 4

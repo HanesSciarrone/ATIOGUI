@@ -10,12 +10,7 @@
 #include <touchgfx/widgets/Box.hpp>
 #include <touchgfx/widgets/ScalableImage.hpp>
 #include <touchgfx/widgets/TextArea.hpp>
-#include <touchgfx/containers/progress_indicators/CircleProgress.hpp>
-#include <touchgfx/widgets/canvas/PainterRGB888Bitmap.hpp>
 #include <touchgfx/widgets/TextAreaWithWildcard.hpp>
-#include <touchgfx/containers/ModalWindow.hpp>
-#include <touchgfx/Color.hpp>
-#include <touchgfx/widgets/ButtonWithLabel.hpp>
 #include <touchgfx/widgets/ButtonWithIcon.hpp>
 
 class MainScreenViewBase : public touchgfx::View<MainScreenPresenter>
@@ -36,13 +31,8 @@ protected:
     touchgfx::Box Background;
     touchgfx::Box Toolbar;
     touchgfx::ScalableImage logo;
-    touchgfx::TextArea textArea1;
-    touchgfx::Box background_progress;
-    touchgfx::CircleProgress progress_bar;
-    touchgfx::PainterRGB888Bitmap progress_barPainter;
+    touchgfx::TextArea Title_main;
     touchgfx::TextAreaWithOneWildcard label_popup;
-    touchgfx::ModalWindow Popup_windows;
-    touchgfx::ButtonWithLabel button_poopup;
     touchgfx::ButtonWithIcon btnSeputMQTT;
     touchgfx::ButtonWithIcon btnSetupWifi;
     touchgfx::ButtonWithIcon btnOptionID;
@@ -65,11 +55,6 @@ private:
      */
     void buttonCallbackHandler(const touchgfx::AbstractButton& src);
 
-    /*
-     * Canvas Buffer Size
-     */
-    static const uint16_t CANVAS_BUFFER_SIZE = 12000;
-    uint8_t canvasBuffer[CANVAS_BUFFER_SIZE];
 };
 
 #endif // MAINSCREENVIEWBASE_HPP
