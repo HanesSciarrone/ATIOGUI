@@ -6,6 +6,9 @@ SetupMQTTScreenView::SetupMQTTScreenView()
 : keyboard(),
   text_area_event_click(this, &SetupMQTTScreenView::callback_event_click_listener)
 {
+	keepalive = 60;
+	version = 3;
+	qos = 0;
 	keyboard.setPosition(90, 15, 320, 240);
 	Pop_up.add(keyboard);
 }
@@ -112,6 +115,7 @@ void SetupMQTTScreenView::fill_text_area_buffer()
 		Unicode::fromUTF8(buffer, Client_idBuffer, BUFFER_SIZE-1);
 		Client_id.invalidate();
 		Pop_up.invalidate();
+		memset(client_id, 0, BUFFER_SIZE);
 		strncpy((char *)client_id, (char *)buffer, strlen((char *)buffer));
 	}
 	break;
@@ -120,6 +124,7 @@ void SetupMQTTScreenView::fill_text_area_buffer()
 		Unicode::fromUTF8(buffer, Publish_topicBuffer, BUFFER_SIZE-1);
 		Publish_topic.invalidate();
 		Pop_up.invalidate();
+		memset(publish_topic, 0, BUFFER_SIZE);
 		strncpy((char *)publish_topic, (char *)buffer, strlen((char *)buffer));
 	}
 	break;
@@ -128,6 +133,7 @@ void SetupMQTTScreenView::fill_text_area_buffer()
 		Unicode::fromUTF8(buffer, Suscribe_topicBuffer, BUFFER_SIZE-1);
 		Suscribe_topic.invalidate();
 		Pop_up.invalidate();
+		memset(suscribe_topic, 0, BUFFER_SIZE);
 		strncpy((char *)suscribe_topic, (char *)buffer, strlen((char *)buffer));
 
 	}

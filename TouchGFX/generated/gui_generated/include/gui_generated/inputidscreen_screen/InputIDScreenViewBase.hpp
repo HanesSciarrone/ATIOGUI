@@ -18,11 +18,11 @@
 #include <touchgfx/widgets/canvas/Circle.hpp>
 #include <touchgfx/widgets/canvas/PainterRGB888.hpp>
 #include <touchgfx/widgets/ButtonWithIcon.hpp>
-#include <touchgfx/containers/ModalWindow.hpp>
-#include <touchgfx/Color.hpp>
+#include <touchgfx/widgets/ToggleButton.hpp>
 #include <touchgfx/containers/progress_indicators/CircleProgress.hpp>
 #include <touchgfx/widgets/canvas/PainterRGB888Bitmap.hpp>
-#include <touchgfx/widgets/ToggleButton.hpp>
+#include <touchgfx/containers/ModalWindow.hpp>
+#include <touchgfx/Color.hpp>
 
 class InputIDScreenViewBase : public touchgfx::View<InputIDScreenPresenter>
 {
@@ -100,14 +100,15 @@ protected:
     touchgfx::PainterRGB888 timeout9Painter;
     touchgfx::Circle timeout10;
     touchgfx::PainterRGB888 timeout10Painter;
+    touchgfx::ToggleButton Selector;
+    touchgfx::Container Container_progress;
+    touchgfx::Box background_progress;
+    touchgfx::CircleProgress progress_bar;
+    touchgfx::PainterRGB888Bitmap progress_barPainter;
     touchgfx::ModalWindow pop_up;
     touchgfx::TextArea label1_pop_up;
     touchgfx::ButtonWithLabel button_ok_pop_up;
     touchgfx::TextArea label2_pop_up;
-    touchgfx::Box background_progress;
-    touchgfx::CircleProgress progress_bar;
-    touchgfx::PainterRGB888Bitmap progress_barPainter;
-    touchgfx::ToggleButton Selector;
 
     /*
      * Wildcard Buffers

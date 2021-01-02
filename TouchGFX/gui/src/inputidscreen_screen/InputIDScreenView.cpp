@@ -32,7 +32,11 @@ void InputIDScreenView::send_credential()
 
 void InputIDScreenView::send_card_id()
 {
+	uint8_t credential[CARD_ID_SIZE+1];
 
+	memset(credential, 0, CARD_ID_SIZE+1);
+	Unicode::toUTF8(card_idBuffer, credential, CARD_ID_SIZE);
+	presenter->sent_credential_to_IoT(credential, PadNumericID.get_buffer_length());
 }
 
 void InputIDScreenView::active_reader()
@@ -62,25 +66,22 @@ void InputIDScreenView::select_mode_id()
 
 void InputIDScreenView::ShowProgreessBar()
 {
-	background_progress.setVisible(true);
-	progress_bar.setVisible(true);
-	background_progress.invalidate();
-	progress_bar.invalidate();
+	Container_progress.setVisible(true);
+	Container_progress.invalidate();
 }
 
 void InputIDScreenView::getting_data_read_card(uint8_t *id, uint8_t length_id)
 {
 	card_manual = false;
-	Unicode::snprintf(card_idBuffer, CARD_ID_SIZE, "%s", id);
+	Unicode::fromUTF8(id, card_idBuffer, CARD_ID_SIZE);
 	card_id.invalidate();
 }
 
 void InputIDScreenView::show_status_credential(uint8_t result)
 {
-	background_progress.setVisible(false);
-	progress_bar.setVisible(false);
+	Container_progress.setVisible(false);
+	Container_progress.invalidate();
 	progress_bar.setValue(0);
-	background_progress.invalidate();
 	progress_bar.invalidate();
 
 	if (result == VALID_USER) {

@@ -14,6 +14,7 @@ void InputSaleScreenView::setupScreen()
     liters = presenter->get_liters_fuel_available();
 
     Unicode::snprintf(label_titleBuffer, LABEL_TITLE_SIZE, "%u", liters);
+    label_title.resizeToCurrentText();
     label_title.invalidate();
 }
 

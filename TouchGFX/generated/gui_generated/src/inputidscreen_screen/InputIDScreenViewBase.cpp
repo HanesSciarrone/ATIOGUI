@@ -214,7 +214,34 @@ InputIDScreenViewBase::InputIDScreenViewBase() :
     timeout10.setVisible(false);
     Input_card.add(timeout10);
 
-    pop_up.setBackground(touchgfx::BitmapId(BITMAP_BACKGROUND_QWERTY_ID), 300, 140);
+    Selector.setXY(705, 15);
+    Selector.setBitmaps(touchgfx::Bitmap(BITMAP_SWITCH_OFF_ID), touchgfx::Bitmap(BITMAP_SWITCH_ON_ID));
+    Selector.forceState(true);
+    Selector.setAction(buttonCallback);
+
+    Container_progress.setPosition(0, 0, 800, 480);
+    Container_progress.setVisible(false);
+
+    background_progress.setPosition(0, 0, 800, 480);
+    background_progress.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    background_progress.setAlpha(201);
+    Container_progress.add(background_progress);
+
+    progress_bar.setXY(348, 188);
+    progress_bar.setProgressIndicatorPosition(0, 0, 104, 104);
+    progress_bar.setRange(0, 100);
+    progress_bar.setCenter(52, 52);
+    progress_bar.setRadius(42);
+    progress_bar.setLineWidth(16);
+    progress_bar.setStartEndAngle(0, 360);
+    progress_bar.setCapPrecision(10);
+    progress_bar.setBackground(touchgfx::Bitmap(BITMAP_BLUE_PROGRESSINDICATORS_BG_MEDIUM_CIRCLE_INDICATOR_BG_LINE_FULL_ID));
+    progress_barPainter.setBitmap(touchgfx::Bitmap(BITMAP_BLUE_PROGRESSINDICATORS_FILL_MEDIUM_CIRCLE_INDICATOR_FILL_LINE_FULL_ID));
+    progress_bar.setPainter(progress_barPainter);
+    progress_bar.setValue(58);
+    Container_progress.add(progress_bar);
+
+    pop_up.setBackground(touchgfx::BitmapId(BITMAP_BACKGROUND_QWERTY_ID), 150, 105);
     pop_up.setShadeColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
     pop_up.setShadeAlpha(200);
     pop_up.hide();
@@ -240,39 +267,14 @@ InputIDScreenViewBase::InputIDScreenViewBase() :
     label2_pop_up.setTypedText(touchgfx::TypedText(T_SINGLEUSEID36));
     pop_up.add(label2_pop_up);
 
-    background_progress.setPosition(0, 0, 800, 480);
-    background_progress.setVisible(false);
-    background_progress.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
-    background_progress.setAlpha(114);
-
-    progress_bar.setXY(348, 188);
-    progress_bar.setProgressIndicatorPosition(0, 0, 104, 104);
-    progress_bar.setRange(0, 100);
-    progress_bar.setCenter(52, 52);
-    progress_bar.setRadius(42);
-    progress_bar.setLineWidth(16);
-    progress_bar.setStartEndAngle(0, 360);
-    progress_bar.setCapPrecision(10);
-    progress_bar.setBackground(touchgfx::Bitmap(BITMAP_BLUE_PROGRESSINDICATORS_BG_MEDIUM_CIRCLE_INDICATOR_BG_LINE_FULL_ID));
-    progress_barPainter.setBitmap(touchgfx::Bitmap(BITMAP_BLUE_PROGRESSINDICATORS_FILL_MEDIUM_CIRCLE_INDICATOR_FILL_LINE_FULL_ID));
-    progress_bar.setPainter(progress_barPainter);
-    progress_bar.setValue(58);
-    progress_bar.setVisible(false);
-
-    Selector.setXY(705, 15);
-    Selector.setBitmaps(touchgfx::Bitmap(BITMAP_SWITCH_OFF_ID), touchgfx::Bitmap(BITMAP_SWITCH_ON_ID));
-    Selector.forceState(true);
-    Selector.setAction(buttonCallback);
-
     add(Background);
     add(ToolBar);
     add(logo);
     add(Input_manual);
     add(Input_card);
-    add(pop_up);
-    add(background_progress);
-    add(progress_bar);
     add(Selector);
+    add(Container_progress);
+    add(pop_up);
 }
 
 void InputIDScreenViewBase::setupScreen()
@@ -317,6 +319,13 @@ void InputIDScreenViewBase::buttonCallbackHandler(const touchgfx::AbstractButton
         //Go to MainScreen with screen transition towards North
         application().gotoMainScreenScreenCoverTransitionNorth();
     }
+    else if (&src == &Selector)
+    {
+        //Selector_mode
+        //When Selector clicked call virtual function
+        //Call select_mode_id
+        select_mode_id();
+    }
     else if (&src == &button_ok_pop_up)
     {
         //hide_pop_up
@@ -324,12 +333,5 @@ void InputIDScreenViewBase::buttonCallbackHandler(const touchgfx::AbstractButton
         //Hide pop_up
         pop_up.setVisible(false);
         pop_up.invalidate();
-    }
-    else if (&src == &Selector)
-    {
-        //Selector_mode
-        //When Selector clicked call virtual function
-        //Call select_mode_id
-        select_mode_id();
     }
 }

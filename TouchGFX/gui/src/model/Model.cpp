@@ -164,8 +164,11 @@ void Model::configure_parameters_mqtt(struct parameters_mqtt_s param)
 {
 	osMutexAcquire(mutex_NewMsg_WifiHandle, osWaitForever);
 	keep_alive_connection = param.keep_alive;
-	version_mqtt = param.keep_alive;
+	version_mqtt = param.version;
 	qos_mqtt = param.qos;
+	memset(client_id, 0, BUFFER_SIZE_TOPIC);
+	memset(publish_topic, 0, BUFFER_SIZE_TOPIC);
+	memset(suscribe_topic, 0, BUFFER_SIZE_TOPIC);
 	strncpy((char *)client_id, (char *)param.client_id, strlen((char *)param.client_id));
 	strncpy((char *)publish_topic, (char *)param.publish_topic, strlen((char *)param.publish_topic));
 	strncpy((char *)suscribe_topic, (char *)param.suscribe_topic, strlen((char *)param.suscribe_topic));

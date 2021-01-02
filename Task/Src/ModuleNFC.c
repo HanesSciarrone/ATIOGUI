@@ -84,10 +84,10 @@ static uint8_t module_nfc_hex_to_string(uint8_t *uid, uint8_t length_uid)
 
 	offset = 0;
 	for (i = 0; i < length_uid; i++) {
-		msr_number = (uid[i] | 0xF0) >> 4;
-		lsr_number = (uid[i] | 0x0F);
+		msr_number = (uid[i] & 0xF0) >> 4;
+		lsr_number = (uid[i] & 0x0F);
 
-		if (msr_number <= 0 && msr_number >= 9) {
+		if (msr_number >= 0 && msr_number <= 9) {
 			user_id[offset] = msr_number + '0';
 		}
 		else {
@@ -95,7 +95,7 @@ static uint8_t module_nfc_hex_to_string(uint8_t *uid, uint8_t length_uid)
 		}
 		offset++;
 
-		if (lsr_number <= 0 && lsr_number >= 9) {
+		if (lsr_number >= 0 && lsr_number <= 9) {
 			user_id[offset] = lsr_number + '0';
 		}
 		else {

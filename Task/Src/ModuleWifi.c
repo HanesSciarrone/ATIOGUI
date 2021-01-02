@@ -305,7 +305,7 @@ static enum mqtt_state sent_subcribe_mqtt(void)
 	while (retry < 3) {
 		MQTTString topicSubcribeString = MQTTString_initializer;
 		topicSubcribeString.cstring = (char *)suscribe_topic;
-		request_qos = 0;
+		request_qos = qos_mqtt;
 
 		// Build and sent message of subcribe
 		length = MQTTSerialize_subscribe(buffer, sizeof(buffer), 0, 1, 1, &topicSubcribeString, (int *)&request_qos);
@@ -366,7 +366,7 @@ static enum mqtt_state sent_connect_mqtt(void)
 		dataConnection.MQTTVersion = version_mqtt;
 		dataConnection.clientID.cstring = (char *)client_id;
 		dataConnection.keepAliveInterval = keep_alive_connection;
-		dataConnection.will.qos = 0;
+		dataConnection.will.qos = qos_mqtt;
 		strncpy((char *)buffer, "0", sizeof(buffer));
 
 		// Build message

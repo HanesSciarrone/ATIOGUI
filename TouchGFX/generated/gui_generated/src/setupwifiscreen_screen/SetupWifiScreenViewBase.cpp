@@ -87,6 +87,25 @@ SetupWifiScreenViewBase::SetupWifiScreenViewBase() :
     textPassword.setWildcard(textPasswordBuffer);
     textPassword.setTypedText(touchgfx::TypedText(T_SINGLEUSEID25));
 
+    BackgroundProgress.setPosition(0, 0, 800, 480);
+    BackgroundProgress.setVisible(false);
+    BackgroundProgress.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    BackgroundProgress.setAlpha(114);
+
+    ProgressBar.setXY(348, 188);
+    ProgressBar.setProgressIndicatorPosition(0, 0, 104, 104);
+    ProgressBar.setRange(0, 100);
+    ProgressBar.setCenter(52, 52);
+    ProgressBar.setRadius(42);
+    ProgressBar.setLineWidth(16);
+    ProgressBar.setStartEndAngle(0, 360);
+    ProgressBar.setCapPrecision(10);
+    ProgressBar.setBackground(touchgfx::Bitmap(BITMAP_BLUE_PROGRESSINDICATORS_BG_MEDIUM_CIRCLE_INDICATOR_BG_LINE_FULL_ID));
+    ProgressBarPainter.setBitmap(touchgfx::Bitmap(BITMAP_BLUE_PROGRESSINDICATORS_FILL_MEDIUM_CIRCLE_INDICATOR_FILL_LINE_FULL_ID));
+    ProgressBar.setPainter(ProgressBarPainter);
+    ProgressBar.setValue(58);
+    ProgressBar.setVisible(false);
+
     Pop_up.setBackground(touchgfx::BitmapId(BITMAP_BACKGROUND_QWERTY_ID), 150, 105);
     Pop_up.setShadeColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
     Pop_up.setShadeAlpha(200);
@@ -108,11 +127,6 @@ SetupWifiScreenViewBase::SetupWifiScreenViewBase() :
     PopupAccept.setAction(buttonCallback);
     Pop_up.add(PopupAccept);
 
-    BackgroundProgress.setPosition(0, 0, 800, 480);
-    BackgroundProgress.setVisible(false);
-    BackgroundProgress.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
-    BackgroundProgress.setAlpha(114);
-
     warning_connection.setBackground(touchgfx::BitmapId(BITMAP_BACKGROUND_QWERTY_ID), 150, 105);
     warning_connection.setShadeColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
     warning_connection.setShadeAlpha(166);
@@ -132,20 +146,6 @@ SetupWifiScreenViewBase::SetupWifiScreenViewBase() :
     text_warning_connection.setTypedText(touchgfx::TypedText(T_SINGLEUSEID35));
     warning_connection.add(text_warning_connection);
 
-    ProgressBar.setXY(348, 188);
-    ProgressBar.setProgressIndicatorPosition(0, 0, 104, 104);
-    ProgressBar.setRange(0, 100);
-    ProgressBar.setCenter(52, 52);
-    ProgressBar.setRadius(42);
-    ProgressBar.setLineWidth(16);
-    ProgressBar.setStartEndAngle(0, 360);
-    ProgressBar.setCapPrecision(10);
-    ProgressBar.setBackground(touchgfx::Bitmap(BITMAP_BLUE_PROGRESSINDICATORS_BG_MEDIUM_CIRCLE_INDICATOR_BG_LINE_FULL_ID));
-    ProgressBarPainter.setBitmap(touchgfx::Bitmap(BITMAP_BLUE_PROGRESSINDICATORS_FILL_MEDIUM_CIRCLE_INDICATOR_FILL_LINE_FULL_ID));
-    ProgressBar.setPainter(ProgressBarPainter);
-    ProgressBar.setValue(58);
-    ProgressBar.setVisible(false);
-
     add(background);
     add(ToolBar);
     add(logo);
@@ -161,10 +161,10 @@ SetupWifiScreenViewBase::SetupWifiScreenViewBase() :
     add(background_Password);
     add(textSSID);
     add(textPassword);
-    add(Pop_up);
     add(BackgroundProgress);
-    add(warning_connection);
     add(ProgressBar);
+    add(Pop_up);
+    add(warning_connection);
 }
 
 void SetupWifiScreenViewBase::setupScreen()
