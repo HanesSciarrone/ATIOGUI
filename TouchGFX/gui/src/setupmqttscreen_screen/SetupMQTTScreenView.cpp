@@ -9,7 +9,7 @@ SetupMQTTScreenView::SetupMQTTScreenView()
 	keepalive = 60;
 	version = 3;
 	qos = 0;
-	keyboard.setPosition(90, 15, 320, 240);
+	keyboard.setPosition(250, 120, 320, 240);
 	Pop_up.add(keyboard);
 }
 

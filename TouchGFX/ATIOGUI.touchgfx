@@ -891,7 +891,7 @@
                   "Green": 0,
                   "Blue": 0
                 },
-                "Alpha": 201,
+                "Alpha": 255,
                 "Name": "background_progress",
                 "X": 0,
                 "Y": 0,
@@ -1046,7 +1046,7 @@
             "ModalHeight": 270,
             "ContX": 0,
             "ContY": 0,
-            "Alpha": 200,
+            "Alpha": 255,
             "Name": "pop_up",
             "X": 0,
             "Y": 0,
@@ -1509,7 +1509,7 @@
               "Green": 0,
               "Blue": 0
             },
-            "Alpha": 114,
+            "Alpha": 255,
             "Name": "BackgroundProgress",
             "X": 0,
             "Y": 0,
@@ -1563,6 +1563,40 @@
           {
             "Components": [
               {
+                "Color": {
+                  "Red": 0,
+                  "Green": 0,
+                  "Blue": 0
+                },
+                "Alpha": 255,
+                "Name": "background_pop_up",
+                "X": 0,
+                "Y": 0,
+                "Width": 800,
+                "Height": 480,
+                "Type": "Box",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
+              {
+                "RelativeFilename": "Background_qwerty.png",
+                "Alpha": 255,
+                "Name": "image_pop_up",
+                "X": 150,
+                "Y": 105,
+                "Width": 500,
+                "Height": 270,
+                "Type": "Image",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
+              {
                 "Pressed": "__designer\\Blue_Buttons_Round_icon_button_pressed.png",
                 "Released": "__designer\\Blue_Buttons_Round_icon_button.png",
                 "Alpha": 255,
@@ -1579,8 +1613,8 @@
                 },
                 "TextRotation": "0",
                 "Name": "PopupCancel",
-                "X": 9,
-                "Y": 206,
+                "X": 159,
+                "Y": 311,
                 "Width": 60,
                 "Height": 60,
                 "Type": "ButtonWithLabel",
@@ -1607,8 +1641,8 @@
                 },
                 "TextRotation": "0",
                 "Name": "PopupAccept",
-                "X": 430,
-                "Y": 206,
+                "X": 580,
+                "Y": 311,
                 "Width": 60,
                 "Height": 60,
                 "Type": "ButtonWithLabel",
@@ -1619,25 +1653,13 @@
                 "Moveable": false
               }
             ],
-            "FileName": "Background_qwerty.png",
-            "Color": {
-              "Red": 0,
-              "Green": 0,
-              "Blue": 0
-            },
-            "ModalX": 150,
-            "ModalY": 105,
-            "ModalWidth": 500,
-            "ModalHeight": 270,
-            "ContX": 0,
-            "ContY": 0,
-            "Alpha": 200,
+            "IsCacheableContainer": false,
             "Name": "Pop_up",
             "X": 0,
             "Y": 0,
             "Width": 800,
             "Height": 480,
-            "Type": "ModalWindow",
+            "Type": "Container",
             "Visible": false,
             "Draggable": false,
             "Clickable": false,
@@ -1711,7 +1733,7 @@
             "ModalHeight": 270,
             "ContX": 0,
             "ContY": 0,
-            "Alpha": 166,
+            "Alpha": 255,
             "Name": "warning_connection",
             "X": 0,
             "Y": 0,
@@ -2032,7 +2054,7 @@
             "ModalHeight": 270,
             "ContX": 0,
             "ContY": 0,
-            "Alpha": 174,
+            "Alpha": 255,
             "Name": "pop_up",
             "X": 0,
             "Y": 0,
@@ -2074,7 +2096,7 @@
             }
           },
           {
-            "InteractionName": "Interaction1",
+            "InteractionName": "Hide_popup",
             "HasCompletedTrigger": false,
             "Trigger": {
               "TriggerComponent": "btn_popup",
@@ -2602,7 +2624,7 @@
             "AutoSize": false,
             "LineSpacing": 7,
             "Wildcard1": {
-              "TextId": "SingleUseId61",
+              "TextId": "SingleUseId67",
               "UseBuffer": true,
               "BufferSize": 9
             },
@@ -2666,7 +2688,65 @@
             "Moveable": false
           },
           {
+            "Pressed": "__designer\\Blue_Buttons_Round_Edge_icon_button_pressed.png",
+            "Released": "__designer\\Blue_Buttons_Round_Edge_icon_button.png",
+            "Alpha": 255,
+            "IconPressed": "__designer\\Blue_Icons_Down_arrow_48.png",
+            "IconReleased": "__designer\\Blue_Icons_Down_arrow_48.png",
+            "IconX": 7,
+            "IconY": 17,
+            "IconHeight": 26,
+            "IconWidth": 46,
+            "ButtonStyle": "Style1",
+            "IconStyle": "Icon14",
+            "Name": "Btn_Decrease_keepalive",
+            "X": 501,
+            "Y": 394,
+            "Width": 60,
+            "Height": 60,
+            "Type": "ButtonWithIcon",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
             "Components": [
+              {
+                "Color": {
+                  "Red": 0,
+                  "Green": 0,
+                  "Blue": 0
+                },
+                "Alpha": 255,
+                "Name": "background",
+                "X": 0,
+                "Y": 0,
+                "Width": 800,
+                "Height": 480,
+                "Type": "Box",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
+              {
+                "RelativeFilename": "Background_qwerty.png",
+                "Alpha": 255,
+                "Name": "image_pop_up",
+                "X": 160,
+                "Y": 105,
+                "Width": 500,
+                "Height": 270,
+                "Type": "Image",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
               {
                 "Pressed": "__designer\\Blue_Buttons_Round_Edge_icon_button_pressed.png",
                 "Released": "__designer\\Blue_Buttons_Round_Edge_icon_button.png",
@@ -2685,8 +2765,8 @@
                 "TextRotation": "0",
                 "Style": "Style1",
                 "Name": "btn_pop_up_ok",
-                "X": 430,
-                "Y": 206,
+                "X": 594,
+                "Y": 311,
                 "Width": 60,
                 "Height": 60,
                 "Type": "ButtonWithLabel",
@@ -2714,8 +2794,8 @@
                 "TextRotation": "0",
                 "Style": "Style1",
                 "Name": "btn_pop_up_cancel",
-                "X": 11,
-                "Y": 206,
+                "X": 166,
+                "Y": 311,
                 "Width": 60,
                 "Height": 60,
                 "Type": "ButtonWithLabel",
@@ -2726,50 +2806,14 @@
                 "Moveable": false
               }
             ],
-            "FileName": "Background_qwerty.png",
-            "Color": {
-              "Red": 0,
-              "Green": 0,
-              "Blue": 0
-            },
-            "ModalX": 150,
-            "ModalY": 105,
-            "ModalWidth": 500,
-            "ModalHeight": 270,
-            "ContX": 0,
-            "ContY": 0,
-            "Alpha": 200,
+            "IsCacheableContainer": false,
             "Name": "Pop_up",
             "X": 0,
             "Y": 0,
             "Width": 800,
             "Height": 480,
-            "Type": "ModalWindow",
+            "Type": "Container",
             "Visible": false,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Pressed": "__designer\\Blue_Buttons_Round_Edge_icon_button_pressed.png",
-            "Released": "__designer\\Blue_Buttons_Round_Edge_icon_button.png",
-            "Alpha": 255,
-            "IconPressed": "__designer\\Blue_Icons_Down_arrow_48.png",
-            "IconReleased": "__designer\\Blue_Icons_Down_arrow_48.png",
-            "IconX": 7,
-            "IconY": 17,
-            "IconHeight": 26,
-            "IconWidth": 46,
-            "ButtonStyle": "Style1",
-            "IconStyle": "Icon14",
-            "Name": "Btn_Decrease_keepalive",
-            "X": 501,
-            "Y": 394,
-            "Width": 60,
-            "Height": 60,
-            "Type": "ButtonWithIcon",
-            "Visible": true,
             "Draggable": false,
             "Clickable": false,
             "Fadeable": false,
@@ -3835,10 +3879,6 @@
         "IsResource": false
       },
       {
-        "TextEntryId": "SingleUseId61",
-        "IsResource": false
-      },
-      {
         "TextEntryId": "SingleUseId62",
         "IsResource": false
       },
@@ -3852,6 +3892,10 @@
       },
       {
         "TextEntryId": "SingleUseId66",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId67",
         "IsResource": false
       }
     ],

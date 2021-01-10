@@ -37,7 +37,7 @@ public:
 
     virtual void ShowStatusConnectionNetwork(uint8_t value);
 
-    virtual void ShowProgreessBar();
+    virtual void hide_progreess_bar();
 
 private:
     SetupWifiScreenPresenter();

@@ -124,7 +124,7 @@ SetupMQTTScreenViewBase::SetupMQTTScreenViewBase() :
     Keep_alive.setPosition(584, 361, 140, 40);
     Keep_alive.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     Keep_alive.setLinespacing(7);
-    Unicode::snprintf(Keep_aliveBuffer, KEEP_ALIVE_SIZE, "%s", touchgfx::TypedText(T_SINGLEUSEID61).getText());
+    Unicode::snprintf(Keep_aliveBuffer, KEEP_ALIVE_SIZE, "%s", touchgfx::TypedText(T_SINGLEUSEID67).getText());
     Keep_alive.setWildcard(Keep_aliveBuffer);
     Keep_alive.setTypedText(touchgfx::TypedText(T_SINGLEUSEID55));
 
@@ -138,12 +138,23 @@ SetupMQTTScreenViewBase::SetupMQTTScreenViewBase() :
     Btn_Increase_keepalive.setIconXY(7, 17);
     Btn_Increase_keepalive.setAction(buttonCallback);
 
-    Pop_up.setBackground(touchgfx::BitmapId(BITMAP_BACKGROUND_QWERTY_ID), 150, 105);
-    Pop_up.setShadeColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
-    Pop_up.setShadeAlpha(200);
-    Pop_up.hide();
+    Btn_Decrease_keepalive.setXY(501, 394);
+    Btn_Decrease_keepalive.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_ICON_BUTTON_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_ICON_BUTTON_PRESSED_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_DOWN_ARROW_48_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_DOWN_ARROW_48_ID));
+    Btn_Decrease_keepalive.setIconXY(7, 17);
+    Btn_Decrease_keepalive.setAction(buttonCallback);
 
-    btn_pop_up_ok.setXY(430, 206);
+    Pop_up.setPosition(0, 0, 800, 480);
+    Pop_up.setVisible(false);
+
+    background.setPosition(0, 0, 800, 480);
+    background.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    Pop_up.add(background);
+
+    image_pop_up.setXY(160, 105);
+    image_pop_up.setBitmap(touchgfx::Bitmap(BITMAP_BACKGROUND_QWERTY_ID));
+    Pop_up.add(image_pop_up);
+
+    btn_pop_up_ok.setXY(594, 311);
     btn_pop_up_ok.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_ICON_BUTTON_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_ICON_BUTTON_PRESSED_ID));
     btn_pop_up_ok.setLabelText(touchgfx::TypedText(T_SINGLEUSEID59));
     btn_pop_up_ok.setLabelColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
@@ -151,18 +162,13 @@ SetupMQTTScreenViewBase::SetupMQTTScreenViewBase() :
     btn_pop_up_ok.setAction(buttonCallback);
     Pop_up.add(btn_pop_up_ok);
 
-    btn_pop_up_cancel.setXY(11, 206);
+    btn_pop_up_cancel.setXY(166, 311);
     btn_pop_up_cancel.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_ICON_BUTTON_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_ICON_BUTTON_PRESSED_ID));
     btn_pop_up_cancel.setLabelText(touchgfx::TypedText(T_SINGLEUSEID60));
     btn_pop_up_cancel.setLabelColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     btn_pop_up_cancel.setLabelColorPressed(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     btn_pop_up_cancel.setAction(buttonCallback);
     Pop_up.add(btn_pop_up_cancel);
-
-    Btn_Decrease_keepalive.setXY(501, 394);
-    Btn_Decrease_keepalive.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_ICON_BUTTON_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_ICON_BUTTON_PRESSED_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_DOWN_ARROW_48_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_DOWN_ARROW_48_ID));
-    Btn_Decrease_keepalive.setIconXY(7, 17);
-    Btn_Decrease_keepalive.setAction(buttonCallback);
 
     add(Background);
     add(ToolBar);
@@ -189,8 +195,8 @@ SetupMQTTScreenViewBase::SetupMQTTScreenViewBase() :
     add(Keep_alive);
     add(textArea1);
     add(Btn_Increase_keepalive);
-    add(Pop_up);
     add(Btn_Decrease_keepalive);
+    add(Pop_up);
     radioButtonGroup1.add(BtnQoS_0);
     radioButtonGroup1.add(BtnQoS_1);
     radioButtonGroup1.add(BtnQoS_2);
@@ -230,6 +236,13 @@ void SetupMQTTScreenViewBase::buttonCallbackHandler(const touchgfx::AbstractButt
         //Call Increase_keep_alive_mqtt
         Increase_keep_alive_mqtt();
     }
+    else if (&src == &Btn_Decrease_keepalive)
+    {
+        //Decrease_second
+        //When Btn_Decrease_keepalive clicked call virtual function
+        //Call Decrease_keep_alive_mqtt
+        Decrease_keep_alive_mqtt();
+    }
     else if (&src == &btn_pop_up_ok)
     {
         //Fill_text
@@ -244,13 +257,6 @@ void SetupMQTTScreenViewBase::buttonCallbackHandler(const touchgfx::AbstractButt
         //Hide Pop_up
         Pop_up.setVisible(false);
         Pop_up.invalidate();
-    }
-    else if (&src == &Btn_Decrease_keepalive)
-    {
-        //Decrease_second
-        //When Btn_Decrease_keepalive clicked call virtual function
-        //Call Decrease_keep_alive_mqtt
-        Decrease_keep_alive_mqtt();
     }
 }
 

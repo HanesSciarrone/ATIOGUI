@@ -20,8 +20,8 @@
 
 /* ----------------------- Global private variable ---------------------- */
 /* Definitions for TaskNFC */
-static osThreadId_t TaskNFCHandle;
-static const osThreadAttr_t TaskNFC_attributes = {
+static osThreadId_t task_nfc_handle;
+static const osThreadAttr_t task_nfc_attributes = {
   .name = "TaskNFC",
   .priority = (osPriority_t) osPriorityBelowNormal1,
   .stack_size = 256 * 4
@@ -173,7 +173,7 @@ void service_nfc(void *argument)
 }
 
 /* -------------------- Implementation public method -------------------- */
-bool_t ModuleNFC_Started(void)
+bool_t module_nfc_started(void)
 {
 	/* Creation of nfc_init */
 	nfc_initHandle = osSemaphoreNew(1, 0, &nfc_init_attributes);
@@ -188,9 +188,9 @@ bool_t ModuleNFC_Started(void)
 	}
 
 	/* Creation of TaskNFC */
-	TaskNFCHandle = osThreadNew(service_nfc, NULL, &TaskNFC_attributes);
+	task_nfc_handle = osThreadNew(service_nfc, NULL, &task_nfc_attributes);
 
-	if (TaskNFCHandle == NULL) {
+	if (task_nfc_handle == NULL) {
 		return FALSE;
 	}
 

@@ -16,7 +16,7 @@
  *
  * @return Return 1 if was success or 0 in other case
  */
-bool_t ModuleNFC_Started(void);
+bool_t module_nfc_started(void);
 
 /**
  * @brief Function to release semaphore to start initialize

@@ -36,8 +36,8 @@ public:
     /* Action when you have result of connection network */
     virtual void ShowStatusConnection(uint8_t value);
 
-    /* Action to show progress bar while operation is doing */
-    virtual void ShowProgress();
+    /* Action to hide progress bar while operation is doing */
+    virtual void hide_progreess_bar();
 
 protected:
 

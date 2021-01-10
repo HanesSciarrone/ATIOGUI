@@ -27,10 +27,12 @@ void InputIDScreenPresenter::show_status_credential(uint8_t result)
 	view.show_status_credential(result);
 }
 
-void InputIDScreenPresenter::ShowProgreessBar()
+void InputIDScreenPresenter::hide_progreess_bar()
 {
-	view.ShowProgreessBar();
+	view.hide_progreess_bar();
 }
+
+
 
 void InputIDScreenPresenter::active_reader()
 {

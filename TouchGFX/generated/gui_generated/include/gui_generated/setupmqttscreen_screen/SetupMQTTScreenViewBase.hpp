@@ -17,8 +17,7 @@
 #include <touchgfx/widgets/ButtonWithLabel.hpp>
 #include <touchgfx/widgets/Image.hpp>
 #include <touchgfx/widgets/ButtonWithIcon.hpp>
-#include <touchgfx/containers/ModalWindow.hpp>
-#include <touchgfx/Color.hpp>
+#include <touchgfx/containers/Container.hpp>
 #include <touchgfx/widgets/RadioButtonGroup.hpp>
 #include <touchgfx/mixins/ClickListener.hpp>
 
@@ -95,10 +94,12 @@ protected:
     touchgfx::TextAreaWithOneWildcard Keep_alive;
     touchgfx::TextArea textArea1;
     touchgfx::ButtonWithIcon Btn_Increase_keepalive;
-    touchgfx::ModalWindow Pop_up;
+    touchgfx::ButtonWithIcon Btn_Decrease_keepalive;
+    touchgfx::Container Pop_up;
+    touchgfx::Box background;
+    touchgfx::Image image_pop_up;
     touchgfx::ButtonWithLabel btn_pop_up_ok;
     touchgfx::ButtonWithLabel btn_pop_up_cancel;
-    touchgfx::ButtonWithIcon Btn_Decrease_keepalive;
     touchgfx::RadioButtonGroup<3> radioButtonGroup1;
 
     /*

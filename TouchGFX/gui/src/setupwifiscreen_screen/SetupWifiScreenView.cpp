@@ -11,7 +11,7 @@ SetupWifiScreenView::SetupWifiScreenView()
 	itemListClickedCallback(this, &SetupWifiScreenView::itemListClicked)
 
 {
-	keyboard.setPosition(90, 15, 320, 240);
+	keyboard.setPosition(240, 120, 320, 240);
 	Pop_up.add(keyboard);
 }
 
@@ -62,6 +62,10 @@ void SetupWifiScreenView::PopupClickAccept()
 
 void SetupWifiScreenView::ScanNetwork()
 {
+	BackgroundProgress.setVisible(true);
+	ProgressBar.setVisible(true);
+	BackgroundProgress.invalidate();
+	ProgressBar.invalidate();
 	presenter->MsgScanNetwork();
 }
 
@@ -75,6 +79,10 @@ void SetupWifiScreenView::SetDataNetwork()
 	Unicode::toUTF8(textSSIDBuffer, bufferSSID, TEXTSSID_SIZE);
 	Unicode::toUTF8(textPasswordBuffer, bufferPassword, TEXTPASSWORD_SIZE);
 
+	BackgroundProgress.setVisible(true);
+	ProgressBar.setVisible(true);
+	BackgroundProgress.invalidate();
+	ProgressBar.invalidate();
 	presenter->MsgConnectNetwork(bufferSSID, bufferPassword);
 }
 
@@ -150,10 +158,10 @@ void SetupWifiScreenView::ShowStatusConnection(uint8_t value)
 }
 
 /* Operation of progress bar */
-void SetupWifiScreenView::ShowProgress()
+void SetupWifiScreenView::hide_progreess_bar()
 {
-	BackgroundProgress.setVisible(true);
-	ProgressBar.setVisible(true);
+	BackgroundProgress.setVisible(false);
+	ProgressBar.setVisible(false);
 	BackgroundProgress.invalidate();
 	ProgressBar.invalidate();
 }

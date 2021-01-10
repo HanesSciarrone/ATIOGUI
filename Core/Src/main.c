@@ -28,6 +28,7 @@
 #include "SPI.h"
 #include "ModuleWifi.h"
 #include "ModuleNFC.h"
+#include "ModuleControllerPump.h"
 
 #include "mx25l512.h"
 #include "otm8009a.h"
@@ -89,6 +90,7 @@ QSPI_HandleTypeDef hqspi;
 SPI_HandleTypeDef hspi2;
 
 UART_HandleTypeDef huart5;
+UART_HandleTypeDef huart6;
 
 SDRAM_HandleTypeDef hsdram1;
 
@@ -99,7 +101,6 @@ const osThreadAttr_t TouchGFXTask_attributes = {
   .priority = (osPriority_t) osPriorityNormal,
   .stack_size = 2048 * 4
 };
-
 /* USER CODE BEGIN PV */
 /* USER CODE END PV */
 
@@ -115,6 +116,7 @@ static void MX_LTDC_Init(void);
 static void MX_QUADSPI_Init(void);
 static void MX_UART5_Init(void);
 static void MX_SPI2_Init(void);
+static void MX_USART6_UART_Init(void);
 void TouchGFX_Task(void *argument);
 
 /* USER CODE BEGIN PFP */
@@ -180,6 +182,7 @@ int main(void)
   MX_QUADSPI_Init();
   MX_UART5_Init();
   MX_SPI2_Init();
+  MX_USART6_UART_Init();
   MX_TouchGFX_Init();
   /* USER CODE BEGIN 2 */
 
@@ -192,8 +195,6 @@ int main(void)
   /* add mutexes, ... */
   /* USER CODE END RTOS_MUTEX */
 
-  /* Create the semaphores(s) */
-
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
   /* USER CODE END RTOS_SEMAPHORES */
@@ -201,9 +202,6 @@ int main(void)
   /* USER CODE BEGIN RTOS_TIMERS */
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
-
-  /* Create the queue(s) */
-
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
@@ -214,12 +212,16 @@ int main(void)
   TouchGFXTaskHandle = osThreadNew(TouchGFX_Task, NULL, &TouchGFXTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
-  if (ModuleWifi_Started() == FALSE)
+  if (module_wifi_started() == FALSE)
   {
 	  Error_Handler();
   }
 
-  if (ModuleNFC_Started() == FALSE) {
+  if (module_nfc_started() == FALSE) {
+	  Error_Handler();
+  }
+
+  if (module_controller_pump_started() == FALSE) {
 	  Error_Handler();
   }
   /* USER CODE END RTOS_THREADS */
@@ -287,8 +289,8 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_LTDC|RCC_PERIPHCLK_UART5
-                              |RCC_PERIPHCLK_I2C4;
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_LTDC|RCC_PERIPHCLK_USART6
+                              |RCC_PERIPHCLK_UART5|RCC_PERIPHCLK_I2C4;
   PeriphClkInitStruct.PLLSAI.PLLSAIN = 417;
   PeriphClkInitStruct.PLLSAI.PLLSAIR = 5;
   PeriphClkInitStruct.PLLSAI.PLLSAIQ = 2;
@@ -296,6 +298,7 @@ void SystemClock_Config(void)
   PeriphClkInitStruct.PLLSAIDivQ = 1;
   PeriphClkInitStruct.PLLSAIDivR = RCC_PLLSAIDIVR_2;
   PeriphClkInitStruct.Uart5ClockSelection = RCC_UART5CLKSOURCE_PCLK1;
+  PeriphClkInitStruct.Usart6ClockSelection = RCC_USART6CLKSOURCE_PCLK2;
   PeriphClkInitStruct.I2c4ClockSelection = RCC_I2C4CLKSOURCE_PCLK1;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
@@ -772,6 +775,41 @@ static void MX_UART5_Init(void)
 		Error_Handler();
 	}
   /* USER CODE END UART5_Init 2 */
+
+}
+
+/**
+  * @brief USART6 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART6_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART6_Init 0 */
+
+  /* USER CODE END USART6_Init 0 */
+
+  /* USER CODE BEGIN USART6_Init 1 */
+
+  /* USER CODE END USART6_Init 1 */
+  huart6.Instance = USART6;
+  huart6.Init.BaudRate = 115200;
+  huart6.Init.WordLength = UART_WORDLENGTH_8B;
+  huart6.Init.StopBits = UART_STOPBITS_1;
+  huart6.Init.Parity = UART_PARITY_NONE;
+  huart6.Init.Mode = UART_MODE_TX_RX;
+  huart6.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart6.Init.OverSampling = UART_OVERSAMPLING_16;
+  huart6.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+  huart6.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  if (HAL_UART_Init(&huart6) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART6_Init 2 */
+
+  /* USER CODE END USART6_Init 2 */
 
 }
 

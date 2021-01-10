@@ -84,7 +84,7 @@ typedef struct
  *
  * @return Return 1 if was success or 0 in other case
  */
-bool_t ModuleWifi_Started(void);
+bool_t module_wifi_started(void);
 
 /**
  * @brief Send uid got of NFC card to server.

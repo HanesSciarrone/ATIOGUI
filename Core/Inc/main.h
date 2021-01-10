@@ -96,8 +96,12 @@ void Error_Handler(void);
 #define LCD_INT_GPIO_Port GPIOI
 #define uSD_Detect_Pin GPIO_PIN_15
 #define uSD_Detect_GPIO_Port GPIOI
+#define CONTROLLER_PUMP_RX_Pin GPIO_PIN_7
+#define CONTROLLER_PUMP_RX_GPIO_Port GPIOC
 #define LCD_BL_CTRL_Pin GPIO_PIN_14
 #define LCD_BL_CTRL_GPIO_Port GPIOI
+#define CONTROLLER_PUMP_TX_Pin GPIO_PIN_6
+#define CONTROLLER_PUMP_TX_GPIO_Port GPIOC
 #define EXT_SDA_Pin GPIO_PIN_6
 #define EXT_SDA_GPIO_Port GPIOG
 #define ARD_D8_Pin GPIO_PIN_4

@@ -53,15 +53,15 @@ typedef StaticSemaphore_t osStaticSemaphoreDef_t;
 /* Definition of task, queue, semaphore and mutex handler */
 
 /* Definitions for TaskWifi */
-osThreadId_t TaskWifiHandle;
-const osThreadAttr_t TaskWifi_attributes = {
+osThreadId_t task_wifi_handle;
+const osThreadAttr_t task_wifi_attributes = {
   .name = "TaskWifi",
   .priority = (osPriority_t) osPriorityNormal2,
   .stack_size = 1024 * 4
 };
 
 /* Definitions for mutex_NewMsg_Wifi */
-osMutexId_t mutex_NewMsg_WifiHandle;
+osMutexId_t mutex_new_msg_wifi_handle;
 osStaticMutexDef_t mutex_NewMsg_WifiControlBlock;
 const osMutexAttr_t mutex_NewMsg_Wifi_attributes = {
   .name = "mutex_NewMsg_Wifi",
@@ -70,7 +70,7 @@ const osMutexAttr_t mutex_NewMsg_Wifi_attributes = {
 };
 
 /* Definitions for wifiqueue_operation */
-osMessageQueueId_t queue_Wifi_operationHandle;
+osMessageQueueId_t queue_wifi_operation_handle;
 const osMessageQueueAttr_t wifiqueue_operation_attributes = {
   .name = "wifiqueue_operation"
 };
@@ -664,8 +664,8 @@ static void ModuleWifi(void *argument)
 	/* Initialization of library ESP8266 */
 	if (!WifiModule_Comm_Init())
 	{
-		osMutexDelete(mutex_NewMsg_WifiHandle);
-		osThreadTerminate(TaskWifiHandle);
+		osMutexDelete(mutex_new_msg_wifi_handle);
+		osThreadTerminate(task_wifi_handle);
 	}
 
 	osDelay(5000/portTICK_PERIOD_MS);
@@ -673,15 +673,15 @@ static void ModuleWifi(void *argument)
 	/* Initialization of module ESP8266 */
 	if (!WifiModule_Init())
 	{
-		osMutexDelete(mutex_NewMsg_WifiHandle);
-		osThreadTerminate(TaskWifiHandle);
+		osMutexDelete(mutex_new_msg_wifi_handle);
+		osThreadTerminate(task_wifi_handle);
 	}
 
 	module_nfc_release_initialization();
 	operation = ANY_OPERATION;
 
 	for(;;) {
-		osMessageQueueGet(queue_Wifi_operationHandle, &operation, 0L, osWaitForever);
+		osMessageQueueGet(queue_wifi_operation_handle, &operation, 0L, osWaitForever);
 
 		switch(operation) {
 			case SCAN_NETWORK: {
@@ -696,7 +696,7 @@ static void ModuleWifi(void *argument)
 				ESP8266_StatusTypeDef_t status;
 
 				status = ESP8266_DisconnectAllNetwork();
-				osMutexAcquire(mutex_NewMsg_WifiHandle, osWaitForever);
+				osMutexAcquire(mutex_new_msg_wifi_handle, osWaitForever);
 
 				network.ssid = wifiParameters.ssid;
 				network.password = wifiParameters.password;
@@ -709,7 +709,7 @@ static void ModuleWifi(void *argument)
 					wifiParameters.resultOperation = 0;
 				}
 
-				osMutexRelease(mutex_NewMsg_WifiHandle);
+				osMutexRelease(mutex_new_msg_wifi_handle);
 
 				msgGUI = 1;
 				osMessageQueuePut(queue_NewMsg_GUI, &msgGUI, 0L, osWaitForever);
@@ -717,12 +717,12 @@ static void ModuleWifi(void *argument)
 			break;
 
 			case SEND_CREDENTIAL: {
-				osMutexAcquire(mutex_NewMsg_WifiHandle, osWaitForever);
+				osMutexAcquire(mutex_new_msg_wifi_handle, osWaitForever);
 				send_credential(wifiParameters.data);
 				msgGUI = 2;
 				wifiParameters.resultOperation = parse_result_credential();
 				osMessageQueuePut(queue_NewMsg_GUI, &msgGUI, 0L, osWaitForever);
-				osMutexRelease(mutex_NewMsg_WifiHandle);
+				osMutexRelease(mutex_new_msg_wifi_handle);
 			}
 			break;
 
@@ -734,25 +734,25 @@ static void ModuleWifi(void *argument)
 
 
 /* Public function implementation --------------------------------------------*/
-bool_t ModuleWifi_Started(void)
+bool_t module_wifi_started(void)
 {
 	/* Create the mutex(es) */
-	mutex_NewMsg_WifiHandle = osMutexNew(&mutex_NewMsg_Wifi_attributes);
-	if (mutex_NewMsg_WifiHandle == NULL)
+	mutex_new_msg_wifi_handle = osMutexNew(&mutex_NewMsg_Wifi_attributes);
+	if (mutex_new_msg_wifi_handle == NULL)
 	{
 		return FALSE;
 	}
 
 	 /* creation of wifiqueue_operation */
-	queue_Wifi_operationHandle = osMessageQueueNew (2, sizeof(WifiModule_Operation), &wifiqueue_operation_attributes);
-	if (queue_Wifi_operationHandle == NULL)
+	queue_wifi_operation_handle = osMessageQueueNew (2, sizeof(WifiModule_Operation), &wifiqueue_operation_attributes);
+	if (queue_wifi_operation_handle == NULL)
 	{
 		return FALSE;
 	}
 
 	/* Create the thread */
-	TaskWifiHandle = osThreadNew(ModuleWifi, NULL, &TaskWifi_attributes);
-	if (TaskWifiHandle == NULL)
+	task_wifi_handle = osThreadNew(ModuleWifi, NULL, &task_wifi_attributes);
+	if (task_wifi_handle == NULL)
 	{
 		return FALSE;
 	}
@@ -764,10 +764,10 @@ void module_wifi_send_id(uint8_t *id, uint8_t length_id)
 {
 	WifiModule_Operation operation;
 
-	osMutexAcquire(mutex_NewMsg_WifiHandle, osWaitForever);
+	osMutexAcquire(mutex_new_msg_wifi_handle, osWaitForever);
 	operation = SEND_CREDENTIAL;
 	strncpy((char *)wifiParameters.data, (char *)id, length_id);
-	osMessageQueuePut(queue_Wifi_operationHandle, &operation, 0L, 500/portTICK_PERIOD_MS);
-	osMutexRelease(mutex_NewMsg_WifiHandle);
+	osMessageQueuePut(queue_wifi_operation_handle, &operation, 0L, 500/portTICK_PERIOD_MS);
+	osMutexRelease(mutex_new_msg_wifi_handle);
 
 }

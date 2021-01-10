@@ -29,7 +29,7 @@ public:
 
     virtual void sent_credential_to_IoT(uint8_t *buffer, uint16_t length);
     virtual void show_status_credential(uint8_t result);
-    virtual void ShowProgreessBar();
+    virtual void hide_progreess_bar();
     virtual void active_reader();
     virtual void getting_data_read_card(uint8_t *id, uint8_t length_id);
 

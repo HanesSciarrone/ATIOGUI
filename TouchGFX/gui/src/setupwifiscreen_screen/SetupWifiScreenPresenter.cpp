@@ -38,7 +38,7 @@ void SetupWifiScreenPresenter::ShowStatusConnectionNetwork(uint8_t value)
 	view.ShowStatusConnection(value);
 }
 
-void SetupWifiScreenPresenter::ShowProgreessBar()
+void SetupWifiScreenPresenter::hide_progreess_bar()
 {
-	view.ShowProgress();
+	view.hide_progreess_bar();
 }

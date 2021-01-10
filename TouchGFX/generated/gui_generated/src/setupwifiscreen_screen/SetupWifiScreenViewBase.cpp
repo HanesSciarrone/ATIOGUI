@@ -90,7 +90,6 @@ SetupWifiScreenViewBase::SetupWifiScreenViewBase() :
     BackgroundProgress.setPosition(0, 0, 800, 480);
     BackgroundProgress.setVisible(false);
     BackgroundProgress.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
-    BackgroundProgress.setAlpha(114);
 
     ProgressBar.setXY(348, 188);
     ProgressBar.setProgressIndicatorPosition(0, 0, 104, 104);
@@ -106,12 +105,18 @@ SetupWifiScreenViewBase::SetupWifiScreenViewBase() :
     ProgressBar.setValue(58);
     ProgressBar.setVisible(false);
 
-    Pop_up.setBackground(touchgfx::BitmapId(BITMAP_BACKGROUND_QWERTY_ID), 150, 105);
-    Pop_up.setShadeColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
-    Pop_up.setShadeAlpha(200);
-    Pop_up.hide();
+    Pop_up.setPosition(0, 0, 800, 480);
+    Pop_up.setVisible(false);
 
-    PopupCancel.setXY(9, 206);
+    background_pop_up.setPosition(0, 0, 800, 480);
+    background_pop_up.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    Pop_up.add(background_pop_up);
+
+    image_pop_up.setXY(150, 105);
+    image_pop_up.setBitmap(touchgfx::Bitmap(BITMAP_BACKGROUND_QWERTY_ID));
+    Pop_up.add(image_pop_up);
+
+    PopupCancel.setXY(159, 311);
     PopupCancel.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_ICON_BUTTON_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_ICON_BUTTON_PRESSED_ID));
     PopupCancel.setLabelText(touchgfx::TypedText(T_SINGLEUSEID26));
     PopupCancel.setLabelColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
@@ -119,7 +124,7 @@ SetupWifiScreenViewBase::SetupWifiScreenViewBase() :
     PopupCancel.setAction(buttonCallback);
     Pop_up.add(PopupCancel);
 
-    PopupAccept.setXY(430, 206);
+    PopupAccept.setXY(580, 311);
     PopupAccept.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_ICON_BUTTON_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_ICON_BUTTON_PRESSED_ID));
     PopupAccept.setLabelText(touchgfx::TypedText(T_SINGLEUSEID27));
     PopupAccept.setLabelColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
@@ -129,7 +134,6 @@ SetupWifiScreenViewBase::SetupWifiScreenViewBase() :
 
     warning_connection.setBackground(touchgfx::BitmapId(BITMAP_BACKGROUND_QWERTY_ID), 150, 105);
     warning_connection.setShadeColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
-    warning_connection.setShadeAlpha(166);
     warning_connection.hide();
 
     btn_warning_ok.setXY(321, 200);

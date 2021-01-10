@@ -27,8 +27,8 @@ public:
     /** Function that show result of sent credential to broker */
     virtual void show_status_credential(uint8_t result);
 
-    /** Shows progress bar */
-    virtual void ShowProgreessBar();
+    /** Hide progress bar */
+    virtual void hide_progreess_bar();
 
     /**
      * @brief Show you data got of card.

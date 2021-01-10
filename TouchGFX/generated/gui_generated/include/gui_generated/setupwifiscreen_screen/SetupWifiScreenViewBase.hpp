@@ -17,9 +17,10 @@
 #include <touchgfx/widgets/TextAreaWithWildcard.hpp>
 #include <touchgfx/containers/progress_indicators/CircleProgress.hpp>
 #include <touchgfx/widgets/canvas/PainterRGB888Bitmap.hpp>
+#include <touchgfx/containers/Container.hpp>
+#include <touchgfx/widgets/ButtonWithLabel.hpp>
 #include <touchgfx/containers/ModalWindow.hpp>
 #include <touchgfx/Color.hpp>
-#include <touchgfx/widgets/ButtonWithLabel.hpp>
 #include <touchgfx/mixins/ClickListener.hpp>
 
 class SetupWifiScreenViewBase : public touchgfx::View<SetupWifiScreenPresenter>
@@ -74,7 +75,9 @@ protected:
     touchgfx::Box BackgroundProgress;
     touchgfx::CircleProgress ProgressBar;
     touchgfx::PainterRGB888Bitmap ProgressBarPainter;
-    touchgfx::ModalWindow Pop_up;
+    touchgfx::Container Pop_up;
+    touchgfx::Box background_pop_up;
+    touchgfx::Image image_pop_up;
     touchgfx::ButtonWithLabel PopupCancel;
     touchgfx::ButtonWithLabel PopupAccept;
     touchgfx::ModalWindow warning_connection;

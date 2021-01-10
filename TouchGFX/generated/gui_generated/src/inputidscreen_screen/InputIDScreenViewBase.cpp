@@ -224,7 +224,6 @@ InputIDScreenViewBase::InputIDScreenViewBase() :
 
     background_progress.setPosition(0, 0, 800, 480);
     background_progress.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
-    background_progress.setAlpha(201);
     Container_progress.add(background_progress);
 
     progress_bar.setXY(348, 188);
@@ -243,7 +242,6 @@ InputIDScreenViewBase::InputIDScreenViewBase() :
 
     pop_up.setBackground(touchgfx::BitmapId(BITMAP_BACKGROUND_QWERTY_ID), 150, 105);
     pop_up.setShadeColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
-    pop_up.setShadeAlpha(200);
     pop_up.hide();
 
     label1_pop_up.setXY(114, 72);

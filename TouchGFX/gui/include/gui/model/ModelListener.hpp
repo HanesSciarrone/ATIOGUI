@@ -20,6 +20,8 @@ public:
 
     virtual void ShowProgreessBar() {}
 
+    virtual void hide_progreess_bar() {}
+
     void bind(Model* m)
     {
         model = m;

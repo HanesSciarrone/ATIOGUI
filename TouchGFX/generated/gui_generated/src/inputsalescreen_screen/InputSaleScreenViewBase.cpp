@@ -46,7 +46,6 @@ InputSaleScreenViewBase::InputSaleScreenViewBase() :
 
     pop_up.setBackground(touchgfx::BitmapId(BITMAP_BACKGROUND_QWERTY_ID), 150, 105);
     pop_up.setShadeColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
-    pop_up.setShadeAlpha(174);
     pop_up.hide();
 
     btn_popup.setXY(317, 196);
@@ -98,7 +97,7 @@ void InputSaleScreenViewBase::buttonCallbackHandler(const touchgfx::AbstractButt
     }
     else if (&src == &btn_popup)
     {
-        //Interaction1
+        //Hide_popup
         //When btn_popup clicked hide pop_up
         //Hide pop_up
         pop_up.setVisible(false);
