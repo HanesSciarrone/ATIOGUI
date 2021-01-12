@@ -7,7 +7,7 @@
 #include <texts/TextKeysAndLanguages.hpp>
 
 MainScreenViewBase::MainScreenViewBase() :
-    flexButtonCallback(this, &MainScreenViewBase::flexButtonCallbackHandler)
+    buttonCallback(this, &MainScreenViewBase::buttonCallbackHandler)
 {
 
     Background.setPosition(0, 0, 800, 480);
@@ -20,39 +20,42 @@ MainScreenViewBase::MainScreenViewBase() :
     logo.setPosition(0, 1, 153, 60);
     logo.setScalingAlgorithm(touchgfx::ScalableImage::NEAREST_NEIGHBOR);
 
-    textArea1.setXY(199, 129);
-    textArea1.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
-    textArea1.setLinespacing(0);
-    textArea1.setTypedText(touchgfx::TypedText(T_SINGLEUSEID11));
+    Title_main.setXY(76, 202);
+    Title_main.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    Title_main.setLinespacing(0);
+    Title_main.setTypedText(touchgfx::TypedText(T_SINGLEUSEID11));
 
-    btnOptionID.setBoxWithBorderPosition(0, 0, 90, 90);
-    btnOptionID.setBorderSize(3);
-    btnOptionID.setBoxWithBorderColors(touchgfx::Color::getColorFrom24BitRGB(71, 77, 80), touchgfx::Color::getColorFrom24BitRGB(45, 53, 55), touchgfx::Color::getColorFrom24BitRGB(0, 0, 0), touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
-    btnOptionID.setIconBitmaps(Bitmap(BITMAP_DARK_ICONS_USER_48_ID), Bitmap(BITMAP_DARK_ICONS_USER_48_ID));
-    btnOptionID.setIconXY(21, 7);
-    btnOptionID.setText(TypedText(T_SINGLEUSEID12));
-    btnOptionID.setTextPosition(0, 58, 90, 90);
-    btnOptionID.setTextColors(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255), touchgfx::Color::getColorFrom24BitRGB(184, 184, 184));
-    btnOptionID.setPosition(199, 317, 90, 90);
-    btnOptionID.setAction(flexButtonCallback);
+    label_popup.setXY(387, 204);
+    label_popup.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    label_popup.setLinespacing(0);
+    label_popupBuffer[0] = 0;
+    label_popup.setWildcard(label_popupBuffer);
+    label_popup.resizeToCurrentText();
+    label_popup.setTypedText(touchgfx::TypedText(T_SINGLEUSEID39));
 
-    btnSetupWifi.setBoxWithBorderPosition(0, 0, 90, 90);
-    btnSetupWifi.setBorderSize(3);
-    btnSetupWifi.setBoxWithBorderColors(touchgfx::Color::getColorFrom24BitRGB(71, 77, 80), touchgfx::Color::getColorFrom24BitRGB(45, 53, 55), touchgfx::Color::getColorFrom24BitRGB(0, 0, 0), touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
-    btnSetupWifi.setIconBitmaps(Bitmap(BITMAP_DARK_ICONS_TOOLS_48_ID), Bitmap(BITMAP_DARK_ICONS_TOOLS_48_ID));
-    btnSetupWifi.setIconXY(21, 7);
-    btnSetupWifi.setText(TypedText(T_SINGLEUSEID13));
-    btnSetupWifi.setTextPosition(0, 58, 90, 90);
-    btnSetupWifi.setTextColors(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255), touchgfx::Color::getColorFrom24BitRGB(184, 184, 184));
-    btnSetupWifi.setPosition(511, 317, 90, 90);
-    btnSetupWifi.setAction(flexButtonCallback);
+    btnSeputMQTT.setXY(576, 232);
+    btnSeputMQTT.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_SETTINGS_48_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_SETTINGS_48_ID));
+    btnSeputMQTT.setIconXY(62, 7);
+    btnSeputMQTT.setAction(buttonCallback);
+
+    btnSetupWifi.setXY(576, 337);
+    btnSetupWifi.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID), touchgfx::Bitmap(BITMAP_SIGNAL_3_ID), touchgfx::Bitmap(BITMAP_SIGNAL_3_ID));
+    btnSetupWifi.setIconXY(55, 3);
+    btnSetupWifi.setAction(buttonCallback);
+
+    btnOptionID.setXY(576, 129);
+    btnOptionID.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_USER_48_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_USER_48_ID));
+    btnOptionID.setIconXY(62, 7);
+    btnOptionID.setAction(buttonCallback);
 
     add(Background);
     add(Toolbar);
     add(logo);
-    add(textArea1);
-    add(btnOptionID);
+    add(Title_main);
+    add(label_popup);
+    add(btnSeputMQTT);
     add(btnSetupWifi);
+    add(btnOptionID);
 }
 
 void MainScreenViewBase::setupScreen()
@@ -60,14 +63,14 @@ void MainScreenViewBase::setupScreen()
 
 }
 
-void MainScreenViewBase::flexButtonCallbackHandler(const touchgfx::AbstractButtonContainer& src)
+void MainScreenViewBase::buttonCallbackHandler(const touchgfx::AbstractButton& src)
 {
-    if (&src == &btnOptionID)
+    if (&src == &btnSeputMQTT)
     {
-        //ChangeIDScreen
-        //When btnOptionID clicked change screen to InputIDScreen
-        //Go to InputIDScreen with screen transition towards South
-        application().gotoInputIDScreenScreenCoverTransitionSouth();
+        //ChangeSetupMQTT
+        //When btnSeputMQTT clicked change screen to SetupMQTTScreen
+        //Go to SetupMQTTScreen with screen transition towards East
+        application().gotoSetupMQTTScreenScreenCoverTransitionEast();
     }
     else if (&src == &btnSetupWifi)
     {
@@ -75,5 +78,12 @@ void MainScreenViewBase::flexButtonCallbackHandler(const touchgfx::AbstractButto
         //When btnSetupWifi clicked change screen to SetupWifiScreen
         //Go to SetupWifiScreen with screen transition towards South
         application().gotoSetupWifiScreenScreenCoverTransitionSouth();
+    }
+    else if (&src == &btnOptionID)
+    {
+        //ChangeIDScreen
+        //When btnOptionID clicked change screen to InputIDScreen
+        //Go to InputIDScreen with screen transition towards South
+        application().gotoInputIDScreenScreenCoverTransitionSouth();
     }
 }

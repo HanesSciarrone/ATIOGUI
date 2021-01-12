@@ -1,5 +1,7 @@
 #include <gui/mainscreen_screen/MainScreenView.hpp>
 
+#include <gui/inputsalescreen_screen/InputSaleScreenView.hpp>
+
 MainScreenView::MainScreenView()
 {
 

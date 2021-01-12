@@ -3,9 +3,6 @@
 
 #include <gui/model/Model.hpp>
 
-/* Include added for user */
-#include "ModuleWifi.h"
-
 class ModelListener
 {
 public:
@@ -13,13 +10,17 @@ public:
     
     virtual ~ModelListener() {}
 
-    virtual void ResultScandNetwork(WifiMessage_t *networks) {}
+    virtual void ResultScandNetwork(gui_network_t *networks) {}
 
     virtual void ShowStatusConnectionNetwork(uint8_t value) {}
 
     virtual void show_status_credential(uint8_t result) {}
 
+    virtual void getting_data_read_card(uint8_t *id, uint8_t length_id) {}
+
     virtual void ShowProgreessBar() {}
+
+    virtual void hide_progreess_bar() {}
 
     void bind(Model* m)
     {

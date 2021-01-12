@@ -9,10 +9,18 @@
 #include <gui/inputidscreen_screen/InputIDScreenPresenter.hpp>
 #include <touchgfx/widgets/Box.hpp>
 #include <touchgfx/widgets/ScalableImage.hpp>
+#include <touchgfx/containers/Container.hpp>
 #include <gui/containers/PadNumeric.hpp>
-#include <touchgfx/widgets/TextArea.hpp>
 #include <touchgfx/widgets/ButtonWithLabel.hpp>
-#include <touchgfx/containers/progress_indicators/ImageProgress.hpp>
+#include <touchgfx/widgets/TextArea.hpp>
+#include <touchgfx/widgets/BoxWithBorder.hpp>
+#include <touchgfx/widgets/TextAreaWithWildcard.hpp>
+#include <touchgfx/widgets/canvas/Circle.hpp>
+#include <touchgfx/widgets/canvas/PainterRGB888.hpp>
+#include <touchgfx/widgets/ButtonWithIcon.hpp>
+#include <touchgfx/widgets/ToggleButton.hpp>
+#include <touchgfx/containers/progress_indicators/CircleProgress.hpp>
+#include <touchgfx/widgets/canvas/PainterRGB888Bitmap.hpp>
 #include <touchgfx/containers/ModalWindow.hpp>
 #include <touchgfx/Color.hpp>
 
@@ -31,6 +39,21 @@ public:
         // Override and implement this function in InputIDScreen
     }
 
+    virtual void send_card_id()
+    {
+        // Override and implement this function in InputIDScreen
+    }
+
+    virtual void active_reader()
+    {
+        // Override and implement this function in InputIDScreen
+    }
+
+    virtual void select_mode_id()
+    {
+        // Override and implement this function in InputIDScreen
+    }
+
 protected:
     FrontendApplication& application() {
         return *static_cast<FrontendApplication*>(touchgfx::Application::getInstance());
@@ -42,16 +65,56 @@ protected:
     touchgfx::Box Background;
     touchgfx::Box ToolBar;
     touchgfx::ScalableImage logo;
+    touchgfx::Container Input_manual;
     PadNumeric PadNumericID;
-    touchgfx::TextArea titleInputID;
     touchgfx::ButtonWithLabel BtnAccept;
+    touchgfx::TextArea titleInputID;
     touchgfx::ButtonWithLabel BtnCancel;
+    touchgfx::Container Input_card;
+    touchgfx::BoxWithBorder bacckground_card_id;
+    touchgfx::TextAreaWithOneWildcard card_id;
+    touchgfx::TextArea Title_card_id;
+    touchgfx::TextArea Lbl_timeout;
+    touchgfx::Circle Background_clock;
+    touchgfx::PainterRGB888 Background_clockPainter;
+    touchgfx::ButtonWithIcon Send_card_id;
+    touchgfx::ButtonWithIcon Active_reader;
+    touchgfx::ButtonWithIcon Cancel;
+    touchgfx::Circle timeout1;
+    touchgfx::PainterRGB888 timeout1Painter;
+    touchgfx::Circle timeout2;
+    touchgfx::PainterRGB888 timeout2Painter;
+    touchgfx::Circle timeout3;
+    touchgfx::PainterRGB888 timeout3Painter;
+    touchgfx::Circle timeout4;
+    touchgfx::PainterRGB888 timeout4Painter;
+    touchgfx::Circle timeout5;
+    touchgfx::PainterRGB888 timeout5Painter;
+    touchgfx::Circle timeout6;
+    touchgfx::PainterRGB888 timeout6Painter;
+    touchgfx::Circle timeout7;
+    touchgfx::PainterRGB888 timeout7Painter;
+    touchgfx::Circle timeout8;
+    touchgfx::PainterRGB888 timeout8Painter;
+    touchgfx::Circle timeout9;
+    touchgfx::PainterRGB888 timeout9Painter;
+    touchgfx::Circle timeout10;
+    touchgfx::PainterRGB888 timeout10Painter;
+    touchgfx::ToggleButton Selector;
+    touchgfx::Container Container_progress;
     touchgfx::Box background_progress;
-    touchgfx::ImageProgress progress_bar;
+    touchgfx::CircleProgress progress_bar;
+    touchgfx::PainterRGB888Bitmap progress_barPainter;
     touchgfx::ModalWindow pop_up;
     touchgfx::TextArea label1_pop_up;
     touchgfx::ButtonWithLabel button_ok_pop_up;
     touchgfx::TextArea label2_pop_up;
+
+    /*
+     * Wildcard Buffers
+     */
+    static const uint16_t CARD_ID_SIZE = 30;
+    touchgfx::Unicode::UnicodeChar card_idBuffer[CARD_ID_SIZE];
 
 private:
 
@@ -65,6 +128,11 @@ private:
      */
     void buttonCallbackHandler(const touchgfx::AbstractButton& src);
 
+    /*
+     * Canvas Buffer Size
+     */
+    static const uint16_t CANVAS_BUFFER_SIZE = 12000;
+    uint8_t canvasBuffer[CANVAS_BUFFER_SIZE];
 };
 
 #endif // INPUTIDSCREENVIEWBASE_HPP

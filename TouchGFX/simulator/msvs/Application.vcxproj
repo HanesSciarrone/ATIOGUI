@@ -37,6 +37,9 @@
     <ClCompile Include="..\..\gui\src\inputsalescreen_screen\InputSaleScreenPresenter.cpp"/>
     <ClCompile Include="..\..\gui\src\inputsalescreen_screen\InputSaleScreenView.cpp"/>
     <ClCompile Include="..\..\generated\gui_generated\src\inputsalescreen_screen\InputSaleScreenViewBase.cpp"/>
+    <ClCompile Include="..\..\gui\src\setupmqttscreen_screen\SetupMQTTScreenPresenter.cpp"/>
+    <ClCompile Include="..\..\gui\src\setupmqttscreen_screen\SetupMQTTScreenView.cpp"/>
+    <ClCompile Include="..\..\generated\gui_generated\src\setupmqttscreen_screen\SetupMQTTScreenViewBase.cpp"/>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(ApplicationRoot)\assets\texts\texts.xlsx"/>
@@ -203,6 +206,9 @@
     <ClInclude Include="..\..\gui\include\gui\inputsalescreen_screen\InputSaleScreenPresenter.hpp"/>
     <ClInclude Include="..\..\gui\include\gui\inputsalescreen_screen\InputSaleScreenView.hpp"/>
     <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\inputsalescreen_screen\InputSaleScreenViewBase.hpp"/>
+    <ClInclude Include="..\..\gui\include\gui\setupmqttscreen_screen\SetupMQTTScreenPresenter.hpp"/>
+    <ClInclude Include="..\..\gui\include\gui\setupmqttscreen_screen\SetupMQTTScreenView.hpp"/>
+    <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\setupmqttscreen_screen\SetupMQTTScreenViewBase.hpp"/>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="$(ApplicationRoot)\generated\simulator\touchgfx.rc"/>

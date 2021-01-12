@@ -4,9 +4,8 @@
 #include <gui/inputsalescreen_screen/InputSaleScreenView.hpp>
 #include "ModuleWifi.h"
 
-
-
 InputIDScreenView::InputIDScreenView()
+: card_manual(false)
 {
 
 }
@@ -28,23 +27,65 @@ void InputIDScreenView::send_credential()
 	uint8_t credential[PadNumericID.get_buffer_length()];
 
 	PadNumericID.get_buffer(credential);
+	Container_progress.setVisible(true);
+	Container_progress.invalidate();
 	presenter->sent_credential_to_IoT(credential, PadNumericID.get_buffer_length());
 }
 
-void InputIDScreenView::ShowProgreessBar()
+void InputIDScreenView::send_card_id()
 {
-	background_progress.setVisible(true);
-	progress_bar.setVisible(true);
-	background_progress.invalidate();
-	progress_bar.invalidate();
+	uint8_t credential[CARD_ID_SIZE+1];
+
+	memset(credential, 0, CARD_ID_SIZE+1);
+	Unicode::toUTF8(card_idBuffer, credential, CARD_ID_SIZE);
+	Container_progress.setVisible(true);
+	Container_progress.invalidate();
+	presenter->sent_credential_to_IoT(credential, PadNumericID.get_buffer_length());
+}
+
+void InputIDScreenView::active_reader()
+{
+	timeout1.setVisible(true);
+	timeout1.invalidate();
+	timeout_counter = 0;
+	card_manual = true;
+
+	presenter->active_reader();
+}
+
+void InputIDScreenView::select_mode_id()
+{
+	if (Selector.getState()) {
+		Input_manual.setVisible(false);
+		Input_card.setVisible(true);
+	}
+	else {
+		Input_manual.setVisible(true);
+		Input_card.setVisible(false);
+	}
+
+	Input_manual.invalidate();
+	Input_card.invalidate();
+}
+
+void InputIDScreenView::hide_progreess_bar()
+{
+	Container_progress.setVisible(false);
+	Container_progress.invalidate();
+}
+
+void InputIDScreenView::getting_data_read_card(uint8_t *id, uint8_t length_id)
+{
+	card_manual = false;
+	Unicode::fromUTF8(id, card_idBuffer, CARD_ID_SIZE);
+	card_id.invalidate();
 }
 
 void InputIDScreenView::show_status_credential(uint8_t result)
 {
-	background_progress.setVisible(false);
-	progress_bar.setVisible(false);
+	Container_progress.setVisible(false);
+	Container_progress.invalidate();
 	progress_bar.setValue(0);
-	background_progress.invalidate();
 	progress_bar.invalidate();
 
 	if (result == VALID_USER) {
@@ -79,8 +120,96 @@ void InputIDScreenView::update_progress(uint16_t tick)
 
 void InputIDScreenView::handleTickEvent()
 {
-	if (background_progress.isVisible() && progress_bar.isVisible()) {
+	if (Container_progress.isVisible()) {
 		tickCounter++;
 		update_progress(tickCounter);
+	}
+
+	if (card_manual) {
+		timeout_counter++;
+		update_clock(timeout_counter);
+	}
+}
+
+void InputIDScreenView::update_clock(uint16_t timeout_counter)
+{
+	switch(timeout_counter) {
+	case 62: {
+		timeout1.setVisible(false);
+		timeout2.setVisible(true);
+		timeout1.invalidate();
+		timeout2.invalidate();
+	}
+	break;
+
+	case 125: {
+		timeout2.setVisible(false);
+		timeout3.setVisible(true);
+		timeout2.invalidate();
+		timeout3.invalidate();
+	}
+	break;
+
+	case 187: {
+		timeout3.setVisible(false);
+		timeout4.setVisible(true);
+		timeout3.invalidate();
+		timeout4.invalidate();
+	}
+	break;
+
+	case 250: {
+		timeout4.setVisible(false);
+		timeout5.setVisible(true);
+		timeout4.invalidate();
+		timeout5.invalidate();
+	}
+	break;
+
+	case 312: {
+		timeout5.setVisible(false);
+		timeout6.setVisible(true);
+		timeout5.invalidate();
+		timeout6.invalidate();
+	}
+	break;
+
+	case 375: {
+		timeout6.setVisible(false);
+		timeout7.setVisible(true);
+		timeout6.invalidate();
+		timeout7.invalidate();
+	}
+	break;
+
+	case 437: {
+		timeout7.setVisible(false);
+		timeout8.setVisible(true);
+		timeout7.invalidate();
+		timeout8.invalidate();
+	}
+	break;
+
+	case 500: {
+		timeout8.setVisible(false);
+		timeout9.setVisible(true);
+		timeout8.invalidate();
+		timeout9.invalidate();
+	}
+	break;
+
+	case 562: {
+		timeout9.setVisible(false);
+		timeout10.setVisible(true);
+		timeout9.invalidate();
+		timeout10.invalidate();
+	}
+	break;
+	}
+
+	if (timeout_counter == 625) {
+		timeout10.setVisible(false);
+		timeout10.invalidate();
+		card_manual = false;
 	}
 }

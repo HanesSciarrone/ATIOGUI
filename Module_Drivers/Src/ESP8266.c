@@ -45,7 +45,7 @@ uint8_t bufferCmd[MAX_BUFFER_SIZE];
 uint8_t tempBuffer[100];
 uint32_t templength = 0;
 
-ESP8266_CommInterface_s *commInterface;
+ESP8266_CommInterface_s *obj;
 /* -------------------------------------- */
 
 
@@ -106,14 +106,14 @@ static ESP8266_StatusTypeDef_t ESP8266_Sent(uint8_t *data, uint16_t length, cons
 	 * Recv <length> Bytes\r\n\r\nSEND OK\r\n					(I sent same quantity of data that I said)
 	 */
 
-	if (commInterface->send(data, length) != 0) {
+	if (obj->send(data, length) != 0) {
 		return ESP8266_ERROR;
 	}
 
 	strncpy((char *)bufferRx, "\0", MAX_BUFFER_SIZE);
 	offset = 0;
 
-	while(commInterface->recv(&char_rx, 1, timeout) != 0 ) {
+	while(obj->recv(&char_rx, 1, timeout) != 0 ) {
 		bufferRx[offset++] = char_rx;
 
 		if( offset == MAX_BUFFER_SIZE ) {
@@ -136,7 +136,7 @@ static ESP8266_StatusTypeDef_t ESP8266_SendCommand(uint16_t length, const uint8_
 	uint32_t offset;
 	uint8_t char_rx = 0;
 
-	if (commInterface->send(bufferCmd, length) != 0) {
+	if (obj->send(bufferCmd, length) != 0) {
 		return ESP8266_ERROR;
 	}
 
@@ -144,7 +144,7 @@ static ESP8266_StatusTypeDef_t ESP8266_SendCommand(uint16_t length, const uint8_
 	strncpy((char *)bufferRx, "\0", MAX_BUFFER_SIZE);
 	offset = 0;
 
-	while( commInterface->recv(&char_rx, 1, timeout) != 0 ) {
+	while( obj->recv(&char_rx, 1, timeout) != 0 ) {
 		bufferRx[offset++] = char_rx;
 
 		if( offset == MAX_BUFFER_SIZE ) {
@@ -172,7 +172,7 @@ ESP8266_StatusTypeDef_t ESP8266_CommInterface_Init(ESP8266_CommInterface_s *inte
 		return ESP8266_ERROR;
 	}
 
-	commInterface = interface;
+	obj = interface;
 
 	return ESP8266_OK;
 }
@@ -421,7 +421,7 @@ ESP8266_StatusTypeDef_t ESP8266_ReceiveData(uint8_t *buffer, uint32_t *length)
 	new_frame = FALSE;
 
 	while(1) {
-		if( commInterface->recv(&char_rx, 1, 5000) != 0 ) {
+		if( obj->recv(&char_rx, 1, 5000) != 0 ) {
 			if( new_frame == TRUE ) {
 				if( length_data-- ) {
 					*buffer++ = char_rx;
@@ -463,7 +463,7 @@ ESP8266_StatusTypeDef_t ESP8266_ReceiveData(uint8_t *buffer, uint32_t *length)
 			i = 0;
 			strncpy((char *)length_frame, "\0", 5);
 			do {
-				commInterface->recv(&char_rx, 1, 5000);
+				obj->recv(&char_rx, 1, 5000);
 				length_frame[i++] = char_rx;
 			} while (char_rx != ':' && i < 4);
 

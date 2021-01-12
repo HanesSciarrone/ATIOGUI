@@ -125,3 +125,13 @@ void CustomKeyboard::GetBuffer(uint8_t *buffer)
 {
 	Unicode::toUTF8(this->buffer, buffer, BUFFER_SIZE);
 }
+
+void CustomKeyboard::clear_buffer()
+{
+    uppercaseKeys = true;
+    firstCharacterEntry = true;
+    alphaKeys = true;
+    keyboard.setBufferPosition(0);
+	memset(buffer, 0, sizeof(buffer));
+	setKeyMappingList();
+}

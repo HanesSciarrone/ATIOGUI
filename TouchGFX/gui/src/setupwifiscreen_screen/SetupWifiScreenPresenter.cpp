@@ -28,7 +28,7 @@ void SetupWifiScreenPresenter::MsgConnectNetwork(uint8_t *ssid, uint8_t *passwor
 }
 
 
-void SetupWifiScreenPresenter::ResultScandNetwork(WifiMessage_t *networks)
+void SetupWifiScreenPresenter::ResultScandNetwork(gui_network_t *networks)
 {
 	view.FillOptionNetwork(networks);
 }
@@ -38,7 +38,7 @@ void SetupWifiScreenPresenter::ShowStatusConnectionNetwork(uint8_t value)
 	view.ShowStatusConnection(value);
 }
 
-void SetupWifiScreenPresenter::ShowProgreessBar()
+void SetupWifiScreenPresenter::hide_progreess_bar()
 {
-	view.ShowProgress();
+	view.hide_progreess_bar();
 }

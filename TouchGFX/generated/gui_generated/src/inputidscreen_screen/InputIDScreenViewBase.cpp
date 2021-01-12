@@ -10,6 +10,8 @@ InputIDScreenViewBase::InputIDScreenViewBase() :
     buttonCallback(this, &InputIDScreenViewBase::buttonCallbackHandler)
 {
 
+    touchgfx::CanvasWidgetRenderer::setupBuffer(canvasBuffer, CANVAS_BUFFER_SIZE);
+
     Background.setPosition(0, 0, 800, 480);
     Background.setColor(touchgfx::Color::getColorFrom24BitRGB(41, 73, 105));
 
@@ -20,45 +22,226 @@ InputIDScreenViewBase::InputIDScreenViewBase() :
     logo.setPosition(0, 1, 153, 60);
     logo.setScalingAlgorithm(touchgfx::ScalableImage::NEAREST_NEIGHBOR);
 
-    PadNumericID.setXY(54, 105);
+    Input_manual.setPosition(0, 62, 800, 418);
+    Input_manual.setVisible(false);
 
-    titleInputID.setXY(153, 137);
-    titleInputID.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
-    titleInputID.setLinespacing(0);
-    titleInputID.setTypedText(touchgfx::TypedText(T_SINGLEUSEID14));
+    PadNumericID.setXY(54, 43);
+    Input_manual.add(PadNumericID);
 
-    BtnAccept.setXY(309, 308);
+    BtnAccept.setXY(309, 246);
     BtnAccept.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID));
     BtnAccept.setLabelText(touchgfx::TypedText(T_SINGLEUSEID17));
     BtnAccept.setLabelColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     BtnAccept.setLabelColorPressed(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     BtnAccept.setAction(buttonCallback);
+    Input_manual.add(BtnAccept);
 
-    BtnCancel.setXY(68, 308);
+    titleInputID.setXY(153, 75);
+    titleInputID.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    titleInputID.setLinespacing(0);
+    titleInputID.setTypedText(touchgfx::TypedText(T_SINGLEUSEID14));
+    Input_manual.add(titleInputID);
+
+    BtnCancel.setXY(68, 246);
     BtnCancel.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID));
     BtnCancel.setLabelText(touchgfx::TypedText(T_SINGLEUSEID18));
     BtnCancel.setLabelColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     BtnCancel.setLabelColorPressed(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     BtnCancel.setAction(buttonCallback);
+    Input_manual.add(BtnCancel);
+
+    Input_card.setPosition(0, 61, 800, 418);
+
+    bacckground_card_id.setPosition(298, 235, 407, 50);
+    bacckground_card_id.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    bacckground_card_id.setBorderColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    bacckground_card_id.setBorderSize(5);
+    Input_card.add(bacckground_card_id);
+
+    card_id.setPosition(304, 248, 395, 25);
+    card_id.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    card_id.setLinespacing(0);
+    Unicode::snprintf(card_idBuffer, CARD_ID_SIZE, "%s", touchgfx::TypedText(T_SINGLEUSEID63).getText());
+    card_id.setWildcard(card_idBuffer);
+    card_id.setTypedText(touchgfx::TypedText(T_SINGLEUSEID62));
+    Input_card.add(card_id);
+
+    Title_card_id.setXY(38, 240);
+    Title_card_id.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    Title_card_id.setLinespacing(0);
+    Title_card_id.setTypedText(touchgfx::TypedText(T_SINGLEUSEID66));
+    Input_card.add(Title_card_id);
+
+    Lbl_timeout.setXY(38, 91);
+    Lbl_timeout.setColor(touchgfx::Color::getColorFrom24BitRGB(249, 249, 249));
+    Lbl_timeout.setLinespacing(0);
+    Lbl_timeout.setTypedText(touchgfx::TypedText(T_SINGLEUSEID65));
+    Input_card.add(Lbl_timeout);
+
+    Background_clock.setPosition(332, 33, 160, 160);
+    Background_clock.setCenter(80, 80);
+    Background_clock.setRadius(80);
+    Background_clock.setLineWidth(0);
+    Background_clock.setArc(0, 360);
+    Background_clockPainter.setColor(touchgfx::Color::getColorFrom24BitRGB(49, 49, 49));
+    Background_clock.setPainter(Background_clockPainter);
+    Input_card.add(Background_clock);
+
+    Send_card_id.setXY(586, 310);
+    Send_card_id.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_EMAIL_32_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_EMAIL_32_ID));
+    Send_card_id.setIconXY(70, 15);
+    Send_card_id.setAction(buttonCallback);
+    Input_card.add(Send_card_id);
+
+    Active_reader.setXY(308, 310);
+    Active_reader.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_USER_32_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_USER_32_ID));
+    Active_reader.setIconXY(70, 15);
+    Active_reader.setAction(buttonCallback);
+    Input_card.add(Active_reader);
+
+    Cancel.setXY(59, 310);
+    Cancel.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_REMOVE_32_ID), touchgfx::Bitmap(BITMAP_BLUE_ICONS_REMOVE_32_ID));
+    Cancel.setIconXY(71, 15);
+    Cancel.setAction(buttonCallback);
+    Input_card.add(Cancel);
+
+    timeout1.setPosition(312, 13, 200, 200);
+    timeout1.setCenter(100, 100);
+    timeout1.setRadius(60);
+    timeout1.setLineWidth(17);
+    timeout1.setArc(0, 360);
+    timeout1.setCapPrecision(180);
+    timeout1Painter.setColor(touchgfx::Color::getColorFrom24BitRGB(1, 96, 147));
+    timeout1.setPainter(timeout1Painter);
+    Input_card.add(timeout1);
+
+    timeout2.setPosition(312, 13, 200, 200);
+    timeout2.setCenter(100, 100);
+    timeout2.setRadius(60);
+    timeout2.setLineWidth(17);
+    timeout2.setArc(36, 360);
+    timeout2.setCapPrecision(180);
+    timeout2Painter.setColor(touchgfx::Color::getColorFrom24BitRGB(1, 96, 147));
+    timeout2.setPainter(timeout2Painter);
+    timeout2.setVisible(false);
+    Input_card.add(timeout2);
+
+    timeout3.setPosition(312, 13, 200, 200);
+    timeout3.setCenter(100, 100);
+    timeout3.setRadius(60);
+    timeout3.setLineWidth(17);
+    timeout3.setArc(72, 360);
+    timeout3.setCapPrecision(180);
+    timeout3Painter.setColor(touchgfx::Color::getColorFrom24BitRGB(1, 96, 147));
+    timeout3.setPainter(timeout3Painter);
+    timeout3.setVisible(false);
+    Input_card.add(timeout3);
+
+    timeout4.setPosition(312, 13, 200, 200);
+    timeout4.setCenter(100, 100);
+    timeout4.setRadius(60);
+    timeout4.setLineWidth(17);
+    timeout4.setArc(108, 360);
+    timeout4.setCapPrecision(180);
+    timeout4Painter.setColor(touchgfx::Color::getColorFrom24BitRGB(1, 96, 147));
+    timeout4.setPainter(timeout4Painter);
+    timeout4.setVisible(false);
+    Input_card.add(timeout4);
+
+    timeout5.setPosition(312, 13, 200, 200);
+    timeout5.setCenter(100, 100);
+    timeout5.setRadius(60);
+    timeout5.setLineWidth(17);
+    timeout5.setArc(144, 360);
+    timeout5.setCapPrecision(180);
+    timeout5Painter.setColor(touchgfx::Color::getColorFrom24BitRGB(1, 96, 147));
+    timeout5.setPainter(timeout5Painter);
+    timeout5.setVisible(false);
+    Input_card.add(timeout5);
+
+    timeout6.setPosition(312, 13, 200, 200);
+    timeout6.setCenter(100, 100);
+    timeout6.setRadius(60);
+    timeout6.setLineWidth(17);
+    timeout6.setArc(180, 360);
+    timeout6.setCapPrecision(180);
+    timeout6Painter.setColor(touchgfx::Color::getColorFrom24BitRGB(1, 96, 147));
+    timeout6.setPainter(timeout6Painter);
+    timeout6.setVisible(false);
+    Input_card.add(timeout6);
+
+    timeout7.setPosition(312, 13, 200, 200);
+    timeout7.setCenter(100, 100);
+    timeout7.setRadius(60);
+    timeout7.setLineWidth(17);
+    timeout7.setArc(216, 360);
+    timeout7.setCapPrecision(180);
+    timeout7Painter.setColor(touchgfx::Color::getColorFrom24BitRGB(1, 96, 147));
+    timeout7.setPainter(timeout7Painter);
+    timeout7.setVisible(false);
+    Input_card.add(timeout7);
+
+    timeout8.setPosition(312, 13, 200, 200);
+    timeout8.setCenter(100, 100);
+    timeout8.setRadius(60);
+    timeout8.setLineWidth(17);
+    timeout8.setArc(252, 360);
+    timeout8.setCapPrecision(180);
+    timeout8Painter.setColor(touchgfx::Color::getColorFrom24BitRGB(1, 96, 147));
+    timeout8.setPainter(timeout8Painter);
+    timeout8.setVisible(false);
+    Input_card.add(timeout8);
+
+    timeout9.setPosition(312, 13, 200, 200);
+    timeout9.setCenter(100, 100);
+    timeout9.setRadius(60);
+    timeout9.setLineWidth(17);
+    timeout9.setArc(288, 360);
+    timeout9.setCapPrecision(180);
+    timeout9Painter.setColor(touchgfx::Color::getColorFrom24BitRGB(1, 96, 147));
+    timeout9.setPainter(timeout9Painter);
+    timeout9.setVisible(false);
+    Input_card.add(timeout9);
+
+    timeout10.setPosition(312, 13, 200, 200);
+    timeout10.setCenter(100, 100);
+    timeout10.setRadius(60);
+    timeout10.setLineWidth(17);
+    timeout10.setArc(324, 360);
+    timeout10.setCapPrecision(180);
+    timeout10Painter.setColor(touchgfx::Color::getColorFrom24BitRGB(1, 96, 147));
+    timeout10.setPainter(timeout10Painter);
+    timeout10.setVisible(false);
+    Input_card.add(timeout10);
+
+    Selector.setXY(705, 15);
+    Selector.setBitmaps(touchgfx::Bitmap(BITMAP_SWITCH_OFF_ID), touchgfx::Bitmap(BITMAP_SWITCH_ON_ID));
+    Selector.forceState(true);
+    Selector.setAction(buttonCallback);
+
+    Container_progress.setPosition(0, 0, 800, 480);
+    Container_progress.setVisible(false);
 
     background_progress.setPosition(0, 0, 800, 480);
-    background_progress.setVisible(false);
     background_progress.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
-    background_progress.setAlpha(114);
+    Container_progress.add(background_progress);
 
-    progress_bar.setXY(198, 235);
-    progress_bar.setProgressIndicatorPosition(2, 2, 400, 30);
+    progress_bar.setXY(348, 188);
+    progress_bar.setProgressIndicatorPosition(0, 0, 104, 104);
     progress_bar.setRange(0, 100);
-    progress_bar.setDirection(touchgfx::AbstractDirectionProgress::RIGHT);
-    progress_bar.setBackground(touchgfx::Bitmap(BITMAP_BLUE_PROGRESSINDICATORS_BG_LARGE_PROGRESS_INDICATOR_BG_SQUARE_0_DEGREES_ID));
-    progress_bar.setBitmap(BITMAP_BLUE_PROGRESSINDICATORS_FILL_TILING_PROGRESS_INDICATOR_FILL_STRIPED_WIDE_HORIZONTAL_ID);
+    progress_bar.setCenter(52, 52);
+    progress_bar.setRadius(42);
+    progress_bar.setLineWidth(16);
+    progress_bar.setStartEndAngle(0, 360);
+    progress_bar.setCapPrecision(10);
+    progress_bar.setBackground(touchgfx::Bitmap(BITMAP_BLUE_PROGRESSINDICATORS_BG_MEDIUM_CIRCLE_INDICATOR_BG_LINE_FULL_ID));
+    progress_barPainter.setBitmap(touchgfx::Bitmap(BITMAP_BLUE_PROGRESSINDICATORS_FILL_MEDIUM_CIRCLE_INDICATOR_FILL_LINE_FULL_ID));
+    progress_bar.setPainter(progress_barPainter);
     progress_bar.setValue(58);
-    progress_bar.setAnchorAtZero(false);
-    progress_bar.setVisible(false);
+    Container_progress.add(progress_bar);
 
     pop_up.setBackground(touchgfx::BitmapId(BITMAP_BACKGROUND_QWERTY_ID), 150, 105);
     pop_up.setShadeColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
-    pop_up.setShadeAlpha(200);
     pop_up.hide();
 
     label1_pop_up.setXY(114, 72);
@@ -75,7 +258,7 @@ InputIDScreenViewBase::InputIDScreenViewBase() :
     button_ok_pop_up.setAction(buttonCallback);
     pop_up.add(button_ok_pop_up);
 
-    label2_pop_up.setXY(106, 72);
+    label2_pop_up.setXY(81, 87);
     label2_pop_up.setVisible(false);
     label2_pop_up.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     label2_pop_up.setLinespacing(0);
@@ -85,12 +268,10 @@ InputIDScreenViewBase::InputIDScreenViewBase() :
     add(Background);
     add(ToolBar);
     add(logo);
-    add(PadNumericID);
-    add(titleInputID);
-    add(BtnAccept);
-    add(BtnCancel);
-    add(background_progress);
-    add(progress_bar);
+    add(Input_manual);
+    add(Input_card);
+    add(Selector);
+    add(Container_progress);
     add(pop_up);
 }
 
@@ -114,6 +295,34 @@ void InputIDScreenViewBase::buttonCallbackHandler(const touchgfx::AbstractButton
         //When BtnCancel clicked change screen to MainScreen
         //Go to MainScreen with screen transition towards North
         application().gotoMainScreenScreenCoverTransitionNorth();
+    }
+    else if (&src == &Send_card_id)
+    {
+        //Send_card_credential
+        //When Send_card_id clicked call virtual function
+        //Call send_card_id
+        send_card_id();
+    }
+    else if (&src == &Active_reader)
+    {
+        //ActiveReader
+        //When Active_reader clicked call virtual function
+        //Call active_reader
+        active_reader();
+    }
+    else if (&src == &Cancel)
+    {
+        //Interaction1
+        //When Cancel clicked change screen to MainScreen
+        //Go to MainScreen with screen transition towards North
+        application().gotoMainScreenScreenCoverTransitionNorth();
+    }
+    else if (&src == &Selector)
+    {
+        //Selector_mode
+        //When Selector clicked call virtual function
+        //Call select_mode_id
+        select_mode_id();
     }
     else if (&src == &button_ok_pop_up)
     {

@@ -1,5 +1,6 @@
 #include <gui/inputsalescreen_screen/InputSaleScreenView.hpp>
 #include <stdlib.h>
+#include <string.h>
 
 InputSaleScreenView::InputSaleScreenView()
 {
@@ -13,6 +14,7 @@ void InputSaleScreenView::setupScreen()
     liters = presenter->get_liters_fuel_available();
 
     Unicode::snprintf(label_titleBuffer, LABEL_TITLE_SIZE, "%u", liters);
+    label_title.resizeToCurrentText();
     label_title.invalidate();
 }
 
@@ -24,7 +26,7 @@ void InputSaleScreenView::tearDownScreen()
 void InputSaleScreenView::send_dispatch_operation()
 {
 	uint32_t liters_fuel = 0;
-	uint8_t buffer[20];
+	uint8_t buffer[20], text[TEXT_PUPUP_SIZE];
 
 	pad_numeric.get_buffer(buffer);
 	liters_fuel = atoi((char *)buffer);
@@ -33,7 +35,8 @@ void InputSaleScreenView::send_dispatch_operation()
 
 	}
 	else {
-		Unicode::fromUTF8((uint8_t *)"You can´t dispense this amount\n of fuel, please enter less liters", text_pupupBuffer, TEXT_PUPUP_SIZE);
+		strcpy((char *)text, "You can't dispense this amount\n of fuel, please enter less liters");
+		Unicode::fromUTF8(text, text_pupupBuffer, TEXT_PUPUP_SIZE);
 		pop_up.setVisible(true);
 		pop_up.invalidate();
 	}

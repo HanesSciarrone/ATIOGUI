@@ -37,12 +37,17 @@ public:
      */
     void GetBuffer(uint8_t *buffer);
 
+    /**
+     * @brief Clear buffer of label when show text.
+     */
+    void clear_buffer();
+
 private:
     /*
      * The size of the buffer that is used by the keyboard.
      * The size determines how much text the keyboard can contain in its textfield.
      */
-    static const uint8_t BUFFER_SIZE = 18;
+    static const uint8_t BUFFER_SIZE = 26;
 
     /**
      * The keyboard which this CustomKeyboard wraps.

@@ -62,8 +62,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define LD_USER1_Pin GPIO_PIN_13
-#define LD_USER1_GPIO_Port GPIOJ
+#define LED_USER1_Pin GPIO_PIN_13
+#define LED_USER1_GPIO_Port GPIOJ
 #define Audio_INT_Pin GPIO_PIN_12
 #define Audio_INT_GPIO_Port GPIOJ
 #define NC4_Pin GPIO_PIN_8
@@ -78,6 +78,8 @@ void Error_Handler(void);
 #define WIFI_RST_GPIO_Port GPIOJ
 #define RMII_RXER_Pin GPIO_PIN_5
 #define RMII_RXER_GPIO_Port GPIOD
+#define SPI2_CS_Pin GPIO_PIN_11
+#define SPI2_CS_GPIO_Port GPIOA
 #define NC8_Pin GPIO_PIN_4
 #define NC8_GPIO_Port GPIOK
 #define NC7_Pin GPIO_PIN_3
@@ -94,8 +96,12 @@ void Error_Handler(void);
 #define LCD_INT_GPIO_Port GPIOI
 #define uSD_Detect_Pin GPIO_PIN_15
 #define uSD_Detect_GPIO_Port GPIOI
+#define CONTROLLER_PUMP_RX_Pin GPIO_PIN_7
+#define CONTROLLER_PUMP_RX_GPIO_Port GPIOC
 #define LCD_BL_CTRL_Pin GPIO_PIN_14
 #define LCD_BL_CTRL_GPIO_Port GPIOI
+#define CONTROLLER_PUMP_TX_Pin GPIO_PIN_6
+#define CONTROLLER_PUMP_TX_GPIO_Port GPIOC
 #define EXT_SDA_Pin GPIO_PIN_6
 #define EXT_SDA_GPIO_Port GPIOG
 #define ARD_D8_Pin GPIO_PIN_4
@@ -108,6 +114,8 @@ void Error_Handler(void);
 #define B_USER_GPIO_Port GPIOA
 #define ARD_D7_Pin GPIO_PIN_3
 #define ARD_D7_GPIO_Port GPIOJ
+#define NFC_IRQ_Pin GPIO_PIN_6
+#define NFC_IRQ_GPIO_Port GPIOH
 #define ARD_D4_Pin GPIO_PIN_0
 #define ARD_D4_GPIO_Port GPIOJ
 #define ARD_D2_Pin GPIO_PIN_1

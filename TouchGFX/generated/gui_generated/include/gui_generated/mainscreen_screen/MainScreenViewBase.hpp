@@ -10,7 +10,8 @@
 #include <touchgfx/widgets/Box.hpp>
 #include <touchgfx/widgets/ScalableImage.hpp>
 #include <touchgfx/widgets/TextArea.hpp>
-#include <touchgfx/containers/buttons/Buttons.hpp>
+#include <touchgfx/widgets/TextAreaWithWildcard.hpp>
+#include <touchgfx/widgets/ButtonWithIcon.hpp>
 
 class MainScreenViewBase : public touchgfx::View<MainScreenPresenter>
 {
@@ -30,21 +31,29 @@ protected:
     touchgfx::Box Background;
     touchgfx::Box Toolbar;
     touchgfx::ScalableImage logo;
-    touchgfx::TextArea textArea1;
-    touchgfx::TextButtonStyle< touchgfx::IconButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger > > > btnOptionID;
-    touchgfx::TextButtonStyle< touchgfx::IconButtonStyle< touchgfx::BoxWithBorderButtonStyle< touchgfx::ClickButtonTrigger > > > btnSetupWifi;
+    touchgfx::TextArea Title_main;
+    touchgfx::TextAreaWithOneWildcard label_popup;
+    touchgfx::ButtonWithIcon btnSeputMQTT;
+    touchgfx::ButtonWithIcon btnSetupWifi;
+    touchgfx::ButtonWithIcon btnOptionID;
+
+    /*
+     * Wildcard Buffers
+     */
+    static const uint16_t LABEL_POPUP_SIZE = 50;
+    touchgfx::Unicode::UnicodeChar label_popupBuffer[LABEL_POPUP_SIZE];
 
 private:
 
     /*
      * Callback Declarations
      */
-    touchgfx::Callback<MainScreenViewBase, const touchgfx::AbstractButtonContainer&> flexButtonCallback;
+    touchgfx::Callback<MainScreenViewBase, const touchgfx::AbstractButton&> buttonCallback;
 
     /*
      * Callback Handler Declarations
      */
-    void flexButtonCallbackHandler(const touchgfx::AbstractButtonContainer& src);
+    void buttonCallbackHandler(const touchgfx::AbstractButton& src);
 
 };
 

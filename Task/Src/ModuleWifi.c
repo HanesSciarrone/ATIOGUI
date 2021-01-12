@@ -12,6 +12,7 @@
 
 #include "cmsis_os.h"
 #include "ModuleWifi.h"
+#include "ModuleNFC.h"
 #include "UART.h"
 #include "MQTTPacket.h"
 
@@ -35,14 +36,8 @@ enum mqtt_state {
 /* Private macros ----------------------------------------------------------- */
 // URL where is the broker MQTT
 #define HOST						"broker.hivemq.com"
-// Port where broker is listening to
+// Port where broker is listening
 #define PORT						1883
-// Parameter connection of broker for keep alive
-#define KEEPALIVE_CONNECTION		60UL
-// Subscribe topic
-#define SUBSCRIBE_TOPIC				"SUB_CESE"
-// Publish topic
-#define PUBLISH_TOPIC				"PUB_CESE"
 
 #define TIME_MS_CONNECTION			2000
 /* Timeout before try to connect with server or reconnect with network wi-fi */
@@ -58,15 +53,15 @@ typedef StaticSemaphore_t osStaticSemaphoreDef_t;
 /* Definition of task, queue, semaphore and mutex handler */
 
 /* Definitions for TaskWifi */
-osThreadId_t TaskWifiHandle;
-const osThreadAttr_t TaskWifi_attributes = {
+osThreadId_t task_wifi_handle;
+const osThreadAttr_t task_wifi_attributes = {
   .name = "TaskWifi",
   .priority = (osPriority_t) osPriorityNormal2,
   .stack_size = 1024 * 4
 };
 
 /* Definitions for mutex_NewMsg_Wifi */
-osMutexId_t mutex_NewMsg_WifiHandle;
+osMutexId_t mutex_new_msg_wifi_handle;
 osStaticMutexDef_t mutex_NewMsg_WifiControlBlock;
 const osMutexAttr_t mutex_NewMsg_Wifi_attributes = {
   .name = "mutex_NewMsg_Wifi",
@@ -75,7 +70,7 @@ const osMutexAttr_t mutex_NewMsg_Wifi_attributes = {
 };
 
 /* Definitions for wifiqueue_operation */
-osMessageQueueId_t queue_Wifi_operationHandle;
+osMessageQueueId_t queue_wifi_operation_handle;
 const osMessageQueueAttr_t wifiqueue_operation_attributes = {
   .name = "wifiqueue_operation"
 };
@@ -84,6 +79,12 @@ const osMessageQueueAttr_t wifiqueue_operation_attributes = {
 /* Private variable ----------------------------------------------------------*/
 static ESP8266_CommInterface_s commInterface;
 WifiMessage_t wifiParameters;
+uint32_t keep_alive_connection = 0;
+uint8_t version_mqtt = 3;
+uint8_t qos_mqtt = 0;
+uint8_t	client_id[BUFFER_SIZE_TOPIC];
+uint8_t publish_topic[BUFFER_SIZE_TOPIC];
+uint8_t suscribe_topic[BUFFER_SIZE_TOPIC];
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -214,7 +215,7 @@ static enum mqtt_state sent_unsubscribe_mqtt(void)
 	ESP8266_StatusTypeDef_t status;
 	MQTTString topicSubcribeString = MQTTString_initializer;
 
-	topicSubcribeString.cstring = SUBSCRIBE_TOPIC;
+	topicSubcribeString.cstring = (char *)suscribe_topic;
 	strncpy((char *)buffer, "\0", sizeof(buffer));
 	length = MQTTSerialize_unsubscribe(buffer, sizeof(buffer), 0, 2, 1, &topicSubcribeString);
 	status = ESP8266_SentData(buffer, length);
@@ -279,7 +280,7 @@ static enum mqtt_state sent_data_mqtt(uint8_t *data)
 	ESP8266_StatusTypeDef_t status;
 	MQTTString topicString = MQTTString_initializer;
 
-	topicString.cstring = PUBLISH_TOPIC;
+	topicString.cstring = (char *)publish_topic;
 	length = MQTTSerialize_publish(buffer, sizeof(buffer), 0, 0, 0, 0, topicString, (unsigned char*)data, strlen((char *)data));
 	status = ESP8266_SentData(buffer, length);
 
@@ -303,8 +304,8 @@ static enum mqtt_state sent_subcribe_mqtt(void)
 	retry = 0;
 	while (retry < 3) {
 		MQTTString topicSubcribeString = MQTTString_initializer;
-		topicSubcribeString.cstring = SUBSCRIBE_TOPIC;
-		request_qos = 0;
+		topicSubcribeString.cstring = (char *)suscribe_topic;
+		request_qos = qos_mqtt;
 
 		// Build and sent message of subcribe
 		length = MQTTSerialize_subscribe(buffer, sizeof(buffer), 0, 1, 1, &topicSubcribeString, (int *)&request_qos);
@@ -362,10 +363,10 @@ static enum mqtt_state sent_connect_mqtt(void)
 	retry = 0;
 	while(retry < 3) {
 		// Initialize data
-		dataConnection.MQTTVersion = 3;
-		dataConnection.clientID.cstring = "Hanes";
-		dataConnection.keepAliveInterval = KEEPALIVE_CONNECTION;
-		dataConnection.will.qos = 0;
+		dataConnection.MQTTVersion = version_mqtt;
+		dataConnection.clientID.cstring = (char *)client_id;
+		dataConnection.keepAliveInterval = keep_alive_connection;
+		dataConnection.will.qos = qos_mqtt;
 		strncpy((char *)buffer, "0", sizeof(buffer));
 
 		// Build message
@@ -663,8 +664,8 @@ static void ModuleWifi(void *argument)
 	/* Initialization of library ESP8266 */
 	if (!WifiModule_Comm_Init())
 	{
-		osMutexDelete(mutex_NewMsg_WifiHandle);
-		osThreadTerminate(TaskWifiHandle);
+		osMutexDelete(mutex_new_msg_wifi_handle);
+		osThreadTerminate(task_wifi_handle);
 	}
 
 	osDelay(5000/portTICK_PERIOD_MS);
@@ -672,14 +673,15 @@ static void ModuleWifi(void *argument)
 	/* Initialization of module ESP8266 */
 	if (!WifiModule_Init())
 	{
-		osMutexDelete(mutex_NewMsg_WifiHandle);
-		osThreadTerminate(TaskWifiHandle);
+		osMutexDelete(mutex_new_msg_wifi_handle);
+		osThreadTerminate(task_wifi_handle);
 	}
 
+	module_nfc_release_initialization();
 	operation = ANY_OPERATION;
 
-	while(1) {
-		osMessageQueueGet(queue_Wifi_operationHandle,&operation, 0L, osWaitForever);
+	for(;;) {
+		osMessageQueueGet(queue_wifi_operation_handle, &operation, 0L, osWaitForever);
 
 		switch(operation) {
 			case SCAN_NETWORK: {
@@ -694,7 +696,7 @@ static void ModuleWifi(void *argument)
 				ESP8266_StatusTypeDef_t status;
 
 				status = ESP8266_DisconnectAllNetwork();
-				osMutexAcquire(mutex_NewMsg_WifiHandle, osWaitForever);
+				osMutexAcquire(mutex_new_msg_wifi_handle, osWaitForever);
 
 				network.ssid = wifiParameters.ssid;
 				network.password = wifiParameters.password;
@@ -707,7 +709,7 @@ static void ModuleWifi(void *argument)
 					wifiParameters.resultOperation = 0;
 				}
 
-				osMutexRelease(mutex_NewMsg_WifiHandle);
+				osMutexRelease(mutex_new_msg_wifi_handle);
 
 				msgGUI = 1;
 				osMessageQueuePut(queue_NewMsg_GUI, &msgGUI, 0L, osWaitForever);
@@ -715,12 +717,12 @@ static void ModuleWifi(void *argument)
 			break;
 
 			case SEND_CREDENTIAL: {
-				osMutexAcquire(mutex_NewMsg_WifiHandle, osWaitForever);
+				osMutexAcquire(mutex_new_msg_wifi_handle, osWaitForever);
 				send_credential(wifiParameters.data);
 				msgGUI = 2;
 				wifiParameters.resultOperation = parse_result_credential();
 				osMessageQueuePut(queue_NewMsg_GUI, &msgGUI, 0L, osWaitForever);
-				osMutexRelease(mutex_NewMsg_WifiHandle);
+				osMutexRelease(mutex_new_msg_wifi_handle);
 			}
 			break;
 
@@ -732,28 +734,40 @@ static void ModuleWifi(void *argument)
 
 
 /* Public function implementation --------------------------------------------*/
-bool_t ModuleWifi_Started(void)
+bool_t module_wifi_started(void)
 {
 	/* Create the mutex(es) */
-	mutex_NewMsg_WifiHandle = osMutexNew(&mutex_NewMsg_Wifi_attributes);
-	if (mutex_NewMsg_WifiHandle == NULL)
+	mutex_new_msg_wifi_handle = osMutexNew(&mutex_NewMsg_Wifi_attributes);
+	if (mutex_new_msg_wifi_handle == NULL)
 	{
 		return FALSE;
 	}
 
 	 /* creation of wifiqueue_operation */
-	queue_Wifi_operationHandle = osMessageQueueNew (2, sizeof(WifiModule_Operation), &wifiqueue_operation_attributes);
-	if (queue_Wifi_operationHandle == NULL)
+	queue_wifi_operation_handle = osMessageQueueNew (2, sizeof(WifiModule_Operation), &wifiqueue_operation_attributes);
+	if (queue_wifi_operation_handle == NULL)
 	{
 		return FALSE;
 	}
 
 	/* Create the thread */
-	TaskWifiHandle = osThreadNew(ModuleWifi, NULL, &TaskWifi_attributes);
-	if (TaskWifiHandle == NULL)
+	task_wifi_handle = osThreadNew(ModuleWifi, NULL, &task_wifi_attributes);
+	if (task_wifi_handle == NULL)
 	{
 		return FALSE;
 	}
 
 	return TRUE;
+}
+
+void module_wifi_send_id(uint8_t *id, uint8_t length_id)
+{
+	WifiModule_Operation operation;
+
+	osMutexAcquire(mutex_new_msg_wifi_handle, osWaitForever);
+	operation = SEND_CREDENTIAL;
+	strncpy((char *)wifiParameters.data, (char *)id, length_id);
+	osMessageQueuePut(queue_wifi_operation_handle, &operation, 0L, 500/portTICK_PERIOD_MS);
+	osMutexRelease(mutex_new_msg_wifi_handle);
+
 }
