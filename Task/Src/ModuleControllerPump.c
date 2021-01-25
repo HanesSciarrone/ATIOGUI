@@ -6,6 +6,7 @@
  */
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "cmsis_os.h"
 
@@ -16,6 +17,13 @@
 #include "ModuleControllerPump.h"
 
 #define SIZE_MAX_BUFFER_COMMAND			1024
+
+struct status_pump_s {
+	uint8_t fuel_tank[30];
+	uint8_t fuel_filled[30];
+	enum type_fuel_t type_fuel;
+	bool filling;
+}status_pump;
 
 /* -------------------- Private global variable -------------------- */
 /* Definitions for Controller_pump */
@@ -31,12 +39,63 @@ const osMessageQueueAttr_t controller_pump_queue_attributes = {
   .name = "controller_pump_queue"
 };
 
-uint8_t  number_pump = 0;
+uint8_t number_pump = 0;
 uint8_t liters_fuel[20];
-enum type_fuel_t type;
+enum type_fuel_t type_fuel;
 
 
 /* ------------------- Prototype private methods ------------------- */
+
+/**
+ * @brief Compare fuel type of message with tipe of fuel used.
+ *
+ * @param[in]	string	Fuel type received on message.
+ * @param[in]	type	Fuel type send on command.
+ *
+ * @return Return true if fuels are same or false in otherwise.
+ */
+static bool validate_type_fuel(uint8_t *string, enum type_fuel_t type);
+
+/**
+ * @brief Navigate data structure XML received on status pump response.
+ *
+ * @param[in]	root_content	String with data structure received.
+ * @param[in]	type			Type of fuel used on command send.
+ *
+ * @return Return true if was success or false in otherwise.
+ */
+static bool get_status_parameters_pump(uint8_t *root_content, enum type_fuel_t type);
+
+/**
+ * @brief Parser status response atribute of STATUS tag on response
+ * of status pump command.
+ *
+ * @param[in]	element	Element of XML with attribute
+ *
+ * @return Retunr true if response was success or false in otherwise.
+ */
+static bool get_attribute_status_tag(uint8_t *element);
+
+/**
+ * @brief Parser response of query state pump command
+ *
+ * @param[in]	message		Buffer where message will be storage.
+ * @param[in]	pump		Number pump used on command sent.
+ * @param[in]	type		Type of fuel sent on command
+ *
+ * @return Return state of response.
+ */
+static state_pump_t receive_response_state_pump(uint8_t *message, uint8_t pump, enum type_fuel_t type);
+
+/**
+ * @brief Parser response of stop command
+ *
+ * @param[in]	message		Buffer where message will be storage.
+ * @param[in]	pump		Number pump used on command sent.
+ *
+ * @return Return state of response.
+ */
+static state_pump_t receive_response_stop_pump(uint8_t *message, uint8_t pump);
 
 /**
  * @brief Parser response of dispache command
@@ -57,7 +116,7 @@ static state_pump_t receive_response_dispache_pump(uint8_t *message, uint8_t pum
  *
  * @return Return state of response.
  */
-static state_pump_t receive_response_reset_pump(uint8_t *message, uint8_t pump);
+static state_pump_t receive_response_start_pump(uint8_t *message, uint8_t pump);
 
 /**
  * @brief Send command to ask for state pump
@@ -83,7 +142,7 @@ static void send_command_stop_pump(uint8_t *message, uint8_t pump);
  * @param[in]	liters		Liters to charge.
  * @param[in]	type_fuel	Type fuel to use.
  */
-static void send_command_dispache_pump(uint8_t *message, uint8_t pump, uint8_t *liters, enum type_fuel_t type_fuel);
+static void send_command_dispache_pump(uint8_t *message, uint8_t pump, uint8_t *liters, enum type_fuel_t type);
 
 /**
  * @brief Send command to restart pump
@@ -91,7 +150,7 @@ static void send_command_dispache_pump(uint8_t *message, uint8_t pump, uint8_t *
  * @param[in]	message	Buffer where message will be build.
  * @param[in]	pump	Number pump to restart.
  */
-static void send_command_reset_pump(uint8_t *message, uint8_t pump);
+static void send_command_start_pump(uint8_t *message, uint8_t pump);
 
 /**
  * @brief Callback with functionality of pumps.
@@ -102,16 +161,271 @@ static void controller_pump_task(void *argument);
 
 
 /* ----------------- Implementation private methods ---------------- */
+static bool validate_type_fuel(uint8_t *string, enum type_fuel_t type) {
+	switch(type) {
+	case REGULAR: {
+		if (!strcmp((char *)string, "Regular")) {
+			return true;
+		}
+	}
+	break;
+
+	case PREMIUM: {
+		if (!strcmp((char *)string, "Premium")) {
+			return true;
+		}
+	}
+	break;
+
+	case REGULAR_DIESEL: {
+		if (!strcmp((char *)string, "Regular diesel")) {
+			return true;
+		}
+	}
+	break;
+
+	case PREMIUM_DIESEL: {
+		if (!strcmp((char *)string, "Premium diesel")) {
+			return true;
+		}
+	}
+	break;
+
+	default: {
+		return false;
+	}
+	break;
+
+	}
+
+	return false;
+}
+
+static bool get_status_parameters_pump(uint8_t *root_content, enum type_fuel_t type)
+{
+	uint16_t index, content_size;
+	uint8_t *element, tag[50], content[50];
+
+	if (root_content == NULL) {
+		return false;
+	}
+
+	index = 0;
+	while ((element = xml_get_element_by_index(root_content, index)) == NULL) {
+		memset(tag, 0, sizeof(tag));
+		memset(content, 0, sizeof(content));
+		xml_get_element_tag(element, tag);
+		content_size = xml_get_element_content(element, content);
+
+		// Get type of fuel and validate if that I would like.
+		if (!strcmp((char *)tag, "TYPE_FUEL")) {
+			if (!validate_type_fuel(content, type)) {
+				return false;
+			}
+			else {
+				status_pump.type_fuel = type;
+			}
+		}
+
+		if (!strcmp((char *)tag, "LITERS_TANKS")) {
+			strncpy((char *)status_pump.fuel_tank, (char *)content, content_size);
+		}
+
+		if (!strcmp((char *)tag, "LITERS_FILLED")) {
+			strncpy((char *)status_pump.fuel_filled, (char *)content, content_size);
+		}
+
+		if (!strcmp((char *)tag, "STATUS_PUMP")) {
+			if (!strcmp((char *)content, "filling")) {
+				status_pump.filling = true;
+			}
+			else {
+				status_pump.filling = false;
+			}
+		}
+
+		index++;
+	}
+
+	return true;
+}
+
+static bool get_attribute_status_tag(uint8_t *element)
+{
+	uint16_t size_name = 0, size_value = 0;
+	uint8_t index = 0, name[50], value[50];
+
+	index = 0;
+	memset(name, 0, sizeof(name));
+	memset(value, 0, sizeof(value));
+
+	while (xml_get_element_attribute_by_index(element, index, name, &size_name, value, &size_value)) {
+		// Ask if response was different of OK, if is then retunr ERROR
+		if (!strcmp((char *)name, "response") && !strcmp((char *)value, "OK")) {
+			return true;
+		}
+
+		memset(name, 0, sizeof(name));
+		memset(value, 0, sizeof(value));
+		index++;
+	}
+
+	return false;
+}
+
+
+static state_pump_t receive_response_state_pump(uint8_t *message, uint8_t pump, enum type_fuel_t type)
+{
+	uint32_t index;
+	uint16_t content_size;
+	uint8_t *xml, *content_element_root, *element, tag[50], content[50];
+
+	xml = content_element_root = element = NULL;
+
+	// Function to receive data from UART
+
+	/* Format of XML
+	 *
+	 *  <?xml version="1.0" encoding="UTF-8"?>
+	 *  <CONTROLLER_CEM>
+	 *  	<COMMAN_ID>STATUS</COMMAN_ID>
+	 *  	<NUMBER_PUMP>[Number pump]</NUMBER_PUMP>
+	 *  	<STATUS response="[Response status]" >
+	 *  		<TYPE_FUEL>[Fuel type]</TYPE_FUEL>
+	 *  		<LITERS_TANKS>[Quantity of liters on tanks]</LITERS_TANKS>
+	 *  		<LITERS_FILLED>[Quantity of liters filled]</LITERS_FILLED>
+	 *  		<STATUS_PUMP>[Status of pump]</STATUS_PUMP>
+	 *  	</STATUS>
+	 *  </CONTROLLER_CEM>
+	 *
+	 */
+
+	index = 0;
+	xml = xml_skip_declaration(message);										// Skip declaration of XML
+	content_element_root = xml_get_element_content_ptr(xml, &content_size);		// Get pointers to root of XML
+
+	if (content_element_root == NULL) {
+		return PUMP_ERROR;
+	}
+
+	// Get pointer of each element from XML
+	while((element = xml_get_element_by_index(content_element_root, index)) != NULL) {
+		memset(tag, 0, sizeof(tag));
+		memset(content, 0, sizeof(content));
+		xml_get_element_tag(element, tag);
+
+		// Ask for value of COMMAN_ID tag
+		if (!strcmp((char *)tag, "COMMAN_ID")) {
+			content_size = xml_get_element_content(element, content);
+			if (strcmp((char *)content, "STATUS")) {
+				return PUMP_ERROR;
+			}
+		}
+
+		// Ask for value of NUMBER_PUMP tag
+		if (!strcmp((char *)tag, "NUMBER_PUMP")) {
+			content_size = xml_get_element_content(element, content);
+			if (atoi((char *)content) != pump) {
+				return PUMP_ERROR;
+			}
+		}
+
+		if (!strcmp((char *)tag, "STATUS_PUMP")) {
+
+			if (!get_attribute_status_tag(element)) {
+				return PUMP_ERROR;
+			}
+
+			// Navigate for element of STATUS_PUMPS
+			if (!get_status_parameters_pump(element, type)) {
+				return PUMP_ERROR;
+			}
+		}
+
+		index++;
+	}
+
+	return PUMP_OK;
+
+}
+
 static state_pump_t receive_response_stop_pump(uint8_t *message, uint8_t pump)
 {
+	uint32_t index;
+	uint16_t content_size;
+	uint8_t *xml, *content_element_root, *element, tag[50], content[50];
 
+	xml = content_element_root = element = NULL;
+	memset(tag, 0, sizeof(tag));
+	memset(content, 0, sizeof(content));
+
+	// Function to receive data from UART
+
+	/* Format of XML
+	 *
+	 *  <?xml version="1.0" encoding="UTF-8"?>
+	 *  <CONTROLLER_CEM>
+	 *  	<COMMAN_ID>STOP</COMMAN_ID>
+	 *  	<NUMBER_PUMP>[Number pump]</NUMBER_PUMP>
+	 *  	<RESPONSE>[Response]</RESPONSE>
+	 *  </CONTROLLER_CEM>
+	 *
+	 */
+
+	index = 0;
+	xml = xml_skip_declaration(message);										// Skip declaration of XML
+	content_element_root = xml_get_element_content_ptr(xml, &content_size);		// Get pointers to root of XML
+
+	if (content_element_root == NULL) {
+		return PUMP_ERROR;
+	}
+
+	// Get pointer of each element from XML
+	while((element = xml_get_element_by_index(content_element_root, index)) != NULL) {
+		memset(tag, 0, sizeof(tag));
+		memset(content, 0, sizeof(content));
+		xml_get_element_tag(element, tag);
+		xml_get_element_by_tag(element, tag);
+		content_size = xml_get_element_content(element, content);
+
+		if(!strcmp((char *)tag, "COMMAN_ID")) {
+			// Ask if is response to stop command
+			if (strcmp((char *)content, "RESET")) {
+				return PUMP_ERROR;
+			}
+		}
+		else if (!strcmp((char *)tag, "NUMBER_PUMP")) {
+			// Ask if response is for same number pump of command
+			if (atoi((char *)content) != pump) {
+				return PUMP_ERROR;
+			}
+		}
+		else if (!strcmp((char *)tag, "RESPONSE")) {
+			// Ask if response is success
+			if (!strcmp((char *)content, "OK")) {
+				return PUMP_OK;
+			}
+			else {
+				return PUMP_ERROR;
+			}
+		}
+		index++;
+	}
+
+	return PUMP_ERROR;
 }
 
 static state_pump_t receive_response_dispache_pump(uint8_t *message, uint8_t pump, enum type_fuel_t type)
 {
 	uint32_t index, index_attribute;
-	uint16_t tag_size, content_size, size_attribute_name, size_attribute_value;
+	uint16_t content_size = 0, size_attribute_name = 0, size_attribute_value = 0;
 	uint8_t *xml, *content_element_root, *element, tag[50], content[50], attribute_name[50], attribute_value[50];
+
+	xml = content_element_root = element = NULL;
+	memset(tag, 0, sizeof(tag));
+	memset(content, 0, sizeof(content));
+	memset(attribute_name, 0, sizeof(attribute_name));
+	memset(attribute_value, 0, sizeof(attribute_value));
 
 	// Function to receive data from UART
 
@@ -126,19 +440,23 @@ static state_pump_t receive_response_dispache_pump(uint8_t *message, uint8_t pum
 	 *
 	 */
 
-	// Skip declaration of XML
-	xml = xml_skip_declaration(message);
-	// Find all tags of root scheduler
 	index = 0;
-	content_element_root = xml_get_element_content_ptr(xml, content_size);
+	xml = xml_skip_declaration(message);										// Skip declaration of XML
+	content_element_root = xml_get_element_content_ptr(xml, &content_size);		// Get pointers to root of XML
+
+	if (content_element_root == NULL) {
+		return PUMP_ERROR;
+	}
+
+	// Get pointer of each element from XML
 	while ((element = xml_get_element_by_index(content_element_root, index)) != NULL) {
 		memset(tag, 0, sizeof(tag));
 		memset(content, 0, sizeof(content));
-		tag_size = xml_get_element_tag(element, tag);
+		xml_get_element_tag(element, tag);
 		content_size = xml_get_element_content(element, content);
 
 		if (!strcmp((char *)tag, "COMMAN_ID")) {
-			// Ask if is response to reset command
+			// Ask if is response to dispache command
 			if (strcmp((char *)content, "DISPACHE")) {
 				return PUMP_ERROR;
 			}
@@ -154,40 +472,8 @@ static state_pump_t receive_response_dispache_pump(uint8_t *message, uint8_t pum
 			index_attribute = 0;
 			while (xml_get_element_attribute_by_index(element, index_attribute, attribute_name, &size_attribute_name, attribute_value, &size_attribute_value)) {
 				if (!strcmp((char *)attribute_name, "type")) {
-					switch(type) {
-					case REGULAR: {
-						if (strcmp((char *)attribute_value, "REGULAR")) {
-							return PUMP_ERROR;
-						}
-					}
-					break;
-
-					case PREMIUM: {
-						if (strcmp((char *)attribute_value, "PREMIUM")) {
-							return PUMP_ERROR;
-						}
-					}
-					break;
-
-					case REGULAR_DIESEL: {
-						if (strcmp((char *)attribute_value, "REGULAR_DIESEL")) {
-							return PUMP_ERROR;
-						}
-					}
-					break;
-
-					case PREMIUM_DIESEL: {
-						if (strcmp((char *)attribute_value, "PREMIUM_DIESEL")) {
-								return PUMP_ERROR;
-						}
-					}
-					break;
-
-					default: {
+					if (!validate_type_fuel(attribute_value, type)) {
 						return PUMP_ERROR;
-					}
-					break;
-
 					}
 				}
 
@@ -214,10 +500,10 @@ static state_pump_t receive_response_dispache_pump(uint8_t *message, uint8_t pum
 	return PUMP_ERROR;
 }
 
-static state_pump_t receive_response_reset_pump(uint8_t *message, uint8_t pump)
+static state_pump_t receive_response_start_pump(uint8_t *message, uint8_t pump)
 {
 	uint32_t index;
-	uint16_t tag_size, content_size;
+	uint16_t content_size;
 	uint8_t *xml, *content_element_root, *element, tag[50], content[50];
 
 	// Function to receive data from UART
@@ -233,21 +519,24 @@ static state_pump_t receive_response_reset_pump(uint8_t *message, uint8_t pump)
 	 *
 	 */
 
-	// Skip declaration of XML
-	xml = xml_skip_declaration(message);
-
-	// Find all tags of root scheduler
 	index = 0;
-	content_element_root = xml_get_element_content_ptr(xml, content_size);
+	xml = xml_skip_declaration(message);										// Skip declaration of XML
+	content_element_root = xml_get_element_content_ptr(xml, &content_size);		// Get pointers to root of XML
+
+	if (content_element_root == NULL) {
+		return PUMP_ERROR;
+	}
+
+	// Get pointer of each element from XML
 	while ((element = xml_get_element_by_index(content_element_root, index)) != NULL) {
 		memset(tag, 0, sizeof(tag));
 		memset(content, 0, sizeof(content));
-		tag_size = xml_get_element_tag(element, tag);
+		xml_get_element_tag(element, tag);
 		content_size = xml_get_element_content(element, content);
 
 		if (!strcmp((char *)tag, "COMMAN_ID")) {
 			// Ask if is response to reset command
-			if (strcmp((char *)content, "RESET")) {
+			if (strcmp((char *)content, "START")) {
 				return PUMP_ERROR;
 			}
 		}
@@ -368,7 +657,7 @@ static void send_command_stop_pump(uint8_t *message, uint8_t pump)
 	BuildXML_Free(root);
 }
 
-static void send_command_dispache_pump(uint8_t *message, uint8_t pump, uint8_t *liters, enum type_fuel_t type_fuel)
+static void send_command_dispache_pump(uint8_t *message, uint8_t pump, uint8_t *liters, enum type_fuel_t type)
 {
 	uint8_t number[4];
 	xml_header_t *header;
@@ -400,7 +689,7 @@ static void send_command_dispache_pump(uint8_t *message, uint8_t pump, uint8_t *
 	children_3 = BuildXML_Newxml((const uint8_t *)"FUEL");
 
 	// Set attribute
-	switch (type_fuel) {
+	switch (type) {
 	case REGULAR: {
 		BuildXML_AddAtrribute(children_3, (const uint8_t *)"Type", (const uint8_t *)"Regutal");
 	}
@@ -443,7 +732,7 @@ static void send_command_dispache_pump(uint8_t *message, uint8_t pump, uint8_t *
 	BuildXML_Free(root);
 }
 
-static void send_command_reset_pump(uint8_t *message, uint8_t pump)
+static void send_command_start_pump(uint8_t *message, uint8_t pump)
 {
 	uint8_t number[4];
 	xml_header_t *header;
@@ -458,7 +747,7 @@ static void send_command_reset_pump(uint8_t *message, uint8_t pump)
 	 *
 	 *  <?xml version="1.0" encoding="UTF-8"?>
 	 *  <CONTROLLER_CEM>
-	 *  	<COMMAN_ID>RESET</COMMAN_ID>
+	 *  	<COMMAN_ID>START</COMMAN_ID>
 	 *  	<NUMBER_PUMP>number_pump</NUMBER_PUMP>
 	 *  </CONTROLLER_CEM>
 	 *
@@ -473,7 +762,7 @@ static void send_command_reset_pump(uint8_t *message, uint8_t pump)
 	children_2 = BuildXML_Newxml((const uint8_t *)"NUMBER_PUMP");
 
 	// Set bodies
-	BuildXML_AddBody(children_1, (const uint8_t *)"RESET");
+	BuildXML_AddBody(children_1, (const uint8_t *)"START");
 	BuildXML_AddBody(children_2, (const uint8_t *)itoa(pump, (char *)number, 10));
 
 	// Set up children into root XML
@@ -505,17 +794,17 @@ static void controller_pump_task(void *argument)
 		switch(msg) {
 
 		case RESTART_PUMP: {
-			send_command_reset_pump(message, number_pump);
+			send_command_start_pump(message, number_pump);
 			memset(message, 0, sizeof(message));
-			receive_response_reset_pump(message, number_pump);
+			receive_response_start_pump(message, number_pump);
 		}
 		break;
 
 		case DISPACHE_PUMP: {
 			memset(liters_fuel, 0, sizeof(liters_fuel));
-			send_command_dispache_pump(message, number_pump, liters_fuel, type);
+			send_command_dispache_pump(message, number_pump, liters_fuel, type_fuel);
 			memset(message, 0, sizeof(message));
-			receive_response_dispache_pump(message, number_pump, type);
+			receive_response_dispache_pump(message, number_pump, type_fuel);
 		}
 		break;
 
@@ -526,8 +815,9 @@ static void controller_pump_task(void *argument)
 		break;
 
 		case STATE_PUMP: {
+			memset(&status_pump, 0, sizeof(struct status_pump_s));
 			send_command_state_pump(message, number_pump);
-			//receive_response_state_pump();
+			receive_response_state_pump(message, number_pump, type_fuel);
 		}
 		break;
 

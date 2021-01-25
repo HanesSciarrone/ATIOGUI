@@ -19,6 +19,8 @@
 #include <gui/inputsalescreen_screen/InputSaleScreenPresenter.hpp>
 #include <gui/setupmqttscreen_screen/SetupMQTTScreenView.hpp>
 #include <gui/setupmqttscreen_screen/SetupMQTTScreenPresenter.hpp>
+#include <gui/operationpumpscreen_screen/OperationPumpScreenView.hpp>
+#include <gui/operationpumpscreen_screen/OperationPumpScreenPresenter.hpp>
 
 using namespace touchgfx;
 

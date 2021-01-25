@@ -16,7 +16,7 @@ public:
 
 protected:
 
-    uint32_t liters;
+    float liters;
 };
 
 #endif // INPUTSALESCREENVIEW_HPP

@@ -1,17 +1,17 @@
-#ifndef INPUTSALESCREENPRESENTER_HPP
-#define INPUTSALESCREENPRESENTER_HPP
+#ifndef OPERATIONPUMPSCREENPRESENTER_HPP
+#define OPERATIONPUMPSCREENPRESENTER_HPP
 
 #include <gui/model/ModelListener.hpp>
 #include <mvp/Presenter.hpp>
 
 using namespace touchgfx;
 
-class InputSaleScreenView;
+class OperationPumpScreenView;
 
-class InputSaleScreenPresenter : public touchgfx::Presenter, public ModelListener
+class OperationPumpScreenPresenter : public touchgfx::Presenter, public ModelListener
 {
 public:
-    InputSaleScreenPresenter(InputSaleScreenView& v);
+    OperationPumpScreenPresenter(OperationPumpScreenView& v);
 
     /**
      * The activate function is called automatically when this screen is "switched in"
@@ -25,14 +25,14 @@ public:
      */
     virtual void deactivate();
 
-    virtual ~InputSaleScreenPresenter() {};
-    virtual float get_liters_fuel_available(void);
-    virtual void set_liters_to_dispache(uint8_t *liters_selected);
+    virtual ~OperationPumpScreenPresenter() {};
+
+    uint8_t *get_liters_to_dispahe();
 
 private:
-    InputSaleScreenPresenter();
+    OperationPumpScreenPresenter();
 
-    InputSaleScreenView& view;
+    OperationPumpScreenView& view;
 };
 
-#endif // INPUTSALESCREENPRESENTER_HPP
+#endif // OPERATIONPUMPSCREENPRESENTER_HPP

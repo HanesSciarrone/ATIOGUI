@@ -650,8 +650,8 @@ static bool_t WifiModule_Init(void)
 
 static bool_t WifiModule_Comm_Init(void)
 {
-	commInterface.send = &WifiUART_Send;
-	commInterface.recv = &WifiUART_Receive;
+	commInterface.send = &wifi_uart_sent;
+	commInterface.recv = &wifi_uart_receive;
 
 	return (ESP8266_CommInterface_Init(&commInterface) == ESP8266_OK) ? 1 : 0;
 }

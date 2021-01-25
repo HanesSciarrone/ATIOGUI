@@ -30,6 +30,8 @@
 #include <gui/inputsalescreen_screen/InputSaleScreenPresenter.hpp>
 #include <gui/setupmqttscreen_screen/SetupMQTTScreenView.hpp>
 #include <gui/setupmqttscreen_screen/SetupMQTTScreenPresenter.hpp>
+#include <gui/operationpumpscreen_screen/OperationPumpScreenView.hpp>
+#include <gui/operationpumpscreen_screen/OperationPumpScreenPresenter.hpp>
 
 
 /**
@@ -57,7 +59,8 @@ public:
             touchgfx::meta::TypeList< SetupWifiScreenView,
             touchgfx::meta::TypeList< InputSaleScreenView,
             touchgfx::meta::TypeList< SetupMQTTScreenView,
-            touchgfx::meta::Nil > > > >
+            touchgfx::meta::TypeList< OperationPumpScreenView,
+            touchgfx::meta::Nil > > > > >
             > GeneratedViewTypes;
 
     /**
@@ -74,7 +77,8 @@ public:
             touchgfx::meta::TypeList< SetupWifiScreenPresenter,
             touchgfx::meta::TypeList< InputSaleScreenPresenter,
             touchgfx::meta::TypeList< SetupMQTTScreenPresenter,
-            touchgfx::meta::Nil > > > >
+            touchgfx::meta::TypeList< OperationPumpScreenPresenter,
+            touchgfx::meta::Nil > > > > >
             > GeneratedPresenterTypes;
 
     /**

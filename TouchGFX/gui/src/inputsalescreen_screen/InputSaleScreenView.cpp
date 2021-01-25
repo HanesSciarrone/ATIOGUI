@@ -13,7 +13,7 @@ void InputSaleScreenView::setupScreen()
 
     liters = presenter->get_liters_fuel_available();
 
-    Unicode::snprintf(label_titleBuffer, LABEL_TITLE_SIZE, "%u", liters);
+    Unicode::snprintf(label_titleBuffer, LABEL_TITLE_SIZE, "%.3f", liters);
     label_title.resizeToCurrentText();
     label_title.invalidate();
 }
@@ -25,14 +25,15 @@ void InputSaleScreenView::tearDownScreen()
 
 void InputSaleScreenView::send_dispatch_operation()
 {
-	uint32_t liters_fuel = 0;
+	float liters_fuel = 0;
 	uint8_t buffer[20], text[TEXT_PUPUP_SIZE];
 
 	pad_numeric.get_buffer(buffer);
-	liters_fuel = atoi((char *)buffer);
+	liters_fuel = atof((char *)buffer);
 
 	if (liters_fuel <= liters) {
-
+		presenter->set_liters_to_dispache(buffer);
+		application().gotoOperationPumpScreenCoverTransitionSouth();
 	}
 	else {
 		strcpy((char *)text, "You can't dispense this amount\n of fuel, please enter less liters");

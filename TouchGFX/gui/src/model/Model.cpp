@@ -1,7 +1,10 @@
 #include <gui/model/Model.hpp>
 #include <gui/model/ModelListener.hpp>
 
+#include "touchgfx/Unicode.hpp"
+
 /* Include used to model for communicative with backend */
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -30,8 +33,9 @@ const osMessageQueueAttr_t queue_GUI_attributes = {
   .name = "wifiqueue_operation"
 };
 
-static uint32_t liters_available;
+static float liters_available;		/// Liters available for user ID
 static gui_network_t list_network;
+static uint8_t liters_dispache[20];	/// Liters to dispache entried for user.
 
 Model::Model() : modelListener(0)
 {
@@ -73,7 +77,7 @@ void Model::tick()
 			case 2:{
 				osMutexAcquire(mutex_new_msg_wifi_handle, osWaitForever);
 				if(wifiParameters.resultOperation == VALID_USER) {
-					liters_available = atoi((char *)wifiParameters.data);
+					liters_available = atof((char *)wifiParameters.data);
 				}
 				else {
 					liters_available = 0;
@@ -147,9 +151,20 @@ void Model::sent_credential_to_IoT(uint8_t *buffer, uint16_t length)
 	}
 }
 
-uint32_t Model::get_liters_fuel_available(void)
+float Model::get_liters_fuel_available(void)
 {
 	return liters_available;
+}
+
+void Model::set_liters_to_dispache(uint8_t *liters_selected)
+{
+	memset(liters_dispache, 0, sizeof(liters_dispache));
+	strncpy((char *)liters_dispache, (char *)liters_selected, strlen((char *)liters_selected));
+}
+
+uint8_t *Model::get_liters_to_dispahe()
+{
+	return liters_dispache;
 }
 
 void Model::configure_parameters_mqtt(struct parameters_mqtt_s param)
