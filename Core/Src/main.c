@@ -221,7 +221,7 @@ int main(void)
 	  Error_Handler();
   }
 
-  if (module_controller_pump_started() == FALSE) {
+  if (module_pump_controller_started() == FALSE) {
 	  Error_Handler();
   }
   /* USER CODE END RTOS_THREADS */

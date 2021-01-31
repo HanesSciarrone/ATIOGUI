@@ -1,10 +1,13 @@
 #include <gui/operationpumpscreen_screen/OperationPumpScreenView.hpp>
 
 #include <stdlib.h>
+#include <string.h>
 
 OperationPumpScreenView::OperationPumpScreenView()
+: liters_dispensed(0.0),
+  selector_enable(true)
 {
-
+	strncpy((char *)type_fuel, "Regular", strlen("Regular"));
 }
 
 void OperationPumpScreenView::setupScreen()
@@ -16,10 +19,6 @@ void OperationPumpScreenView::setupScreen()
     lbl_title.resizeToCurrentText();
     lbl_title.invalidate();
     status_operation.setValue(0);
-    pump_dispaching = false;
-    Unicode::fromUTF8((const uint8_t *)"Start", lbl_status_operationBuffer, LBL_STATUS_OPERATION_SIZE);
-    lbl_status_operation.resizeToCurrentText();
-    lbl_status_operation.invalidate();
 }
 
 void OperationPumpScreenView::tearDownScreen()
@@ -29,20 +28,60 @@ void OperationPumpScreenView::tearDownScreen()
 
 void OperationPumpScreenView::pay_sale_action()
 {
-
+	// Sent liters dispensed
 }
 
 void OperationPumpScreenView::cancel_sale_action()
 {
+	uint8_t pump[LBL_TITLE_PUMP_SELECTED_SIZE];
 
+	memset(pump, 0, LBL_TITLE_PUMP_SELECTED_SIZE);
+	Unicode::toUTF8(lbl_title_pump_selectedBuffer, pump, LBL_TITLE_PUMP_SELECTED_SIZE);
+	presenter->stop_dispatch_action(pump);
+
+	application().gotoMainScreenScreenCoverTransitionNorth();
 }
 
-void OperationPumpScreenView::dispache_fuel_action()
+void OperationPumpScreenView::dispatch_fuel_action()
 {
+	uint8_t pump[LBL_TITLE_PUMP_SELECTED_SIZE];
 
+	memset(pump, 0, LBL_TITLE_PUMP_SELECTED_SIZE);
+	Unicode::toUTF8(lbl_title_pump_selectedBuffer, pump, LBL_TITLE_PUMP_SELECTED_SIZE);
+	selector_enable = false;
+	presenter->dispatch_fuel_action(pump, type_fuel);
 }
 
 void OperationPumpScreenView::stop_dispache_action()
 {
+	uint8_t pump[LBL_TITLE_PUMP_SELECTED_SIZE];
 
+	memset(pump, 0, LBL_TITLE_PUMP_SELECTED_SIZE);
+	Unicode::toUTF8(lbl_title_pump_selectedBuffer, pump, LBL_TITLE_PUMP_SELECTED_SIZE);
+	presenter->stop_dispatch_action(pump);
+}
+
+void OperationPumpScreenView::set_pump_selected(int value)
+{
+	if (selector_enable) {
+		Unicode::snprintfFloat(lbl_title_pump_selectedBuffer, LBL_TITLE_PUMP_SELECTED_SIZE, "%d", value);
+		lbl_title_pump_selected.resizeToCurrentText();
+		lbl_title_pump_selected.invalidate();
+	}
+}
+
+void OperationPumpScreenView::select_types_fuel()
+{
+	if (checkbox_regular.getSelected()) {
+		strcpy((char *)type_fuel, "Regular");
+	}
+	else if (checkbox_premium.getSelected()) {
+		strcpy((char *)type_fuel, "Premium");
+	}
+	else if (checkbox_regular_diesel.getSelected()) {
+		strcpy((char *)type_fuel, "Regular diesel");
+	}
+	else if (checkbox_premium_diesel.getSelected()) {
+		strcpy((char *)type_fuel, "Premium diesel");
+	}
 }

@@ -3021,7 +3021,7 @@
             },
             "TextRotation": "0",
             "Style": "Style4",
-            "Name": "btn_dispache",
+            "Name": "btn_dispatch",
             "X": 616,
             "Y": 128,
             "Width": 170,
@@ -3117,8 +3117,8 @@
             "ProgressRangeStepsMin": 0,
             "ProgressInitialValue": 0,
             "Name": "status_operation",
-            "X": 141,
-            "Y": 158,
+            "X": 400,
+            "Y": 342,
             "Width": 104,
             "Height": 104,
             "Type": "CircleProgress",
@@ -3174,8 +3174,8 @@
               "BufferSize": 20
             },
             "Name": "lbl_title",
-            "X": 16,
-            "Y": 342,
+            "X": 528,
+            "Y": 374,
             "Width": 212,
             "Height": 40,
             "Type": "TextArea",
@@ -3186,7 +3186,32 @@
             "Moveable": false
           },
           {
-            "TextId": "SingleUseId74",
+            "IsHorizontalSlider": true,
+            "BackgroundUnselected": "__designer\\Blue_Slider_Horizontal_Medium_Slider_Round_back.png",
+            "BackgroundSelected": "__designer\\Blue_Slider_Horizontal_Medium_Slider_Round_fill.png",
+            "Indicator": "__designer\\Blue_Slider_Horizontal_Medium_Indicators_Slider_Round_nob.png",
+            "BackgroundX": 2,
+            "BackgroundY": 19,
+            "IndicatorPos": 2,
+            "IndicatorMax": 310,
+            "IndicatorMin": 0,
+            "ValueMax": 10,
+            "ValueMin": 1,
+            "InitValue": 1,
+            "Name": "pump_number_select",
+            "X": 12,
+            "Y": 83,
+            "Width": 358,
+            "Height": 52,
+            "Type": "Slider",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId75",
             "TextRotation": "0",
             "Color": {
               "Red": 255,
@@ -3197,13 +3222,190 @@
             "AutoSize": true,
             "LineSpacing": 0,
             "Wildcard1": {
+              "TextId": "SingleUseId80",
               "UseBuffer": true,
-              "BufferSize": 20
+              "BufferSize": 4
             },
-            "Name": "lbl_status_operation",
-            "X": 438,
-            "Y": 342,
-            "Width": 170,
+            "Name": "lbl_title_pump_selected",
+            "X": 12,
+            "Y": 138,
+            "Width": 300,
+            "Height": 40,
+            "Type": "TextArea",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Alpha": 255,
+            "Selected": true,
+            "Deselectable": false,
+            "FileNameSelected": "__designer\\Blue_Check_buttons_Check_Round_mark_active.png",
+            "FileNameSelectedPressed": "__designer\\Blue_Check_buttons_Check_Round_mark_pressed.png",
+            "FileNameUnselected": "__designer\\Blue_Check_buttons_Check_Round_mark_inactive.png",
+            "FileNameUnselectedPressed": "__designer\\Blue_Check_buttons_Check_Round_mark_normal.png",
+            "RadioButtonGroup": "radioButtonGroup1",
+            "Name": "checkbox_regular",
+            "X": 20,
+            "Y": 196,
+            "Width": 44,
+            "Height": 44,
+            "Type": "RadioButton",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Alpha": 255,
+            "Selected": false,
+            "Deselectable": false,
+            "FileNameSelected": "__designer\\Blue_Check_buttons_Check_Round_mark_active.png",
+            "FileNameSelectedPressed": "__designer\\Blue_Check_buttons_Check_Round_mark_pressed.png",
+            "FileNameUnselected": "__designer\\Blue_Check_buttons_Check_Round_mark_inactive.png",
+            "FileNameUnselectedPressed": "__designer\\Blue_Check_buttons_Check_Round_mark_normal.png",
+            "RadioButtonGroup": "radioButtonGroup1",
+            "Name": "checkbox_premium",
+            "X": 20,
+            "Y": 262,
+            "Width": 44,
+            "Height": 44,
+            "Type": "RadioButton",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Alpha": 255,
+            "Selected": false,
+            "Deselectable": false,
+            "FileNameSelected": "__designer\\Blue_Check_buttons_Check_Round_mark_active.png",
+            "FileNameSelectedPressed": "__designer\\Blue_Check_buttons_Check_Round_mark_pressed.png",
+            "FileNameUnselected": "__designer\\Blue_Check_buttons_Check_Round_mark_inactive.png",
+            "FileNameUnselectedPressed": "__designer\\Blue_Check_buttons_Check_Round_mark_normal.png",
+            "RadioButtonGroup": "radioButtonGroup1",
+            "Name": "checkbox_regular_diesel",
+            "X": 20,
+            "Y": 330,
+            "Width": 44,
+            "Height": 44,
+            "Type": "RadioButton",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Alpha": 255,
+            "Selected": false,
+            "Deselectable": false,
+            "FileNameSelected": "__designer\\Blue_Check_buttons_Check_Round_mark_active.png",
+            "FileNameSelectedPressed": "__designer\\Blue_Check_buttons_Check_Round_mark_pressed.png",
+            "FileNameUnselected": "__designer\\Blue_Check_buttons_Check_Round_mark_inactive.png",
+            "FileNameUnselectedPressed": "__designer\\Blue_Check_buttons_Check_Round_mark_normal.png",
+            "RadioButtonGroup": "radioButtonGroup1",
+            "Name": "checkbox_premium_diesel",
+            "X": 20,
+            "Y": 394,
+            "Width": 44,
+            "Height": 44,
+            "Type": "RadioButton",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId76",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Alpha": 255,
+            "AutoSize": true,
+            "LineSpacing": 0,
+            "Name": "lbl_title_regular",
+            "X": 82,
+            "Y": 198,
+            "Width": 118,
+            "Height": 40,
+            "Type": "TextArea",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId77",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Alpha": 255,
+            "AutoSize": true,
+            "LineSpacing": 0,
+            "Name": "lbl_title_premium",
+            "X": 82,
+            "Y": 264,
+            "Width": 136,
+            "Height": 40,
+            "Type": "TextArea",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId78",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Alpha": 255,
+            "AutoSize": true,
+            "LineSpacing": 0,
+            "Name": "lbl_title_regular_diesel",
+            "X": 82,
+            "Y": 332,
+            "Width": 219,
+            "Height": 40,
+            "Type": "TextArea",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId79",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Alpha": 255,
+            "AutoSize": true,
+            "LineSpacing": 0,
+            "Name": "lbl_title_premium_diesel",
+            "X": 82,
+            "Y": 396,
+            "Width": 237,
             "Height": 40,
             "Type": "TextArea",
             "Visible": true,
@@ -3227,26 +3429,14 @@
             }
           },
           {
-            "InteractionName": "Cancel_sale",
-            "HasCompletedTrigger": false,
-            "Trigger": {
-              "TriggerComponent": "btn_cancel",
-              "Type": "TriggerClicked"
-            },
-            "Action": {
-              "FunctionName": "cancel_sale_action",
-              "Type": "ActionCustom"
-            }
-          },
-          {
             "InteractionName": "Dispache_fuel",
             "HasCompletedTrigger": false,
             "Trigger": {
-              "TriggerComponent": "btn_dispache",
+              "TriggerComponent": "btn_dispatch",
               "Type": "TriggerClicked"
             },
             "Action": {
-              "FunctionName": "dispache_fuel_action",
+              "FunctionName": "dispatch_fuel_action",
               "Type": "ActionCustom"
             }
           },
@@ -3259,6 +3449,78 @@
             },
             "Action": {
               "FunctionName": "stop_dispache_action",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "Select_pump",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "pump_number_select",
+              "Type": "TriggerSliderValueChanged"
+            },
+            "Action": {
+              "FunctionName": "set_pump_selected",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "Select_regular_fuel",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "checkbox_regular",
+              "Type": "TriggerRadioButtonSelected"
+            },
+            "Action": {
+              "FunctionName": "select_types_fuel",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "Select_premium_fuel",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "checkbox_premium",
+              "Type": "TriggerRadioButtonSelected"
+            },
+            "Action": {
+              "FunctionName": "select_types_fuel",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "Select_regular_diesel_fuel",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "checkbox_regular_diesel",
+              "Type": "TriggerRadioButtonSelected"
+            },
+            "Action": {
+              "FunctionName": "select_types_fuel",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "Select_premium_diesel_fuel",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "checkbox_premium_diesel",
+              "Type": "TriggerRadioButtonSelected"
+            },
+            "Action": {
+              "FunctionName": "select_types_fuel",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "cancel_sale_action",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "btn_cancel",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "FunctionName": "Cancel_sale",
               "Type": "ActionCustom"
             }
           }
@@ -4226,10 +4488,6 @@
         "IsResource": false
       },
       {
-        "TextEntryId": "SingleUseId70",
-        "IsResource": false
-      },
-      {
         "TextEntryId": "SingleUseId71",
         "IsResource": false
       },
@@ -4242,7 +4500,31 @@
         "IsResource": false
       },
       {
-        "TextEntryId": "SingleUseId74",
+        "TextEntryId": "SingleUseId75",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId76",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId77",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId78",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId79",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId80",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId70",
         "IsResource": false
       }
     ],

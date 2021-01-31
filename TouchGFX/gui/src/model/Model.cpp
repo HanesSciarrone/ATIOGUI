@@ -10,13 +10,13 @@
 
 #include "cmsis_os.h"
 #include "ModuleWifi.h"
+#include "ModuleControllerPump.h"
 
-#define MAXBUFFER_LITERS	20
+#define SIZE_BUFFER_LITERS	20
 #define BUFFER_SIZE_USER_ID	20
 
-// Global variable declared on ModuleWifi.c
+// Variable used for Wifi module
 extern osMessageQueueId_t queue_wifi_operation_handle;
-extern osSemaphoreId_t semaphore_new_msg_nfc;
 extern osMutexId_t mutex_new_msg_wifi_handle;
 extern WifiMessage_t wifiParameters;
 extern uint32_t keep_alive_connection;
@@ -25,7 +25,17 @@ extern uint8_t qos_mqtt;
 extern uint8_t	client_id[BUFFER_SIZE_TOPIC];
 extern uint8_t publish_topic[BUFFER_SIZE_TOPIC];
 extern uint8_t suscribe_topic[BUFFER_SIZE_TOPIC];
+
+//Variable used for NFC reader
+extern osSemaphoreId_t semaphore_new_msg_nfc;
 extern uint8_t user_id[BUFFER_SIZE_USER_ID], length_id;
+
+// Variable used for pump controller
+extern osMutexId_t mutex_new_msg_pump_controller_handle;
+extern osMessageQueueId_t controller_pump_queueHandle;
+extern uint8_t number_pump;
+extern uint8_t liters_fuel[20];
+extern enum type_fuel_t type_fuel;
 
 /* --------------------- Global variable --------------------- */
 osMessageQueueId_t	queue_NewMsg_GUI;
@@ -33,9 +43,9 @@ const osMessageQueueAttr_t queue_GUI_attributes = {
   .name = "wifiqueue_operation"
 };
 
-static float liters_available;		/// Liters available for user ID
 static gui_network_t list_network;
-static uint8_t liters_dispache[20];	/// Liters to dispache entried for user.
+static float liters_available;						/// Liters available for user ID
+static uint8_t liters_dispache[SIZE_BUFFER_LITERS];	/// Liters to dispache entried for user.
 
 Model::Model() : modelListener(0)
 {
@@ -151,6 +161,11 @@ void Model::sent_credential_to_IoT(uint8_t *buffer, uint16_t length)
 	}
 }
 
+uint8_t *get_user_id(void)
+{
+	return user_id;
+}
+
 float Model::get_liters_fuel_available(void)
 {
 	return liters_available;
@@ -185,4 +200,39 @@ void Model::configure_parameters_mqtt(struct parameters_mqtt_s param)
 void Model::active_reader(void)
 {
 	osSemaphoreRelease(semaphore_new_msg_nfc);
+}
+
+void Model::dispatch_fuel_action(uint8_t *pump, uint8_t * type)
+{
+	uint8_t msg = DISPACHE_PUMP;
+
+	osMutexAcquire(mutex_new_msg_pump_controller_handle, osWaitForever);
+	number_pump = (uint8_t)atoi((char *)pump);
+	strncpy((char *)liters_fuel, (char *)liters_dispache, strlen((char *)liters_dispache));
+
+	if (!strcmp((char *)type, "Regular")) {
+		type_fuel = REGULAR;
+	}
+	else if (!strcmp((char *)type, "Premium")) {
+		type_fuel = PREMIUM;
+	}
+	else if (!strcmp((char *)type, "Regular diesel")) {
+		type_fuel = REGULAR_DIESEL;
+	}
+	else {
+		type_fuel = PREMIUM_DIESEL;
+	}
+
+	osMessageQueuePut(controller_pump_queueHandle, &msg, 0L, 0);
+	osMutexRelease(mutex_new_msg_pump_controller_handle);
+}
+
+void Model::stop_dispatch_action(uint8_t *pump)
+{
+	uint8_t msg = STOP_PUMP;
+
+	osMutexAcquire(mutex_new_msg_pump_controller_handle, osWaitForever);
+	number_pump = (uint8_t)atoi((char *)pump);
+	osMessageQueuePut(controller_pump_queueHandle, &msg, 0L, 0);
+	osMutexRelease(mutex_new_msg_pump_controller_handle);
 }

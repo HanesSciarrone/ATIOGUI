@@ -13,6 +13,10 @@
 #include <touchgfx/containers/progress_indicators/CircleProgress.hpp>
 #include <touchgfx/widgets/canvas/PainterRGB888Bitmap.hpp>
 #include <touchgfx/widgets/TextAreaWithWildcard.hpp>
+#include <touchgfx/containers/Slider.hpp>
+#include <touchgfx/widgets/RadioButton.hpp>
+#include <touchgfx/widgets/TextArea.hpp>
+#include <touchgfx/widgets/RadioButtonGroup.hpp>
 
 class OperationPumpScreenViewBase : public touchgfx::View<OperationPumpScreenPresenter>
 {
@@ -29,17 +33,27 @@ public:
         // Override and implement this function in OperationPumpScreen
     }
 
-    virtual void cancel_sale_action()
-    {
-        // Override and implement this function in OperationPumpScreen
-    }
-
-    virtual void dispache_fuel_action()
+    virtual void dispatch_fuel_action()
     {
         // Override and implement this function in OperationPumpScreen
     }
 
     virtual void stop_dispache_action()
+    {
+        // Override and implement this function in OperationPumpScreen
+    }
+
+    virtual void set_pump_selected(int value)
+    {
+        // Override and implement this function in OperationPumpScreen
+    }
+
+    virtual void select_types_fuel()
+    {
+        // Override and implement this function in OperationPumpScreen
+    }
+
+    virtual void Cancel_sale()
     {
         // Override and implement this function in OperationPumpScreen
     }
@@ -55,22 +69,32 @@ protected:
     touchgfx::Box background;
     touchgfx::Box toolbar;
     touchgfx::ScalableImage logo;
-    touchgfx::ButtonWithLabel btn_dispache;
+    touchgfx::ButtonWithLabel btn_dispatch;
     touchgfx::ButtonWithLabel bth_stop;
     touchgfx::ButtonWithLabel btn_cancel;
     touchgfx::CircleProgress status_operation;
     touchgfx::PainterRGB888Bitmap status_operationPainter;
     touchgfx::ButtonWithLabel btn_pay_sale;
     touchgfx::TextAreaWithOneWildcard lbl_title;
-    touchgfx::TextAreaWithOneWildcard lbl_status_operation;
+    touchgfx::Slider pump_number_select;
+    touchgfx::TextAreaWithOneWildcard lbl_title_pump_selected;
+    touchgfx::RadioButton checkbox_regular;
+    touchgfx::RadioButton checkbox_premium;
+    touchgfx::RadioButton checkbox_regular_diesel;
+    touchgfx::RadioButton checkbox_premium_diesel;
+    touchgfx::TextArea lbl_title_regular;
+    touchgfx::TextArea lbl_title_premium;
+    touchgfx::TextArea lbl_title_regular_diesel;
+    touchgfx::TextArea lbl_title_premium_diesel;
+    touchgfx::RadioButtonGroup<4> radioButtonGroup1;
 
     /*
      * Wildcard Buffers
      */
     static const uint16_t LBL_TITLE_SIZE = 20;
     touchgfx::Unicode::UnicodeChar lbl_titleBuffer[LBL_TITLE_SIZE];
-    static const uint16_t LBL_STATUS_OPERATION_SIZE = 20;
-    touchgfx::Unicode::UnicodeChar lbl_status_operationBuffer[LBL_STATUS_OPERATION_SIZE];
+    static const uint16_t LBL_TITLE_PUMP_SELECTED_SIZE = 4;
+    touchgfx::Unicode::UnicodeChar lbl_title_pump_selectedBuffer[LBL_TITLE_PUMP_SELECTED_SIZE];
 
 private:
 
@@ -78,11 +102,15 @@ private:
      * Callback Declarations
      */
     touchgfx::Callback<OperationPumpScreenViewBase, const touchgfx::AbstractButton&> buttonCallback;
+    touchgfx::Callback<OperationPumpScreenViewBase, const touchgfx::Slider&, int> sliderValueChangedCallback;
+    touchgfx::Callback<OperationPumpScreenViewBase, const touchgfx::AbstractButton&> radioButtonSelectedCallback;
 
     /*
      * Callback Handler Declarations
      */
     void buttonCallbackHandler(const touchgfx::AbstractButton& src);
+    void sliderValueChangedCallbackHandler(const touchgfx::Slider& src, int value);
+    void radioButtonSelectedCallbackHandler(const touchgfx::AbstractButton& src);
 
     /*
      * Canvas Buffer Size

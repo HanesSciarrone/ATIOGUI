@@ -25,6 +25,8 @@ struct status_pump_s {
 	bool filling;
 }status_pump;
 
+typedef StaticSemaphore_t osStaticMutexDef_t;
+
 /* -------------------- Private global variable -------------------- */
 /* Definitions for Controller_pump */
 osThreadId_t Controller_pumpHandle;
@@ -37,6 +39,15 @@ const osThreadAttr_t Controller_pump_attributes = {
 osMessageQueueId_t controller_pump_queueHandle;
 const osMessageQueueAttr_t controller_pump_queue_attributes = {
   .name = "controller_pump_queue"
+};
+
+/* Definitions for mutex_new_msg_pump_controller */
+osMutexId_t mutex_new_msg_pump_controller_handle;
+osStaticMutexDef_t mutex_new_msg_pump_controller_control_block;
+const osMutexAttr_t mutex_new_msg_pump_controller_attributes = {
+  .name = "mutex_new_msg_pump_controller",
+  .cb_mem = &mutex_new_msg_pump_controller_control_block,
+  .cb_size = sizeof(mutex_new_msg_pump_controller_control_block),
 };
 
 uint8_t number_pump = 0;
@@ -106,7 +117,7 @@ static state_pump_t receive_response_stop_pump(uint8_t *message, uint8_t pump);
  *
  * @return Return state of response.
  */
-static state_pump_t receive_response_dispache_pump(uint8_t *message, uint8_t pump, enum type_fuel_t type);
+static state_pump_t receive_response_dispatch_pump(uint8_t *message, uint8_t pump, enum type_fuel_t type);
 
 /**
  * @brief Parser response of reset command
@@ -142,7 +153,7 @@ static void send_command_stop_pump(uint8_t *message, uint8_t pump);
  * @param[in]	liters		Liters to charge.
  * @param[in]	type_fuel	Type fuel to use.
  */
-static void send_command_dispache_pump(uint8_t *message, uint8_t pump, uint8_t *liters, enum type_fuel_t type);
+static void send_command_dispatch_pump(uint8_t *message, uint8_t pump, uint8_t *liters, enum type_fuel_t type);
 
 /**
  * @brief Send command to restart pump
@@ -157,7 +168,7 @@ static void send_command_start_pump(uint8_t *message, uint8_t pump);
  *
  * @param[in]	argument	Argumment passed to task.
  */
-static void controller_pump_task(void *argument);
+static void pump_controller_task(void *argument);
 
 
 /* ----------------- Implementation private methods ---------------- */
@@ -273,7 +284,6 @@ static bool get_attribute_status_tag(uint8_t *element)
 	return false;
 }
 
-
 static state_pump_t receive_response_state_pump(uint8_t *message, uint8_t pump, enum type_fuel_t type)
 {
 	uint32_t index;
@@ -345,7 +355,7 @@ static state_pump_t receive_response_state_pump(uint8_t *message, uint8_t pump, 
 		index++;
 	}
 
-	return PUMP_OK;
+	return status_pump.filling ? PUMP_DISPACHING : PUMP_FINISH_CHARGE;
 
 }
 
@@ -415,7 +425,7 @@ static state_pump_t receive_response_stop_pump(uint8_t *message, uint8_t pump)
 	return PUMP_ERROR;
 }
 
-static state_pump_t receive_response_dispache_pump(uint8_t *message, uint8_t pump, enum type_fuel_t type)
+static state_pump_t receive_response_dispatch_pump(uint8_t *message, uint8_t pump, enum type_fuel_t type)
 {
 	uint32_t index, index_attribute;
 	uint16_t content_size = 0, size_attribute_name = 0, size_attribute_value = 0;
@@ -433,7 +443,7 @@ static state_pump_t receive_response_dispache_pump(uint8_t *message, uint8_t pum
 	 *
 	 *  <?xml version="1.0" encoding="UTF-8"?>
 	 *  <CONTROLLER_CEM>
-	 *  	<COMMAN_ID>DISPACHE</COMMAN_ID>
+	 *  	<COMMAN_ID>DISPATCH</COMMAN_ID>
 	 *  	<NUMBER_PUMP>[Number pump]</NUMBER_PUMP>
 	 *  	<RESPONSE type="type_fuel">[Response]</RESPONSE>
 	 *  </CONTROLLER_CEM>
@@ -457,7 +467,7 @@ static state_pump_t receive_response_dispache_pump(uint8_t *message, uint8_t pum
 
 		if (!strcmp((char *)tag, "COMMAN_ID")) {
 			// Ask if is response to dispache command
-			if (strcmp((char *)content, "DISPACHE")) {
+			if (strcmp((char *)content, "DISPATCH")) {
 				return PUMP_ERROR;
 			}
 		}
@@ -657,7 +667,7 @@ static void send_command_stop_pump(uint8_t *message, uint8_t pump)
 	BuildXML_Free(root);
 }
 
-static void send_command_dispache_pump(uint8_t *message, uint8_t pump, uint8_t *liters, enum type_fuel_t type)
+static void send_command_dispatch_pump(uint8_t *message, uint8_t pump, uint8_t *liters, enum type_fuel_t type)
 {
 	uint8_t number[4];
 	xml_header_t *header;
@@ -672,7 +682,7 @@ static void send_command_dispache_pump(uint8_t *message, uint8_t pump, uint8_t *
 	 *
 	 *  <?xml version="1.0" encoding="UTF-8"?>
 	 *  <CONTROLLER_CEM>
-	 *  	<COMMAN_ID>DISPACHE</COMMAN_ID>
+	 *  	<COMMAN_ID>DISPATCH</COMMAN_ID>
 	 *  	<NUMBER_PUMP>number_pump</NUMBER_PUMP>
 	 *  	<FUEL type="type_fuel">liters_fuel</FUEL>
 	 *  </CONTROLLER_CEM>
@@ -691,7 +701,7 @@ static void send_command_dispache_pump(uint8_t *message, uint8_t pump, uint8_t *
 	// Set attribute
 	switch (type) {
 	case REGULAR: {
-		BuildXML_AddAtrribute(children_3, (const uint8_t *)"Type", (const uint8_t *)"Regutal");
+		BuildXML_AddAtrribute(children_3, (const uint8_t *)"Type", (const uint8_t *)"Regular");
 	}
 	break;
 
@@ -701,7 +711,7 @@ static void send_command_dispache_pump(uint8_t *message, uint8_t pump, uint8_t *
 	break;
 
 	case REGULAR_DIESEL: {
-		BuildXML_AddAtrribute(children_3, (const uint8_t *)"Type", (const uint8_t *)"Regutal_diesel");
+		BuildXML_AddAtrribute(children_3, (const uint8_t *)"Type", (const uint8_t *)"Regular_diesel");
 	}
 	break;
 
@@ -712,7 +722,7 @@ static void send_command_dispache_pump(uint8_t *message, uint8_t pump, uint8_t *
 	}
 
 	// Set bodies
-	BuildXML_AddBody(children_1, (const uint8_t *)"DISPACHE");
+	BuildXML_AddBody(children_1, (const uint8_t *)"DISPATCH");
 	BuildXML_AddBody(children_2, (const uint8_t *)itoa(pump, (char *)number, 10));
 	BuildXML_AddBody(children_3, liters);
 
@@ -780,10 +790,11 @@ static void send_command_start_pump(uint8_t *message, uint8_t pump)
 	BuildXML_Free(root);
 }
 
-static void controller_pump_task(void *argument)
+static void pump_controller_task(void *argument)
 {
 	uint8_t msg;
 	uint8_t message[SIZE_MAX_BUFFER_COMMAND];
+	state_pump_t state;
 
 	for(;;) {
 
@@ -801,10 +812,11 @@ static void controller_pump_task(void *argument)
 		break;
 
 		case DISPACHE_PUMP: {
-			memset(liters_fuel, 0, sizeof(liters_fuel));
-			send_command_dispache_pump(message, number_pump, liters_fuel, type_fuel);
+			send_command_dispatch_pump(message, number_pump, liters_fuel, type_fuel);
 			memset(message, 0, sizeof(message));
-			receive_response_dispache_pump(message, number_pump, type_fuel);
+			if (receive_response_dispatch_pump(message, number_pump, type_fuel) == PUMP_OK) {
+
+			}
 		}
 		break;
 
@@ -817,32 +829,39 @@ static void controller_pump_task(void *argument)
 		case STATE_PUMP: {
 			memset(&status_pump, 0, sizeof(struct status_pump_s));
 			send_command_state_pump(message, number_pump);
-			receive_response_state_pump(message, number_pump, type_fuel);
+			state = receive_response_state_pump(message, number_pump, type_fuel);
+			if (state == PUMP_ERROR || state = PUMP_FINISH_CHARGE) {
+				// Do stop of FreeRTOS timer
+			}
 		}
 		break;
 
 		}
-
 	}
 }
 
 /* ----------------- Implementation public methods ----------------- */
-bool_t module_controller_pump_started(void)
+bool_t module_pump_controller_started(void)
 {
-	  /* Create the queue(s) */
-	  /* creation of controller_pump_queue */
-	  controller_pump_queueHandle = osMessageQueueNew (2, sizeof(uint8_t), &controller_pump_queue_attributes);
+	mutex_new_msg_pump_controller_handle = osMutexNew(&mutex_new_msg_pump_controller_attributes);
+	if (mutex_new_msg_pump_controller_handle == NULL) {
+		return FALSE;
+	}
 
-	  if (controller_pump_queueHandle == NULL) {
-		  return FALSE;
-	  }
+	/* Create the queue(s) */
+	/* creation of controller_pump_queue */
+	controller_pump_queueHandle = osMessageQueueNew (2, sizeof(uint8_t), &controller_pump_queue_attributes);
 
-	  /* creation of Controller_pump */
-	  Controller_pumpHandle = osThreadNew(controller_pump_task, NULL, &Controller_pump_attributes);
+	if (controller_pump_queueHandle == NULL) {
+		return FALSE;
+	}
 
-	  if (Controller_pumpHandle == NULL) {
-		  return FALSE;
-	  }
+	/* creation of Controller_pump */
+	Controller_pumpHandle = osThreadNew(pump_controller_task, NULL, &Controller_pump_attributes);
 
-	  return TRUE;
+	if (Controller_pumpHandle == NULL) {
+		return FALSE;
+	}
+
+	return TRUE;
 }

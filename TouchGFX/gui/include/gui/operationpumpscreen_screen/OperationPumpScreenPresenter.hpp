@@ -29,6 +29,21 @@ public:
 
     uint8_t *get_liters_to_dispahe();
 
+    /**
+     * @brief Sent command to dispache fuel.
+     *
+     * @param[in]	pump Pump number used.
+     * @param[in]	type Type fuel used.
+     */
+    void dispatch_fuel_action(uint8_t *pump, uint8_t *type);
+
+    /**
+     * @brief Sent command to stop dispatch.
+     *
+     * @param[in]	pump Pump number to stop.
+     */
+    void stop_dispatch_action(uint8_t *pump);
+
 private:
     OperationPumpScreenPresenter();
 

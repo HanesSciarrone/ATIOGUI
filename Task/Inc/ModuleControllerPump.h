@@ -37,7 +37,6 @@ typedef enum {
  *
  * @return Return 1 if operation was success or 0 in ohrerwise.
  */
-bool_t module_controller_pump_started(void);
-
+bool_t module_pump_controller_started(void);
 
 #endif /* INC_MODULECONTROLLERPUMP_H_ */

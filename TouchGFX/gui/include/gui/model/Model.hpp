@@ -44,6 +44,13 @@ public:
     void sent_credential_to_IoT(uint8_t *buffer, uint16_t length);
 
     /**
+     * @brief Get user id used to operation.
+     *
+     * @return Pointer with user id.
+     */
+    uint8_t *get_user_id(void);
+
+    /**
      * @brief Getting liters available of back end.
      *
      * @return Return liters available.
@@ -76,6 +83,21 @@ public:
      * @brief Activa reader card NFC.
      */
     void active_reader(void);
+
+    /**
+     * @brief Sent command to dispache fuel.
+     *
+     * @param[in]	pump Pump number.
+     * @param[in]	type Type fuel used.
+     */
+    void dispatch_fuel_action(uint8_t *pump, uint8_t * type);
+
+    /**
+     * @brief Sent command to stop dispatch.
+     *
+     * @param[in]	pump Pump number to stop.
+     */
+    void stop_dispatch_action(uint8_t *pump);
 
     void tick();
 protected:
