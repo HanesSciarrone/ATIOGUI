@@ -101,6 +101,7 @@ const osThreadAttr_t TouchGFXTask_attributes = {
   .priority = (osPriority_t) osPriorityNormal,
   .stack_size = 2048 * 4
 };
+
 /* USER CODE BEGIN PV */
 /* USER CODE END PV */
 
@@ -212,8 +213,7 @@ int main(void)
   TouchGFXTaskHandle = osThreadNew(TouchGFX_Task, NULL, &TouchGFXTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
-  if (module_wifi_started() == FALSE)
-  {
+  if (module_wifi_started() == FALSE) {
 	  Error_Handler();
   }
 

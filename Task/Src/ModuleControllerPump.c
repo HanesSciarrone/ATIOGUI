@@ -52,12 +52,20 @@ const osMutexAttr_t mutex_new_msg_pump_controller_attributes = {
   .cb_size = sizeof(mutex_new_msg_pump_controller_control_block),
 };
 
+/* Definitions for Timer_pump_controller */
+osTimerId_t timer_pump_controllerHandle;
+const osTimerAttr_t timer_pump_controller_attributes = {
+  .name = "Timer_pump_controller"
+};
+
 uint8_t number_pump = 0;
 uint8_t liters_fuel[20];
 enum type_fuel_t type_fuel;
 
 
 /* ------------------- Prototype private methods ------------------- */
+
+static void callback_timer_pump_controller(void *argument);
 
 /**
  * @brief Compare fuel type of message with tipe of fuel used.
@@ -182,6 +190,13 @@ static void pump_controller_task(void *argument);
 
 
 /* ----------------- Implementation private methods ---------------- */
+/* callback_timer_pump_controller function */
+void callback_timer_pump_controller(void *argument)
+{
+
+	osMessageQueuePut(controller_pump_queueHandle, msg_ptr, 0L, );
+}
+
 static bool validate_type_fuel(uint8_t *string, enum type_fuel_t type) {
 	switch(type) {
 	case REGULAR: {
@@ -863,7 +878,7 @@ static void pump_controller_task(void *argument)
 			send_command_dispatch_pump(message, number_pump, liters_fuel, type_fuel);
 			memset(message, 0, sizeof(message));
 			if (receive_response_dispatch_pump(message, number_pump, type_fuel) == PUMP_OK) {
-				// Show message of success
+				osTimerStart(timer_pump_controllerHandle, 200U);
 			}
 			else {
 				// show message of fail
@@ -875,6 +890,7 @@ static void pump_controller_task(void *argument)
 			send_command_stop_pump(message, number_pump);
 			memset(message, 0, sizeof(message));
 			if (receive_response_stop_pump(message, number_pump) == PUMP_OK) {
+				osTimerStop(timer_pump_controllerHandle);
 				// Show message of succes
 			}
 			else {
@@ -888,7 +904,7 @@ static void pump_controller_task(void *argument)
 			send_command_state_pump(message, number_pump);
 			state = receive_response_state_pump(message, number_pump, type_fuel);
 			if (state == PUMP_ERROR || state == PUMP_FINISH_CHARGE) {
-				// Do stop of FreeRTOS timer
+				osTimerStop(timer_pump_controllerHandle);
 			}
 			else {
 				// Update GUI
@@ -905,6 +921,14 @@ bool_t module_pump_controller_started(void)
 {
 	mutex_new_msg_pump_controller_handle = osMutexNew(&mutex_new_msg_pump_controller_attributes);
 	if (mutex_new_msg_pump_controller_handle == NULL) {
+		return FALSE;
+	}
+
+	/* Create the timer(s) */
+	/* creation of Timer_pump_controller */
+	timer_pump_controllerHandle = osTimerNew(callback_timer_pump_controller, osTimerPeriodic, NULL, &timer_pump_controller_attributes);
+
+	if (timer_pump_controllerHandle == NULL) {
 		return FALSE;
 	}
 
