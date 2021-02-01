@@ -11,12 +11,14 @@
 #include "cmsis_os.h"
 
 #include "main.h"
+#include "UART.h"
 #include "Build_XML.h"
 #include "XML_Parser.h"
 #include "Library.h"
 #include "ModuleControllerPump.h"
 
 #define SIZE_MAX_BUFFER_COMMAND			1024
+#define TIMEOUT_RESPONSE				1000
 
 struct status_pump_s {
 	uint8_t fuel_tank[30];
@@ -134,16 +136,20 @@ static state_pump_t receive_response_start_pump(uint8_t *message, uint8_t pump);
  *
  * @param[in]	message		Buffer where message will be build.
  * @param[in]	pump		Number pump to restart.
+ *
+ * @return Return true if was success or false in otherwise.
  */
-static void send_command_state_pump(uint8_t *message, uint8_t pump);
+static bool send_command_state_pump(uint8_t *message, uint8_t pump);
 
 /**
  * @brief Send command to stop pump
  *
  * @param[in]	message		Buffer where message will be build.
  * @param[in]	pump		Number pump to restart.
+ *
+ * @return Return true if was success or false in otherwise.
  */
-static void send_command_stop_pump(uint8_t *message, uint8_t pump);
+static bool send_command_stop_pump(uint8_t *message, uint8_t pump);
 
 /**
  * @brief Send command to dispache fuel with pump
@@ -152,16 +158,20 @@ static void send_command_stop_pump(uint8_t *message, uint8_t pump);
  * @param[in]	pump		Number pump to restart.
  * @param[in]	liters		Liters to charge.
  * @param[in]	type_fuel	Type fuel to use.
+ *
+ * @return Return true if was success or false in otherwise.
  */
-static void send_command_dispatch_pump(uint8_t *message, uint8_t pump, uint8_t *liters, enum type_fuel_t type);
+static bool send_command_dispatch_pump(uint8_t *message, uint8_t pump, uint8_t *liters, enum type_fuel_t type);
 
 /**
  * @brief Send command to restart pump
  *
  * @param[in]	message	Buffer where message will be build.
  * @param[in]	pump	Number pump to restart.
+ *
+ * @return Return true if was success or false in otherwise.
  */
-static void send_command_start_pump(uint8_t *message, uint8_t pump);
+static bool send_command_start_pump(uint8_t *message, uint8_t pump);
 
 /**
  * @brief Callback with functionality of pumps.
@@ -293,6 +303,9 @@ static state_pump_t receive_response_state_pump(uint8_t *message, uint8_t pump, 
 	xml = content_element_root = element = NULL;
 
 	// Function to receive data from UART
+	if (pump_controller_uart_receive(message, SIZE_MAX_BUFFER_COMMAND, TIMEOUT_RESPONSE) == 0) {
+		return PUMP_ERROR;
+	}
 
 	/* Format of XML
 	 *
@@ -370,6 +383,9 @@ static state_pump_t receive_response_stop_pump(uint8_t *message, uint8_t pump)
 	memset(content, 0, sizeof(content));
 
 	// Function to receive data from UART
+	if (pump_controller_uart_receive(message, SIZE_MAX_BUFFER_COMMAND, TIMEOUT_RESPONSE) == 0) {
+		return PUMP_ERROR;
+	}
 
 	/* Format of XML
 	 *
@@ -438,6 +454,9 @@ static state_pump_t receive_response_dispatch_pump(uint8_t *message, uint8_t pum
 	memset(attribute_value, 0, sizeof(attribute_value));
 
 	// Function to receive data from UART
+	if (pump_controller_uart_receive(message, SIZE_MAX_BUFFER_COMMAND, TIMEOUT_RESPONSE) == 0) {
+		return PUMP_ERROR;
+	}
 
 	/* Format of XML
 	 *
@@ -517,6 +536,9 @@ static state_pump_t receive_response_start_pump(uint8_t *message, uint8_t pump)
 	uint8_t *xml, *content_element_root, *element, tag[50], content[50];
 
 	// Function to receive data from UART
+	if (pump_controller_uart_receive(message, SIZE_MAX_BUFFER_COMMAND, TIMEOUT_RESPONSE) == 0) {
+		return PUMP_ERROR;
+	}
 
 	/* Format of XML
 	 *
@@ -571,9 +593,11 @@ static state_pump_t receive_response_start_pump(uint8_t *message, uint8_t pump)
 	return PUMP_ERROR;
 }
 
-static void send_command_state_pump(uint8_t *message, uint8_t pump)
+static bool send_command_state_pump(uint8_t *message, uint8_t pump)
 {
+	bool retVal;
 	uint8_t number[4];
+	uint32_t length;
 	xml_header_t *header;
 	xml_element_t *root, *children_1, *children_2;
 
@@ -610,18 +634,23 @@ static void send_command_state_pump(uint8_t *message, uint8_t pump)
 
 	// Build XML inside string
 	BuildXML_FormatHeader(header, message);
-	BuildXML_Format(root, message);
+	length = BuildXML_Format(root, message);
 
-	// Se envia los datos por UART
+	// Sent XML to pump controller.
+	retVal = pump_controller_uart_sent(message, length);
 
 	// Free memory allocated
 	BuildXML_FreeHeader(header);
 	BuildXML_Free(root);
+
+	return retVal;
 }
 
-static void send_command_stop_pump(uint8_t *message, uint8_t pump)
+static bool send_command_stop_pump(uint8_t *message, uint8_t pump)
 {
+	bool retVal;
 	uint8_t number[4];
+	uint32_t length = 0;
 	xml_header_t *header;
 	xml_element_t *root, *children_1, *children_2;
 
@@ -658,18 +687,23 @@ static void send_command_stop_pump(uint8_t *message, uint8_t pump)
 
 	// Build XML inside string
 	BuildXML_FormatHeader(header, message);
-	BuildXML_Format(root, message);
+	length = BuildXML_Format(root, message);
 
-	// Se envia los datos por UART
+	// Sent XML to pump controller.
+	retVal = pump_controller_uart_sent(message, length);
 
 	// Free memory allocated
 	BuildXML_FreeHeader(header);
 	BuildXML_Free(root);
+
+	return retVal;
 }
 
-static void send_command_dispatch_pump(uint8_t *message, uint8_t pump, uint8_t *liters, enum type_fuel_t type)
+static bool send_command_dispatch_pump(uint8_t *message, uint8_t pump, uint8_t *liters, enum type_fuel_t type)
 {
+	bool retVal;
 	uint8_t number[4];
+	uint32_t length;
 	xml_header_t *header;
 	xml_element_t *root, *children_1, *children_2, *children_3;
 
@@ -733,18 +767,23 @@ static void send_command_dispatch_pump(uint8_t *message, uint8_t pump, uint8_t *
 
 	// Build XML inside string
 	BuildXML_FormatHeader(header, message);
-	BuildXML_Format(root, message);
+	length = BuildXML_Format(root, message);
 
-	// Se envia los datos por UART
+	// Sent XML to pump controller.
+	retVal = pump_controller_uart_sent(message, length);
 
 	// Free memory allocated
 	BuildXML_FreeHeader(header);
 	BuildXML_Free(root);
+
+	return retVal;
 }
 
-static void send_command_start_pump(uint8_t *message, uint8_t pump)
+static bool send_command_start_pump(uint8_t *message, uint8_t pump)
 {
+	bool retVal;
 	uint8_t number[4];
+	uint32_t length = 0;
 	xml_header_t *header;
 	xml_element_t *root, *children_1, *children_2;
 
@@ -781,13 +820,16 @@ static void send_command_start_pump(uint8_t *message, uint8_t pump)
 
 	// Build XML inside string
 	BuildXML_FormatHeader(header, message);
-	BuildXML_Format(root, message);
+	length = BuildXML_Format(root, message);
 
-	// Se envia los datos por UART
+	// Sent XML to pump controller.
+	retVal = pump_controller_uart_sent(message, length);
 
 	// Free memory allocated
 	BuildXML_FreeHeader(header);
 	BuildXML_Free(root);
+
+	return retVal;
 }
 
 static void pump_controller_task(void *argument)
@@ -807,7 +849,13 @@ static void pump_controller_task(void *argument)
 		case RESTART_PUMP: {
 			send_command_start_pump(message, number_pump);
 			memset(message, 0, sizeof(message));
-			receive_response_start_pump(message, number_pump);
+			if (receive_response_start_pump(message, number_pump) == PUMP_OK) {
+				// Show message of success
+			}
+			else {
+				// show message of fail
+			}
+
 		}
 		break;
 
@@ -815,14 +863,23 @@ static void pump_controller_task(void *argument)
 			send_command_dispatch_pump(message, number_pump, liters_fuel, type_fuel);
 			memset(message, 0, sizeof(message));
 			if (receive_response_dispatch_pump(message, number_pump, type_fuel) == PUMP_OK) {
-
+				// Show message of success
+			}
+			else {
+				// show message of fail
 			}
 		}
 		break;
 
 		case STOP_PUMP: {
 			send_command_stop_pump(message, number_pump);
-			receive_response_stop_pump(message, number_pump);
+			memset(message, 0, sizeof(message));
+			if (receive_response_stop_pump(message, number_pump) == PUMP_OK) {
+				// Show message of succes
+			}
+			else {
+				// Show message of fail
+			}
 		}
 		break;
 
@@ -830,8 +887,11 @@ static void pump_controller_task(void *argument)
 			memset(&status_pump, 0, sizeof(struct status_pump_s));
 			send_command_state_pump(message, number_pump);
 			state = receive_response_state_pump(message, number_pump, type_fuel);
-			if (state == PUMP_ERROR || state = PUMP_FINISH_CHARGE) {
+			if (state == PUMP_ERROR || state == PUMP_FINISH_CHARGE) {
 				// Do stop of FreeRTOS timer
+			}
+			else {
+				// Update GUI
 			}
 		}
 		break;

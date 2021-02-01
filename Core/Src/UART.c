@@ -131,6 +131,24 @@ int8_t wifi_uart_sent(const uint8_t* data, uint32_t length)
 	return 0;
 }
 
+bool pump_controller_uart_sent(const uint8_t* data, uint32_t length)
+{
+	buffer_pump_controller.index = 0;
+	buffer_pump_controller.position = 0;
+	memset(buffer_pump_controller.data, 0, PUMP_CONTROLLER_BUFFER_SIZE);
+
+#ifdef UART_RTOS
+	if (HAL_UART_Transmit_IT(uart_pump_controller, (uint8_t*)data, length) != HAL_OK) {
+		return false;
+	}
+#else
+	if (HAL_UART_Transmit(uart_pump_controller, (uint8_t*)data, length, DEFAULT_TIME_OUT) != HAL_OK) {
+		return false;
+	}
+#endif
+	return true;
+}
+
 int32_t wifi_uart_receive(uint8_t* buffer, uint32_t length, uint32_t timeout)
 {
 	uint32_t readData = 0;
@@ -183,6 +201,58 @@ int32_t wifi_uart_receive(uint8_t* buffer, uint32_t length, uint32_t timeout)
 	return readData;
 }
 
+int32_t pump_controller_uart_receive(uint8_t* buffer, uint32_t length, uint32_t timeout)
+{
+	uint32_t read_data = 0;
+
+	/* Loop until data received */
+	#ifdef UART_RTOS
+	osStatus_t status;
+
+	while (length--) {
+		status = osSemaphoreAcquire(pump_controller_sem_reception_data_handle, timeout/portTICK_PERIOD_MS);
+		if (status != osOK ) {
+			break;
+		}
+
+		if(buffer_pump_controller.position != buffer_pump_controller.index) {
+			/* serial data available, so return data to user */
+			*buffer++ = buffer_pump_controller.data[buffer_pump_controller.position++];
+			read_data++;
+
+			/* check for ring buffer wrap */
+			if (buffer_pump_controller.position >= PUMP_CONTROLLER_BUFFER_SIZE) {
+				/* Ring buffer wrap, so reset head pointer to start of buffer */
+				buffer_pump_controller.position = 0;
+			}
+		}
+	}
+#else
+	uint32_t tickStart;
+
+	while (length--) {
+		tickStart = HAL_GetTick();
+		do {
+			if(buffer_pump_controller.position != buffer_pump_controller.index) {
+				/* serial data available, so return data to user */
+				*buffer++ = buffer_pump_controller.data[buffer_pump_controller.position++];
+				read_data++;
+
+				/* check for ring buffer wrap */
+				if (buffer_pump_controller.position >= PUMP_CONTROLLER_BUFFER_SIZE) {
+					/* Ring buffer wrap, so reset head pointer to start of buffer */
+					buffer_pump_controller.position = 0;
+				}
+				break;
+			}
+		} while((HAL_GetTick() - tickStart ) < DEFAULT_TIME_OUT);
+	}
+	#endif
+
+
+	return read_data;
+}
+
 /**
   * @brief  Rx Callback when new data is received on the UART.
   * @param  UartHandle: Uart handle receiving the data.
@@ -204,6 +274,20 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *uartHandle)
 		 */
 #ifdef UART_RTOS
 		osSemaphoreRelease(wifi_sem_reception_data_handle);
+#endif
+	}
+	else if (uartHandle == uart_pump_controller) {
+		if(++buffer_pump_controller.index >= PUMP_CONTROLLER_BUFFER_SIZE) {
+			buffer_pump_controller.index = 0;
+		}
+
+		HAL_UART_Receive_IT(uartHandle, (uint8_t *)&buffer_pump_controller.data[buffer_pump_controller.index], 1);
+
+		/* Internally this function call xSemaphoreGiveFromISR if
+		 * function is calling inside of interruption.
+		 */
+#ifdef UART_RTOS
+		osSemaphoreRelease(pump_controller_sem_reception_data_handle);
 #endif
 	}
 }

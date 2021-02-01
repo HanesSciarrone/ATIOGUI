@@ -59,6 +59,16 @@ bool pump_controller_uart_operation_init(void);
 int8_t wifi_uart_sent(const uint8_t* data, uint32_t length);
 
 /**
+  * @brief  Send Data to the pump controller over the UART interface.
+  *
+  * @param[in]	data 	Data that you would like to sent.
+  * @param[in]	length	Length of data at sent
+  *
+  * @return Return true if operation was success or false in otherwise.
+  */
+bool pump_controller_uart_sent(const uint8_t* data, uint32_t length);
+
+/**
   * @brief  Receive Data from the Wi-Fi module over the UART interface.
   *
   * @param[in,out]  buffer 	Buffer used to storage data read.
@@ -68,5 +78,16 @@ int8_t wifi_uart_sent(const uint8_t* data, uint32_t length);
   * @return The actual data size that has been received.
   */
 int32_t wifi_uart_receive(uint8_t* buffer, uint32_t length, uint32_t timeout);
+
+/**
+  * @brief  Receive Data from the pump controller over the UART interface.
+  *
+  * @param[in,out]  buffer 	Buffer used to storage data read.
+  * @param[in]  	length 	Maximum size of the data to receive.
+  * @param[in]		timeout	Timeout until function return.
+  *
+  * @return The actual data size that has been received.
+  */
+int32_t pump_controller_uart_receive(uint8_t* buffer, uint32_t length, uint32_t timeout);
 
 #endif /* INC_UART_H_ */
