@@ -72,16 +72,39 @@ void OperationPumpScreenView::set_pump_selected(int value)
 
 void OperationPumpScreenView::select_types_fuel()
 {
-	if (checkbox_regular.getSelected()) {
-		strcpy((char *)type_fuel, "Regular");
-	}
-	else if (checkbox_premium.getSelected()) {
-		strcpy((char *)type_fuel, "Premium");
-	}
-	else if (checkbox_regular_diesel.getSelected()) {
-		strcpy((char *)type_fuel, "Regular diesel");
-	}
-	else if (checkbox_premium_diesel.getSelected()) {
-		strcpy((char *)type_fuel, "Premium diesel");
+	if (selector_enable) {
+		if (checkbox_regular.getSelected()) {
+			strcpy((char *)type_fuel, "Regular");
+		}
+		else if (checkbox_premium.getSelected()) {
+			strcpy((char *)type_fuel, "Premium");
+		}
+		else if (checkbox_regular_diesel.getSelected()) {
+			strcpy((char *)type_fuel, "Regular diesel");
+		}
+		else if (checkbox_premium_diesel.getSelected()) {
+			strcpy((char *)type_fuel, "Premium diesel");
+		}
 	}
 }
+
+void OperationPumpScreenView::show_mesage_pump_controller(uint8_t *message)
+{
+	popup.setVisible(true);
+	Unicode::fromUTF8(message, lbl_popupBuffer, LBL_POPUP_SIZE);
+	lbl_popup.resizeToCurrentText();
+	lbl_popup.invalidate();
+	popup.invalidate();
+}
+
+void OperationPumpScreenView::update_state_pump_controller(uint8_t *fuel_dispensed)
+{
+	int porcent = 0;
+
+	Unicode::fromUTF8(fuel_dispensed, lbl_titleBuffer, LBL_TITLE_SIZE);
+	porcent = (100.0*atof((char *)fuel_dispensed))/(this->dispache_liters);
+	status_operation.setValue(porcent);
+	lbl_title.invalidate();
+	status_operation.invalidate();
+}
+

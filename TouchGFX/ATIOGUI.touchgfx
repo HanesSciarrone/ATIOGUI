@@ -3117,7 +3117,7 @@
             "ProgressRangeStepsMin": 0,
             "ProgressInitialValue": 0,
             "Name": "status_operation",
-            "X": 400,
+            "X": 348,
             "Y": 342,
             "Width": 104,
             "Height": 104,
@@ -3174,7 +3174,7 @@
               "BufferSize": 20
             },
             "Name": "lbl_title",
-            "X": 528,
+            "X": 464,
             "Y": 374,
             "Width": 212,
             "Height": 40,
@@ -3413,6 +3413,90 @@
             "Clickable": false,
             "Fadeable": false,
             "Moveable": false
+          },
+          {
+            "Components": [
+              {
+                "TextId": "SingleUseId81",
+                "TextRotation": "0",
+                "Color": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "Alpha": 255,
+                "AutoSize": true,
+                "LineSpacing": 0,
+                "Wildcard1": {
+                  "UseBuffer": true,
+                  "BufferSize": 100
+                },
+                "Name": "lbl_popup",
+                "X": 23,
+                "Y": 95,
+                "Width": 0,
+                "Height": 40,
+                "Type": "TextArea",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
+              {
+                "Pressed": "__designer\\Blue_Buttons_Round_Edge_small_pressed.png",
+                "Released": "__designer\\Blue_Buttons_Round_Edge_small.png",
+                "Alpha": 255,
+                "TextId": "SingleUseId83",
+                "ReleasedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "PressedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "TextRotation": "0",
+                "Style": "Style4",
+                "Name": "btn_popup",
+                "X": 314,
+                "Y": 201,
+                "Width": 170,
+                "Height": 60,
+                "Type": "ButtonWithLabel",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              }
+            ],
+            "FileName": "Background_qwerty.png",
+            "Color": {
+              "Red": 0,
+              "Green": 0,
+              "Blue": 0
+            },
+            "ModalX": 150,
+            "ModalY": 105,
+            "ModalWidth": 500,
+            "ModalHeight": 270,
+            "ContX": 0,
+            "ContY": 0,
+            "Alpha": 255,
+            "Name": "popup",
+            "X": 0,
+            "Y": 0,
+            "Width": 800,
+            "Height": 480,
+            "Type": "ModalWindow",
+            "Visible": false,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
           }
         ],
         "Interactions": [
@@ -3522,6 +3606,18 @@
             "Action": {
               "FunctionName": "Cancel_sale",
               "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "Hide_popup",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "btn_popup",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "ActionComponent": "popup",
+              "Type": "ActionHide"
             }
           }
         ],
@@ -4525,6 +4621,14 @@
       },
       {
         "TextEntryId": "SingleUseId70",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId81",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId83",
         "IsResource": false
       }
     ],

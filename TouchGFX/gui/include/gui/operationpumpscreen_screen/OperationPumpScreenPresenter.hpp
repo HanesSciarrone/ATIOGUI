@@ -44,6 +44,20 @@ public:
      */
     void stop_dispatch_action(uint8_t *pump);
 
+    /**
+     * @brief Show message from pump controller.
+     *
+     * @param[in]	message	Message to show.
+     */
+    void show_mesage_pump_controller(uint8_t *message);
+
+    /**
+     * @brief Show state pump updated.
+     *
+     * @param[in]	fuel_dispensed	Fuel charged on card.
+     */
+    void update_state_pump_controller(uint8_t *fuel_dispensed);
+
 private:
     OperationPumpScreenPresenter();
 

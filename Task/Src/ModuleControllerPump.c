@@ -35,7 +35,7 @@ osThreadId_t Controller_pumpHandle;
 const osThreadAttr_t Controller_pump_attributes = {
   .name = "Controller_pump",
   .priority = (osPriority_t) osPriorityNormal3,
-  .stack_size = 1024 * 4
+  .stack_size = 2048 * 4
 };
 /* Definitions for controller_pump_queue */
 osMessageQueueId_t controller_pump_queueHandle;
@@ -58,13 +58,23 @@ const osTimerAttr_t timer_pump_controller_attributes = {
   .name = "Timer_pump_controller"
 };
 
-uint8_t number_pump = 0;
-uint8_t liters_fuel[20];
-enum type_fuel_t type_fuel;
+// Variable of GUI
+extern uint8_t message_pump_controller[100];
+extern uint8_t liters_dispensed[20];
+extern osMessageQueueId_t	queue_NewMsg_GUI;
+
+// Variable of pump controller service
+uint8_t number_pump = 0;					// Pump number selected for user.
+uint8_t liters_fuel[20];					// Liters will be dispatch.
+enum type_fuel_t type_fuel;					// Type fuel selected for usar
 
 
 /* ------------------- Prototype private methods ------------------- */
 
+/**
+ * @brief Callback used for timer pump controller. Timer is used to
+ * update gui about state pump.
+ */
 static void callback_timer_pump_controller(void *argument);
 
 /**
@@ -193,8 +203,9 @@ static void pump_controller_task(void *argument);
 /* callback_timer_pump_controller function */
 void callback_timer_pump_controller(void *argument)
 {
+	uint8_t msg = STATE_PUMP;
 
-	osMessageQueuePut(controller_pump_queueHandle, msg_ptr, 0L, );
+	osMessageQueuePut(controller_pump_queueHandle, &msg, 0, 0);
 }
 
 static bool validate_type_fuel(uint8_t *string, enum type_fuel_t type) {
@@ -855,7 +866,7 @@ static void pump_controller_task(void *argument)
 
 	for(;;) {
 
-		osMessageQueueGet(controller_pump_queueHandle, &msg, 0L, osWaitForever);
+		osMessageQueueGet(controller_pump_queueHandle, &msg, 0, osWaitForever);
 
 		memset(message, 0, sizeof(message));
 
@@ -865,10 +876,17 @@ static void pump_controller_task(void *argument)
 			send_command_start_pump(message, number_pump);
 			memset(message, 0, sizeof(message));
 			if (receive_response_start_pump(message, number_pump) == PUMP_OK) {
-				// Show message of success
+				osTimerStop(timer_pump_controllerHandle);
+				msg = 5;
+				memset(message_pump_controller, 0, sizeof(message_pump_controller));
+				strncpy((char *)message_pump_controller, "Pump restarted successfully", sizeof(message_pump_controller)-1);
+				osMessageQueuePut(queue_NewMsg_GUI, &msg, 0, osWaitForever);
 			}
 			else {
-				// show message of fail
+				msg = 5;
+				memset(message_pump_controller, 0, sizeof(message_pump_controller));
+				strncpy((char *)message_pump_controller, "There was problem with pump", sizeof(message_pump_controller)-1);
+				osMessageQueuePut(queue_NewMsg_GUI, &msg, 0, osWaitForever);
 			}
 
 		}
@@ -878,10 +896,17 @@ static void pump_controller_task(void *argument)
 			send_command_dispatch_pump(message, number_pump, liters_fuel, type_fuel);
 			memset(message, 0, sizeof(message));
 			if (receive_response_dispatch_pump(message, number_pump, type_fuel) == PUMP_OK) {
-				osTimerStart(timer_pump_controllerHandle, 200U);
+				osTimerStart(timer_pump_controllerHandle, pdMS_TO_TICKS(2000));
+				msg = 5;
+				memset(message_pump_controller, 0, sizeof(message_pump_controller));
+				strncpy((char *)message_pump_controller, "Pump is dispatching", sizeof(message_pump_controller)-1);
+				osMessageQueuePut(queue_NewMsg_GUI, &msg, 0, osWaitForever);
 			}
 			else {
-				// show message of fail
+				msg = 5;
+				memset(message_pump_controller, 0, sizeof(message_pump_controller));
+				strncpy((char *)message_pump_controller, "There was problem with pump", sizeof(message_pump_controller)-1);
+				osMessageQueuePut(queue_NewMsg_GUI, &msg, 0, osWaitForever);
 			}
 		}
 		break;
@@ -891,10 +916,21 @@ static void pump_controller_task(void *argument)
 			memset(message, 0, sizeof(message));
 			if (receive_response_stop_pump(message, number_pump) == PUMP_OK) {
 				osTimerStop(timer_pump_controllerHandle);
-				// Show message of succes
+				msg = 5;
+				memset(message_pump_controller, 0, sizeof(message_pump_controller));
+				strncpy((char *)message_pump_controller, "Pump stopped", sizeof(message_pump_controller)-1);
+				osMessageQueuePut(queue_NewMsg_GUI, &msg, 0, osWaitForever);
+				// Clean message of queue
+				osMessageQueueReset(controller_pump_queueHandle);
+				// Send message to ask state pump and update gui
+				msg = STATE_PUMP;
+				osMessageQueuePut(controller_pump_queueHandle, &msg, 0, 0L);
 			}
 			else {
-				// Show message of fail
+				msg = 5;
+				memset(message_pump_controller, 0, sizeof(message_pump_controller));
+				strncpy((char *)message_pump_controller, "There was problem with pump", sizeof(message_pump_controller)-1);
+				osMessageQueuePut(queue_NewMsg_GUI, &msg, 0, osWaitForever);
 			}
 		}
 		break;
@@ -906,9 +942,10 @@ static void pump_controller_task(void *argument)
 			if (state == PUMP_ERROR || state == PUMP_FINISH_CHARGE) {
 				osTimerStop(timer_pump_controllerHandle);
 			}
-			else {
-				// Update GUI
-			}
+
+			msg = 6;
+			strncpy((char *)liters_dispensed, (char *)status_pump.fuel_filled, sizeof(liters_dispensed));
+			osMessageQueuePut(queue_NewMsg_GUI, &msg, 0, osWaitForever);
 		}
 		break;
 

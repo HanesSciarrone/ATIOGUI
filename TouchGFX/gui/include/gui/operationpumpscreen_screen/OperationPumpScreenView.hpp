@@ -18,6 +18,8 @@ public:
     void stop_dispache_action();
     void set_pump_selected(int value);
     void select_types_fuel();
+    void show_mesage_pump_controller(uint8_t *message);
+    void update_state_pump_controller(uint8_t *fuel_dispensed);
 
 protected:
 

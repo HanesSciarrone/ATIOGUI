@@ -16,6 +16,8 @@
 #include <touchgfx/containers/Slider.hpp>
 #include <touchgfx/widgets/RadioButton.hpp>
 #include <touchgfx/widgets/TextArea.hpp>
+#include <touchgfx/containers/ModalWindow.hpp>
+#include <touchgfx/Color.hpp>
 #include <touchgfx/widgets/RadioButtonGroup.hpp>
 
 class OperationPumpScreenViewBase : public touchgfx::View<OperationPumpScreenPresenter>
@@ -86,6 +88,9 @@ protected:
     touchgfx::TextArea lbl_title_premium;
     touchgfx::TextArea lbl_title_regular_diesel;
     touchgfx::TextArea lbl_title_premium_diesel;
+    touchgfx::ModalWindow popup;
+    touchgfx::TextAreaWithOneWildcard lbl_popup;
+    touchgfx::ButtonWithLabel btn_popup;
     touchgfx::RadioButtonGroup<4> radioButtonGroup1;
 
     /*
@@ -95,6 +100,8 @@ protected:
     touchgfx::Unicode::UnicodeChar lbl_titleBuffer[LBL_TITLE_SIZE];
     static const uint16_t LBL_TITLE_PUMP_SELECTED_SIZE = 4;
     touchgfx::Unicode::UnicodeChar lbl_title_pump_selectedBuffer[LBL_TITLE_PUMP_SELECTED_SIZE];
+    static const uint16_t LBL_POPUP_SIZE = 100;
+    touchgfx::Unicode::UnicodeChar lbl_popupBuffer[LBL_POPUP_SIZE];
 
 private:
 

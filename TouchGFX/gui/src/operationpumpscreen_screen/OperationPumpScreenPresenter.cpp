@@ -31,3 +31,13 @@ void OperationPumpScreenPresenter::stop_dispatch_action(uint8_t *pump)
 {
 	model->stop_dispatch_action(pump);
 }
+
+void OperationPumpScreenPresenter::show_mesage_pump_controller(uint8_t *message)
+{
+	view.show_mesage_pump_controller(message);
+}
+
+void OperationPumpScreenPresenter::update_state_pump_controller(uint8_t *fuel_dispensed)
+{
+	view.update_state_pump_controller(fuel_dispensed);
+}

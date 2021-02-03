@@ -15,7 +15,7 @@
 #define SIZE_BUFFER_LITERS	20
 #define BUFFER_SIZE_USER_ID	20
 
-// Variable used for Wifi module
+// Variable used of Wifi module task
 extern osMessageQueueId_t queue_wifi_operation_handle;
 extern osMutexId_t mutex_new_msg_wifi_handle;
 extern WifiMessage_t wifiParameters;
@@ -26,11 +26,11 @@ extern uint8_t	client_id[BUFFER_SIZE_TOPIC];
 extern uint8_t publish_topic[BUFFER_SIZE_TOPIC];
 extern uint8_t suscribe_topic[BUFFER_SIZE_TOPIC];
 
-//Variable used for NFC reader
+//Variable used of NFC reader task
 extern osSemaphoreId_t semaphore_new_msg_nfc;
 extern uint8_t user_id[BUFFER_SIZE_USER_ID], length_id;
 
-// Variable used for pump controller
+// Variable of pump controller task
 extern osMutexId_t mutex_new_msg_pump_controller_handle;
 extern osMessageQueueId_t controller_pump_queueHandle;
 extern uint8_t number_pump;
@@ -43,9 +43,11 @@ const osMessageQueueAttr_t queue_GUI_attributes = {
   .name = "wifiqueue_operation"
 };
 
-static gui_network_t list_network;
+static gui_network_t list_network;					/// List network detected
 static float liters_available;						/// Liters available for user ID
 static uint8_t liters_dispache[SIZE_BUFFER_LITERS];	/// Liters to dispache entried for user.
+uint8_t liters_dispensed[20];		/// Liters dispensed currently
+uint8_t message_pump_controller[100];				/// Message send from pump controller, size is equal of label text buffer on GUI
 
 Model::Model() : modelListener(0)
 {
@@ -104,8 +106,21 @@ void Model::tick()
 			}
 			break;
 
+			// Show credential on GUI.
 			case 4: {
 				modelListener->getting_data_read_card(user_id, length_id);
+			}
+			break;
+
+			// Show message of pump controller
+			case 5: {
+				modelListener->show_mesage_pump_controller(message_pump_controller);
+			}
+			break;
+
+			// Update operation pump GUI
+			case 6: {
+				modelListener->update_state_pump_controller(liters_dispensed);
 			}
 			break;
 		}

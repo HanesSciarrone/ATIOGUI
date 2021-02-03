@@ -101,7 +101,6 @@ const osThreadAttr_t TouchGFXTask_attributes = {
   .priority = (osPriority_t) osPriorityNormal,
   .stack_size = 2048 * 4
 };
-
 /* USER CODE BEGIN PV */
 /* USER CODE END PV */
 

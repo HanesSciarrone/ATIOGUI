@@ -45,7 +45,7 @@ OperationPumpScreenViewBase::OperationPumpScreenViewBase() :
     btn_cancel.setLabelColorPressed(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     btn_cancel.setAction(buttonCallback);
 
-    status_operation.setXY(400, 342);
+    status_operation.setXY(348, 342);
     status_operation.setProgressIndicatorPosition(0, 0, 104, 104);
     status_operation.setRange(0, 100);
     status_operation.setCenter(52, 52);
@@ -64,7 +64,7 @@ OperationPumpScreenViewBase::OperationPumpScreenViewBase() :
     btn_pay_sale.setLabelColorPressed(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     btn_pay_sale.setAction(buttonCallback);
 
-    lbl_title.setXY(528, 374);
+    lbl_title.setXY(464, 374);
     lbl_title.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     lbl_title.setLinespacing(0);
     Unicode::snprintf(lbl_titleBuffer, LBL_TITLE_SIZE, "%s", touchgfx::TypedText(T_SINGLEUSEID73).getText());
@@ -127,6 +127,27 @@ OperationPumpScreenViewBase::OperationPumpScreenViewBase() :
     lbl_title_premium_diesel.setLinespacing(0);
     lbl_title_premium_diesel.setTypedText(touchgfx::TypedText(T_SINGLEUSEID79));
 
+    popup.setBackground(touchgfx::BitmapId(BITMAP_BACKGROUND_QWERTY_ID), 150, 105);
+    popup.setShadeColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    popup.hide();
+
+    lbl_popup.setXY(23, 95);
+    lbl_popup.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    lbl_popup.setLinespacing(0);
+    lbl_popupBuffer[0] = 0;
+    lbl_popup.setWildcard(lbl_popupBuffer);
+    lbl_popup.resizeToCurrentText();
+    lbl_popup.setTypedText(touchgfx::TypedText(T_SINGLEUSEID81));
+    popup.add(lbl_popup);
+
+    btn_popup.setXY(314, 201);
+    btn_popup.setBitmaps(touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_ID), touchgfx::Bitmap(BITMAP_BLUE_BUTTONS_ROUND_EDGE_SMALL_PRESSED_ID));
+    btn_popup.setLabelText(touchgfx::TypedText(T_SINGLEUSEID83));
+    btn_popup.setLabelColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    btn_popup.setLabelColorPressed(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
+    btn_popup.setAction(buttonCallback);
+    popup.add(btn_popup);
+
     add(background);
     add(toolbar);
     add(logo);
@@ -146,6 +167,7 @@ OperationPumpScreenViewBase::OperationPumpScreenViewBase() :
     add(lbl_title_premium);
     add(lbl_title_regular_diesel);
     add(lbl_title_premium_diesel);
+    add(popup);
     radioButtonGroup1.add(checkbox_regular);
     radioButtonGroup1.add(checkbox_premium);
     radioButtonGroup1.add(checkbox_regular_diesel);
@@ -187,6 +209,14 @@ void OperationPumpScreenViewBase::buttonCallbackHandler(const touchgfx::Abstract
         //When btn_pay_sale clicked call virtual function
         //Call pay_sale_action
         pay_sale_action();
+    }
+    else if (&src == &btn_popup)
+    {
+        //Hide_popup
+        //When btn_popup clicked hide popup
+        //Hide popup
+        popup.setVisible(false);
+        popup.invalidate();
     }
 }
 

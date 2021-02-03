@@ -99,7 +99,7 @@ bool pump_controller_uart_operation_init(void)
 {
 #ifdef UART_RTOS
 	/* Semaphore counting initialize blocked because second parameter is 0 */
-	pump_controller_sem_reception_data_handle = osSemaphoreNew(2048, 0, &pump_controller_sem_reception_data_attributes);
+	pump_controller_sem_reception_data_handle = osSemaphoreNew(1024, 0, &pump_controller_sem_reception_data_attributes);
 
 	if (pump_controller_sem_reception_data_handle == NULL) {
 		return false;
