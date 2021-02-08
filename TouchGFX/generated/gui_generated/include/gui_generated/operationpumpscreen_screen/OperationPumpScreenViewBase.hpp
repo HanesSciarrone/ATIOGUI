@@ -55,7 +55,7 @@ public:
         // Override and implement this function in OperationPumpScreen
     }
 
-    virtual void Cancel_sale()
+    virtual void cancel_sale_action()
     {
         // Override and implement this function in OperationPumpScreen
     }

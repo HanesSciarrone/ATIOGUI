@@ -36,7 +36,7 @@ InputSaleScreenViewBase::InputSaleScreenViewBase() :
     button_cancel_operation.setLabelColorPressed(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     button_cancel_operation.setAction(buttonCallback);
 
-    label_title.setXY(76, 154);
+    label_title.setXY(17, 154);
     label_title.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     label_title.setLinespacing(0);
     Unicode::snprintf(label_titleBuffer, LABEL_TITLE_SIZE, "%s", touchgfx::TypedText(T_SINGLEUSEID33).getText());

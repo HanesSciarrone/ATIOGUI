@@ -1972,7 +1972,7 @@
               "BufferSize": 20
             },
             "Name": "label_title",
-            "X": 76,
+            "X": 17,
             "Y": 154,
             "Width": 380,
             "Height": 40,
@@ -3597,14 +3597,14 @@
             }
           },
           {
-            "InteractionName": "cancel_sale_action",
+            "InteractionName": "Cancel_sale",
             "HasCompletedTrigger": false,
             "Trigger": {
               "TriggerComponent": "btn_cancel",
               "Type": "TriggerClicked"
             },
             "Action": {
-              "FunctionName": "Cancel_sale",
+              "FunctionName": "cancel_sale_action",
               "Type": "ActionCustom"
             }
           },

@@ -22,7 +22,7 @@ extern WifiMessage_t wifiParameters;
 extern uint32_t keep_alive_connection;
 extern uint8_t version_mqtt;
 extern uint8_t qos_mqtt;
-extern uint8_t	client_id[BUFFER_SIZE_TOPIC];
+extern uint8_t client_id[BUFFER_SIZE_TOPIC];
 extern uint8_t publish_topic[BUFFER_SIZE_TOPIC];
 extern uint8_t suscribe_topic[BUFFER_SIZE_TOPIC];
 
@@ -46,7 +46,7 @@ const osMessageQueueAttr_t queue_GUI_attributes = {
 static gui_network_t list_network;					/// List network detected
 static float liters_available;						/// Liters available for user ID
 static uint8_t liters_dispache[SIZE_BUFFER_LITERS];	/// Liters to dispache entried for user.
-uint8_t liters_dispensed[20];		/// Liters dispensed currently
+uint8_t liters_dispensed[20];						/// Liters dispensed currently
 uint8_t message_pump_controller[100];				/// Message send from pump controller, size is equal of label text buffer on GUI
 
 Model::Model() : modelListener(0)
@@ -250,4 +250,23 @@ void Model::stop_dispatch_action(uint8_t *pump)
 	number_pump = (uint8_t)atoi((char *)pump);
 	osMessageQueuePut(controller_pump_queueHandle, &msg, 0L, 0);
 	osMutexRelease(mutex_new_msg_pump_controller_handle);
+}
+
+void Model::pay_sale_action(uint8_t *fuel_dispensed)
+{
+	WifiModule_Operation msg;
+
+	osMutexAcquire(mutex_new_msg_wifi_handle, osWaitForever);
+
+	memset(wifiParameters.data, 0, MAX_LENGTH_MESSAGE_CREDENTIAL*sizeof(uint8_t));
+	wifiParameters.data[0] = EVENT_SEND_SALE_FINALIZATION;
+	wifiParameters.data[1] = '|';
+	strcat((char *)wifiParameters.data, (char *)user_id);
+	strcat((char *)wifiParameters.data, "|");
+	strcat((char *)wifiParameters.data, (char *)fuel_dispensed);
+
+	osMutexRelease(mutex_new_msg_wifi_handle);
+
+	msg = SEND_FINISH_SALE;
+	osMessageQueuePut(queue_wifi_operation_handle, &msg, 0L, 0);
 }

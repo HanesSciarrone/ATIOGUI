@@ -99,6 +99,13 @@ public:
      */
     void stop_dispatch_action(uint8_t *pump);
 
+    /**
+     * @brief Send command to finish sale.
+     *
+     * @param[in]	fuel_dispensed	Fuel dispensed on sale.
+     */
+    void pay_sale_action(uint8_t *fuel_dispensed);
+
     void tick();
 protected:
     ModelListener* modelListener;

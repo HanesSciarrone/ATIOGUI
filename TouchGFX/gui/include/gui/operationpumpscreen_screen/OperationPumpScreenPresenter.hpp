@@ -58,6 +58,13 @@ public:
      */
     void update_state_pump_controller(uint8_t *fuel_dispensed);
 
+    /**
+     * @brief Send pay sale to MQTT broker.
+     *
+     * @param[in]	fuel_dispensed	Fuel dispensed on sale.
+     */
+    void pay_sale_action(uint8_t *fuel_dispensed);
+
 private:
     OperationPumpScreenPresenter();
 

@@ -198,10 +198,10 @@ void OperationPumpScreenViewBase::buttonCallbackHandler(const touchgfx::Abstract
     }
     else if (&src == &btn_cancel)
     {
-        //cancel_sale_action
+        //Cancel_sale
         //When btn_cancel clicked call virtual function
-        //Call Cancel_sale
-        Cancel_sale();
+        //Call cancel_sale_action
+        cancel_sale_action();
     }
     else if (&src == &btn_pay_sale)
     {

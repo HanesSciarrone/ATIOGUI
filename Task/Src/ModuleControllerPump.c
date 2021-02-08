@@ -251,14 +251,16 @@ static bool validate_type_fuel(uint8_t *string, enum type_fuel_t type) {
 static bool get_status_parameters_pump(uint8_t *root_content, enum type_fuel_t type)
 {
 	uint16_t index, content_size;
-	uint8_t *element, tag[50], content[50];
+	uint8_t *element, *content_element_root, tag[50], content[50];
 
 	if (root_content == NULL) {
 		return false;
 	}
 
+	content_element_root = xml_get_element_content_ptr(root_content, &content_size);
+
 	index = 0;
-	while ((element = xml_get_element_by_index(root_content, index)) == NULL) {
+	while ((element = xml_get_element_by_index(content_element_root, index)) != NULL) {
 		memset(tag, 0, sizeof(tag));
 		memset(content, 0, sizeof(content));
 		xml_get_element_tag(element, tag);
@@ -306,6 +308,7 @@ static bool get_attribute_status_tag(uint8_t *element)
 	memset(name, 0, sizeof(name));
 	memset(value, 0, sizeof(value));
 
+
 	while (xml_get_element_attribute_by_index(element, index, name, &size_name, value, &size_value)) {
 		// Ask if response was different of OK, if is then retunr ERROR
 		if (!strcmp((char *)name, "response") && !strcmp((char *)value, "OK")) {
@@ -324,14 +327,16 @@ static state_pump_t receive_response_state_pump(uint8_t *message, uint8_t pump, 
 {
 	uint32_t index;
 	uint16_t content_size;
-	uint8_t *xml, *content_element_root, *element, tag[50], content[50];
+	uint8_t character, *xml, *content_element_root, *element, tag[50], content[50];
 
 	xml = content_element_root = element = NULL;
 
 	// Function to receive data from UART
-	if (pump_controller_uart_receive(message, SIZE_MAX_BUFFER_COMMAND, TIMEOUT_RESPONSE) == 0) {
-		return PUMP_ERROR;
+	index = 0;
+	while (pump_controller_uart_receive(&character, 1, TIMEOUT_RESPONSE) != 0) {
+		message[index++] = character;
 	}
+
 
 	/* Format of XML
 	 *
@@ -379,7 +384,7 @@ static state_pump_t receive_response_state_pump(uint8_t *message, uint8_t pump, 
 			}
 		}
 
-		if (!strcmp((char *)tag, "STATUS_PUMP")) {
+		if (!strcmp((char *)tag, "STATUS")) {
 
 			if (!get_attribute_status_tag(element)) {
 				return PUMP_ERROR;
@@ -402,15 +407,16 @@ static state_pump_t receive_response_stop_pump(uint8_t *message, uint8_t pump)
 {
 	uint32_t index;
 	uint16_t content_size;
-	uint8_t *xml, *content_element_root, *element, tag[50], content[50];
+	uint8_t *xml, *content_element_root, *element, tag[50], content[50], character;
 
 	xml = content_element_root = element = NULL;
 	memset(tag, 0, sizeof(tag));
 	memset(content, 0, sizeof(content));
 
 	// Function to receive data from UART
-	if (pump_controller_uart_receive(message, SIZE_MAX_BUFFER_COMMAND, TIMEOUT_RESPONSE) == 0) {
-		return PUMP_ERROR;
+	index = 0;
+	while (pump_controller_uart_receive(&character, 1, TIMEOUT_RESPONSE) != 0) {
+		message[index++] = character;
 	}
 
 	/* Format of XML
@@ -442,7 +448,7 @@ static state_pump_t receive_response_stop_pump(uint8_t *message, uint8_t pump)
 
 		if(!strcmp((char *)tag, "COMMAN_ID")) {
 			// Ask if is response to stop command
-			if (strcmp((char *)content, "RESET")) {
+			if (strcmp((char *)content, "STOP")) {
 				return PUMP_ERROR;
 			}
 		}
@@ -471,7 +477,7 @@ static state_pump_t receive_response_dispatch_pump(uint8_t *message, uint8_t pum
 {
 	uint32_t index, index_attribute;
 	uint16_t content_size = 0, size_attribute_name = 0, size_attribute_value = 0;
-	uint8_t *xml, *content_element_root, *element, tag[50], content[50], attribute_name[50], attribute_value[50];
+	uint8_t character, *xml, *content_element_root, *element, tag[50], content[50], attribute_name[50], attribute_value[50];
 
 	xml = content_element_root = element = NULL;
 	memset(tag, 0, sizeof(tag));
@@ -480,8 +486,9 @@ static state_pump_t receive_response_dispatch_pump(uint8_t *message, uint8_t pum
 	memset(attribute_value, 0, sizeof(attribute_value));
 
 	// Function to receive data from UART
-	if (pump_controller_uart_receive(message, SIZE_MAX_BUFFER_COMMAND, TIMEOUT_RESPONSE) == 0) {
-		return PUMP_ERROR;
+	index = 0;
+	while (pump_controller_uart_receive(&character, 1, TIMEOUT_RESPONSE) != 0) {
+		message[index++] = character;
 	}
 
 	/* Format of XML
@@ -623,7 +630,7 @@ static bool send_command_state_pump(uint8_t *message, uint8_t pump)
 {
 	bool retVal;
 	uint8_t number[4];
-	uint32_t length;
+	uint16_t length;
 	xml_header_t *header;
 	xml_element_t *root, *children_1, *children_2;
 
@@ -662,12 +669,14 @@ static bool send_command_state_pump(uint8_t *message, uint8_t pump)
 	BuildXML_FormatHeader(header, message);
 	length = BuildXML_Format(root, message);
 
-	// Sent XML to pump controller.
-	retVal = pump_controller_uart_sent(message, length);
-
 	// Free memory allocated
 	BuildXML_FreeHeader(header);
 	BuildXML_Free(root);
+
+	// Sent XML to pump controller.
+	retVal = pump_controller_uart_sent(message, length);
+
+	osDelay(500/portTICK_PERIOD_MS);
 
 	return retVal;
 }
@@ -676,7 +685,7 @@ static bool send_command_stop_pump(uint8_t *message, uint8_t pump)
 {
 	bool retVal;
 	uint8_t number[4];
-	uint32_t length = 0;
+	uint16_t length;
 	xml_header_t *header;
 	xml_element_t *root, *children_1, *children_2;
 
@@ -715,12 +724,14 @@ static bool send_command_stop_pump(uint8_t *message, uint8_t pump)
 	BuildXML_FormatHeader(header, message);
 	length = BuildXML_Format(root, message);
 
-	// Sent XML to pump controller.
-	retVal = pump_controller_uart_sent(message, length);
-
 	// Free memory allocated
 	BuildXML_FreeHeader(header);
 	BuildXML_Free(root);
+
+	// Sent XML to pump controller.
+	retVal = pump_controller_uart_sent(message, length);
+
+	osDelay(500/portTICK_PERIOD_MS);
 
 	return retVal;
 }
@@ -729,7 +740,7 @@ static bool send_command_dispatch_pump(uint8_t *message, uint8_t pump, uint8_t *
 {
 	bool retVal;
 	uint8_t number[4];
-	uint32_t length;
+	uint16_t length;
 	xml_header_t *header;
 	xml_element_t *root, *children_1, *children_2, *children_3;
 
@@ -795,12 +806,14 @@ static bool send_command_dispatch_pump(uint8_t *message, uint8_t pump, uint8_t *
 	BuildXML_FormatHeader(header, message);
 	length = BuildXML_Format(root, message);
 
-	// Sent XML to pump controller.
-	retVal = pump_controller_uart_sent(message, length);
-
 	// Free memory allocated
 	BuildXML_FreeHeader(header);
 	BuildXML_Free(root);
+
+	// Sent XML to pump controller.
+	retVal = pump_controller_uart_sent(message, length);
+
+	osDelay(500/portTICK_PERIOD_MS);
 
 	return retVal;
 }
@@ -848,12 +861,14 @@ static bool send_command_start_pump(uint8_t *message, uint8_t pump)
 	BuildXML_FormatHeader(header, message);
 	length = BuildXML_Format(root, message);
 
-	// Sent XML to pump controller.
-	retVal = pump_controller_uart_sent(message, length);
-
 	// Free memory allocated
 	BuildXML_FreeHeader(header);
 	BuildXML_Free(root);
+
+	// Sent XML to pump controller.
+	retVal = pump_controller_uart_sent(message, length);
+
+	osDelay(500/portTICK_PERIOD_MS);
 
 	return retVal;
 }
@@ -938,6 +953,7 @@ static void pump_controller_task(void *argument)
 		case STATE_PUMP: {
 			memset(&status_pump, 0, sizeof(struct status_pump_s));
 			send_command_state_pump(message, number_pump);
+			memset(message, 0, sizeof(message));
 			state = receive_response_state_pump(message, number_pump, type_fuel);
 			if (state == PUMP_ERROR || state == PUMP_FINISH_CHARGE) {
 				osTimerStop(timer_pump_controllerHandle);

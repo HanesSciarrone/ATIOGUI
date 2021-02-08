@@ -37,6 +37,7 @@ void FrontendApplication::gotoInputSaleScreenScreenCoverTransitionSouthImpl()
 void FrontendApplication::gotoOperationPumpScreenCoverTransitionSouth()
 {
 	transitionCallback_custom = touchgfx::Callback<FrontendApplication>(this, &FrontendApplication::gotoOperationPumpScreenCoverTransitionSouthImpl);
+	pendingScreenTransitionCallback = &transitionCallback_custom;
 }
 
 void FrontendApplication::gotoOperationPumpScreenCoverTransitionSouthImpl()

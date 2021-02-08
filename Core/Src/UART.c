@@ -131,14 +131,11 @@ int8_t wifi_uart_sent(const uint8_t* data, uint32_t length)
 	return 0;
 }
 
-bool pump_controller_uart_sent(const uint8_t* data, uint32_t length)
+bool pump_controller_uart_sent(uint8_t* data, uint16_t length)
 {
-	buffer_pump_controller.index = 0;
-	buffer_pump_controller.position = 0;
-	memset(buffer_pump_controller.data, 0, PUMP_CONTROLLER_BUFFER_SIZE);
 
 #ifdef UART_RTOS
-	if (HAL_UART_Transmit_IT(uart_pump_controller, (uint8_t*)data, length) != HAL_OK) {
+	if (HAL_UART_Transmit_IT(uart_pump_controller, data, length) != HAL_OK) {
 		return false;
 	}
 #else
@@ -216,11 +213,10 @@ int32_t pump_controller_uart_receive(uint8_t* buffer, uint32_t length, uint32_t 
 		}
 
 		if(buffer_pump_controller.position != buffer_pump_controller.index) {
-			/* serial data available, so return data to user */
+			/* check for ring buffer wrap */
 			*buffer++ = buffer_pump_controller.data[buffer_pump_controller.position++];
 			read_data++;
 
-			/* check for ring buffer wrap */
 			if (buffer_pump_controller.position >= PUMP_CONTROLLER_BUFFER_SIZE) {
 				/* Ring buffer wrap, so reset head pointer to start of buffer */
 				buffer_pump_controller.position = 0;
@@ -248,7 +244,6 @@ int32_t pump_controller_uart_receive(uint8_t* buffer, uint32_t length, uint32_t 
 		} while((HAL_GetTick() - tickStart ) < DEFAULT_TIME_OUT);
 	}
 	#endif
-
 
 	return read_data;
 }
@@ -281,7 +276,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *uartHandle)
 			buffer_pump_controller.index = 0;
 		}
 
-		HAL_UART_Receive_IT(uartHandle, (uint8_t *)&buffer_pump_controller.data[buffer_pump_controller.index], 1);
+		HAL_UART_Receive_IT(uartHandle, &buffer_pump_controller.data[buffer_pump_controller.index], 1);
 
 		/* Internally this function call xSemaphoreGiveFromISR if
 		 * function is calling inside of interruption.

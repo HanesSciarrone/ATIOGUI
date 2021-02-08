@@ -28,7 +28,10 @@ void OperationPumpScreenView::tearDownScreen()
 
 void OperationPumpScreenView::pay_sale_action()
 {
-	// Sent liters dispensed
+	uint8_t liters_dispensed[LBL_TITLE_SIZE];
+
+	Unicode::toUTF8(lbl_titleBuffer, liters_dispensed, LBL_TITLE_SIZE);
+	presenter->pay_sale_action(liters_dispensed);
 }
 
 void OperationPumpScreenView::cancel_sale_action()
@@ -64,7 +67,7 @@ void OperationPumpScreenView::stop_dispache_action()
 void OperationPumpScreenView::set_pump_selected(int value)
 {
 	if (selector_enable) {
-		Unicode::snprintfFloat(lbl_title_pump_selectedBuffer, LBL_TITLE_PUMP_SELECTED_SIZE, "%d", value);
+		Unicode::snprintf(lbl_title_pump_selectedBuffer, LBL_TITLE_PUMP_SELECTED_SIZE, "%d", value);
 		lbl_title_pump_selected.resizeToCurrentText();
 		lbl_title_pump_selected.invalidate();
 	}
@@ -101,7 +104,7 @@ void OperationPumpScreenView::update_state_pump_controller(uint8_t *fuel_dispens
 {
 	int porcent = 0;
 
-	Unicode::fromUTF8(fuel_dispensed, lbl_titleBuffer, LBL_TITLE_SIZE);
+	Unicode::snprintfFloat(lbl_titleBuffer, LBL_TITLE_SIZE, "%.3f", atof((char *)fuel_dispensed));
 	porcent = (100.0*atof((char *)fuel_dispensed))/(this->dispache_liters);
 	status_operation.setValue(porcent);
 	lbl_title.invalidate();

@@ -183,7 +183,6 @@ uint32_t BuildXML_Format(xml_element_t *xml_element, uint8_t *out)
 	strcat((char *)out, "</");
 	strcat((char *)out, (char *)xml_element->name_tag);
 	strcat((char *)out, ">");
-	//sprintf(out+length, "</%s>", xml_element->name_tag);
 
 	return strlen((char *)out);
 }

@@ -66,7 +66,7 @@ int8_t wifi_uart_sent(const uint8_t* data, uint32_t length);
   *
   * @return Return true if operation was success or false in otherwise.
   */
-bool pump_controller_uart_sent(const uint8_t* data, uint32_t length);
+bool pump_controller_uart_sent(uint8_t* data, uint16_t length);
 
 /**
   * @brief  Receive Data from the Wi-Fi module over the UART interface.

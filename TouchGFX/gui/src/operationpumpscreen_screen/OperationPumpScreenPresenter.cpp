@@ -41,3 +41,8 @@ void OperationPumpScreenPresenter::update_state_pump_controller(uint8_t *fuel_di
 {
 	view.update_state_pump_controller(fuel_dispensed);
 }
+
+void OperationPumpScreenPresenter::pay_sale_action(uint8_t *fuel_dispensed)
+{
+	view.pay_sale_action(fuel_dispensed);
+}
