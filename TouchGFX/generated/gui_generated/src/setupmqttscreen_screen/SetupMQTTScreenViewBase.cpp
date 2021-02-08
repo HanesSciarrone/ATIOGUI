@@ -87,7 +87,7 @@ SetupMQTTScreenViewBase::SetupMQTTScreenViewBase() :
     Client_id.setWildcard(Client_idBuffer);
     Client_id.setTypedText(touchgfx::TypedText(T_SINGLEUSEID49));
 
-    Title_suscribe_topic.setXY(293, 246);
+    Title_suscribe_topic.setXY(274, 246);
     Title_suscribe_topic.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
     Title_suscribe_topic.setLinespacing(0);
     Title_suscribe_topic.setTypedText(touchgfx::TypedText(T_SINGLEUSEID52));

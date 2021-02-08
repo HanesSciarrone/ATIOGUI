@@ -427,6 +427,8 @@ static bool parse_result_sale_finalization(void)
 	 * Where each data is separate for |
 	 */
 
+	memset(response, 0, sizeof(response));
+
 	// Ask if command received is correct
 	if (wifiParameters.data[0] != CMD_RESULT_SALE) {
 		return false;
@@ -434,13 +436,13 @@ static bool parse_result_sale_finalization(void)
 
 	index = 2;
 	offset = 0;
-	while(wifiParameters.data[index] != '0' && index < 21) {
+	while(wifiParameters.data[index] != '\0' && index < 21) {
 		response[offset] = wifiParameters.data[index];
 		index++;
 		offset++;
 	}
 
-	if (!strcmp((char *)response, "Approbed")) {
+	if (!strcmp((char *)response, "Approved")) {
 		return true;
 	}
 
@@ -762,6 +764,8 @@ static void ModuleWifi(void *argument)
 				osMutexAcquire(mutex_new_msg_wifi_handle, osWaitForever);
 				send_resquest(wifiParameters.data);
 				wifiParameters.resultOperation = parse_result_sale_finalization() ? 1 : 0;
+				msgGUI = 7;
+				osMessageQueuePut(queue_NewMsg_GUI, &msgGUI, 0L, osWaitForever);
 				osMutexRelease(mutex_new_msg_wifi_handle);
 			}
 			break;

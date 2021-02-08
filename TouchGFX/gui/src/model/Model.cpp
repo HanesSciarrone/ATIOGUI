@@ -123,6 +123,13 @@ void Model::tick()
 				modelListener->update_state_pump_controller(liters_dispensed);
 			}
 			break;
+
+			// Show result operation of sale finalization
+			case 7: {
+				osMutexAcquire(mutex_new_msg_wifi_handle, osWaitForever);
+				modelListener->show_status_sale(wifiParameters.resultOperation);
+				osMutexRelease(mutex_new_msg_wifi_handle);
+			}
 		}
 	}
 }

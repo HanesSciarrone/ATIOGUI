@@ -225,14 +225,14 @@ static bool validate_type_fuel(uint8_t *string, enum type_fuel_t type) {
 	break;
 
 	case REGULAR_DIESEL: {
-		if (!strcmp((char *)string, "Regular diesel")) {
+		if (!strcmp((char *)string, "Regular_diesel")) {
 			return true;
 		}
 	}
 	break;
 
 	case PREMIUM_DIESEL: {
-		if (!strcmp((char *)string, "Premium diesel")) {
+		if (!strcmp((char *)string, "Premium_diesel")) {
 			return true;
 		}
 	}

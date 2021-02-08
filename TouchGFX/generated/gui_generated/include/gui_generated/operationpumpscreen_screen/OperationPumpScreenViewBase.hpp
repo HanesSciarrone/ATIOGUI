@@ -91,6 +91,9 @@ protected:
     touchgfx::ModalWindow popup;
     touchgfx::TextAreaWithOneWildcard lbl_popup;
     touchgfx::ButtonWithLabel btn_popup;
+    touchgfx::Box background_progress;
+    touchgfx::CircleProgress progress_bar;
+    touchgfx::PainterRGB888Bitmap progress_barPainter;
     touchgfx::RadioButtonGroup<4> radioButtonGroup1;
 
     /*

@@ -65,6 +65,13 @@ public:
      */
     void pay_sale_action(uint8_t *fuel_dispensed);
 
+    /**
+     * @brief Show result of sale I have send to MQTT broker.
+     *
+     * @param[in]	result	Result of operation
+     */
+    void show_status_sale(uint8_t result);
+
 private:
     OperationPumpScreenPresenter();
 

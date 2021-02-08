@@ -19,6 +19,8 @@ void OperationPumpScreenView::setupScreen()
     lbl_title.resizeToCurrentText();
     lbl_title.invalidate();
     status_operation.setValue(0);
+
+    progress_bar.getRange(boxProgressMin, boxProgressMax);
 }
 
 void OperationPumpScreenView::tearDownScreen()
@@ -32,6 +34,11 @@ void OperationPumpScreenView::pay_sale_action()
 
 	Unicode::toUTF8(lbl_titleBuffer, liters_dispensed, LBL_TITLE_SIZE);
 	presenter->pay_sale_action(liters_dispensed);
+
+	progress_bar.setVisible(true);
+	background_progress.setVisible(true);
+	progress_bar.invalidate();
+	background_progress.invalidate();
 }
 
 void OperationPumpScreenView::cancel_sale_action()
@@ -111,3 +118,38 @@ void OperationPumpScreenView::update_state_pump_controller(uint8_t *fuel_dispens
 	status_operation.invalidate();
 }
 
+void OperationPumpScreenView::show_status_sale(uint8_t result)
+{
+	progress_bar.setVisible(false);
+	background_progress.setVisible(false);
+	progress_bar.invalidate();
+	background_progress.invalidate();
+
+	if (result == 1) {
+		application().gotoMainScreenScreenCoverTransitionNorth();
+	}
+	else {
+		popup.setVisible(true);
+		Unicode::fromUTF8((const uint8_t *)"Problem with sale pay", lbl_popupBuffer, LBL_POPUP_SIZE);
+		lbl_popup.resizeToCurrentText();
+		lbl_popup.invalidate();
+		popup.invalidate();
+	}
+}
+
+void OperationPumpScreenView::update_progress(uint16_t tick)
+{
+	progress_bar.setValue(tick % (boxProgressMax+1));
+
+	if (progress_bar.getValue() >= 100) {
+		progress_bar.setValue(0);
+	}
+}
+
+void OperationPumpScreenView::handleTickEvent()
+{
+	if (progress_bar.isVisible()) {
+		tickCounter++;
+		update_progress(tickCounter);
+	}
+}

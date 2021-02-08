@@ -148,6 +148,24 @@ OperationPumpScreenViewBase::OperationPumpScreenViewBase() :
     btn_popup.setAction(buttonCallback);
     popup.add(btn_popup);
 
+    background_progress.setPosition(0, 0, 800, 480);
+    background_progress.setVisible(false);
+    background_progress.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+
+    progress_bar.setXY(348, 188);
+    progress_bar.setProgressIndicatorPosition(0, 0, 104, 104);
+    progress_bar.setRange(0, 100);
+    progress_bar.setCenter(52, 52);
+    progress_bar.setRadius(42);
+    progress_bar.setLineWidth(16);
+    progress_bar.setStartEndAngle(0, 360);
+    progress_bar.setCapPrecision(10);
+    progress_bar.setBackground(touchgfx::Bitmap(BITMAP_BLUE_PROGRESSINDICATORS_BG_MEDIUM_CIRCLE_INDICATOR_BG_LINE_FULL_ID));
+    progress_barPainter.setBitmap(touchgfx::Bitmap(BITMAP_BLUE_PROGRESSINDICATORS_FILL_MEDIUM_CIRCLE_INDICATOR_FILL_LINE_FULL_ID));
+    progress_bar.setPainter(progress_barPainter);
+    progress_bar.setValue(58);
+    progress_bar.setVisible(false);
+
     add(background);
     add(toolbar);
     add(logo);
@@ -168,6 +186,8 @@ OperationPumpScreenViewBase::OperationPumpScreenViewBase() :
     add(lbl_title_regular_diesel);
     add(lbl_title_premium_diesel);
     add(popup);
+    add(background_progress);
+    add(progress_bar);
     radioButtonGroup1.add(checkbox_regular);
     radioButtonGroup1.add(checkbox_premium);
     radioButtonGroup1.add(checkbox_regular_diesel);

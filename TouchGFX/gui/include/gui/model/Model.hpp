@@ -106,6 +106,8 @@ public:
      */
     void pay_sale_action(uint8_t *fuel_dispensed);
 
+
+
     void tick();
 protected:
     ModelListener* modelListener;
