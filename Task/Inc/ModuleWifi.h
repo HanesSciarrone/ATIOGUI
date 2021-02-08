@@ -24,7 +24,7 @@
 #define MAX_LENGTH_CONNECTION_NETWORK	22
 
 /** This value depend of GUI */
-#define MAX_LENGTH_CREDENTIAL			30
+#define MAX_LENGTH_CREDENTIAL			50
 
 /// Must be same size of buffer GUI.
 #define BUFFER_SIZE_TOPIC				26
@@ -54,6 +54,7 @@ typedef enum
 	SCAN_NETWORK,		/*!< Search for nearby networks */
 	CONNECT_NETWORK,	/*!< Connect to specific network */
 	SEND_CREDENTIAL,	/*!< Send credential to server */
+	SEND_FINISH_SALE,	/*!< Send command with finish sale */
 	ANY_OPERATION		/*!< Don't any operation */
 }WifiModule_Operation;
 

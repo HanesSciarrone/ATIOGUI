@@ -1972,7 +1972,7 @@
               "BufferSize": 20
             },
             "Name": "label_title",
-            "X": 76,
+            "X": 17,
             "Y": 154,
             "Width": 380,
             "Height": 40,
@@ -2478,9 +2478,9 @@
             "AutoSize": true,
             "LineSpacing": 0,
             "Name": "Title_suscribe_topic",
-            "X": 293,
+            "X": 274,
             "Y": 246,
-            "Width": 117,
+            "Width": 136,
             "Height": 25,
             "Type": "TextArea",
             "Visible": true,
@@ -2947,6 +2947,740 @@
         "Name": "SetupMQTTScreen",
         "OverrideDefaultBufferSize": false,
         "CanvasBufferSize": 0
+      },
+      {
+        "Components": [
+          {
+            "Color": {
+              "Red": 41,
+              "Green": 73,
+              "Blue": 105
+            },
+            "Alpha": 255,
+            "Name": "background",
+            "X": 0,
+            "Y": 0,
+            "Width": 800,
+            "Height": 480,
+            "Type": "Box",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Color": {
+              "Red": 145,
+              "Green": 145,
+              "Blue": 145
+            },
+            "Alpha": 255,
+            "Name": "toolbar",
+            "X": 0,
+            "Y": 0,
+            "Width": 800,
+            "Height": 62,
+            "Type": "Box",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Filename": "ControlGas.png",
+            "Alpha": 255,
+            "ScalingAlgorithm": "Nearest-neighbor",
+            "Name": "logo",
+            "X": 0,
+            "Y": 1,
+            "Width": 153,
+            "Height": 60,
+            "Type": "ScalableImage",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Pressed": "__designer\\Blue_Buttons_Round_Edge_small_pressed.png",
+            "Released": "__designer\\Blue_Buttons_Round_Edge_small.png",
+            "Alpha": 255,
+            "TextId": "SingleUseId68",
+            "ReleasedColor": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "PressedColor": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "TextRotation": "0",
+            "Style": "Style4",
+            "Name": "btn_dispatch",
+            "X": 616,
+            "Y": 128,
+            "Width": 170,
+            "Height": 60,
+            "Type": "ButtonWithLabel",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Pressed": "__designer\\Blue_Buttons_Round_Edge_small_pressed.png",
+            "Released": "__designer\\Blue_Buttons_Round_Edge_small.png",
+            "Alpha": 255,
+            "TextId": "SingleUseId69",
+            "ReleasedColor": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "PressedColor": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "TextRotation": "0",
+            "Style": "Style4",
+            "Name": "bth_stop",
+            "X": 616,
+            "Y": 232,
+            "Width": 170,
+            "Height": 60,
+            "Type": "ButtonWithLabel",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Pressed": "__designer\\Blue_Buttons_Round_Edge_small_pressed.png",
+            "Released": "__designer\\Blue_Buttons_Round_Edge_small.png",
+            "Alpha": 255,
+            "TextId": "SingleUseId70",
+            "ReleasedColor": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "PressedColor": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "TextRotation": "0",
+            "Style": "Style4",
+            "Name": "btn_cancel",
+            "X": 400,
+            "Y": 232,
+            "Width": 170,
+            "Height": 60,
+            "Type": "ButtonWithLabel",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "FileNameProgress": "__designer\\Blue_ProgressIndicators_fill_medium_circle_indicator_fill_line_full.png",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "CenterX": 52,
+            "CenterY": 52,
+            "Radius": 50,
+            "LineWidth": 0,
+            "StartAngle": 0,
+            "EndAngle": 360,
+            "CapPrecision": "Butt",
+            "Alpha": 255,
+            "FileNameBackground": "__designer\\Blue_ProgressIndicators_bg_medium_circle_indicator_bg_line_full.png",
+            "IndicatorPositionX": 0,
+            "IndicatorPositionY": 0,
+            "IndicatorPositionWidth": 0,
+            "IndicatorPositionHeight": 0,
+            "ProgressRangeMin": 0,
+            "ProgressRangeMax": 100,
+            "ProgressRangeSteps": 0,
+            "ProgressRangeStepsMin": 0,
+            "ProgressInitialValue": 0,
+            "Name": "status_operation",
+            "X": 348,
+            "Y": 342,
+            "Width": 104,
+            "Height": 104,
+            "Type": "CircleProgress",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Pressed": "__designer\\Blue_Buttons_Round_Edge_small_pressed.png",
+            "Released": "__designer\\Blue_Buttons_Round_Edge_small.png",
+            "Alpha": 255,
+            "TextId": "SingleUseId71",
+            "ReleasedColor": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "PressedColor": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "TextRotation": "0",
+            "Style": "Style4",
+            "Name": "btn_pay_sale",
+            "X": 400,
+            "Y": 128,
+            "Width": 170,
+            "Height": 60,
+            "Type": "ButtonWithLabel",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId72",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Alpha": 255,
+            "AutoSize": true,
+            "LineSpacing": 0,
+            "Wildcard1": {
+              "TextId": "SingleUseId73",
+              "UseBuffer": true,
+              "BufferSize": 20
+            },
+            "Name": "lbl_title",
+            "X": 464,
+            "Y": 374,
+            "Width": 212,
+            "Height": 40,
+            "Type": "TextArea",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "IsHorizontalSlider": true,
+            "BackgroundUnselected": "__designer\\Blue_Slider_Horizontal_Medium_Slider_Round_back.png",
+            "BackgroundSelected": "__designer\\Blue_Slider_Horizontal_Medium_Slider_Round_fill.png",
+            "Indicator": "__designer\\Blue_Slider_Horizontal_Medium_Indicators_Slider_Round_nob.png",
+            "BackgroundX": 2,
+            "BackgroundY": 19,
+            "IndicatorPos": 2,
+            "IndicatorMax": 310,
+            "IndicatorMin": 0,
+            "ValueMax": 10,
+            "ValueMin": 1,
+            "InitValue": 1,
+            "Name": "pump_number_select",
+            "X": 12,
+            "Y": 83,
+            "Width": 358,
+            "Height": 52,
+            "Type": "Slider",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId75",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Alpha": 255,
+            "AutoSize": true,
+            "LineSpacing": 0,
+            "Wildcard1": {
+              "TextId": "SingleUseId80",
+              "UseBuffer": true,
+              "BufferSize": 4
+            },
+            "Name": "lbl_title_pump_selected",
+            "X": 12,
+            "Y": 138,
+            "Width": 300,
+            "Height": 40,
+            "Type": "TextArea",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Alpha": 255,
+            "Selected": true,
+            "Deselectable": false,
+            "FileNameSelected": "__designer\\Blue_Check_buttons_Check_Round_mark_active.png",
+            "FileNameSelectedPressed": "__designer\\Blue_Check_buttons_Check_Round_mark_pressed.png",
+            "FileNameUnselected": "__designer\\Blue_Check_buttons_Check_Round_mark_inactive.png",
+            "FileNameUnselectedPressed": "__designer\\Blue_Check_buttons_Check_Round_mark_normal.png",
+            "RadioButtonGroup": "radioButtonGroup1",
+            "Name": "checkbox_regular",
+            "X": 20,
+            "Y": 196,
+            "Width": 44,
+            "Height": 44,
+            "Type": "RadioButton",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Alpha": 255,
+            "Selected": false,
+            "Deselectable": false,
+            "FileNameSelected": "__designer\\Blue_Check_buttons_Check_Round_mark_active.png",
+            "FileNameSelectedPressed": "__designer\\Blue_Check_buttons_Check_Round_mark_pressed.png",
+            "FileNameUnselected": "__designer\\Blue_Check_buttons_Check_Round_mark_inactive.png",
+            "FileNameUnselectedPressed": "__designer\\Blue_Check_buttons_Check_Round_mark_normal.png",
+            "RadioButtonGroup": "radioButtonGroup1",
+            "Name": "checkbox_premium",
+            "X": 20,
+            "Y": 262,
+            "Width": 44,
+            "Height": 44,
+            "Type": "RadioButton",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Alpha": 255,
+            "Selected": false,
+            "Deselectable": false,
+            "FileNameSelected": "__designer\\Blue_Check_buttons_Check_Round_mark_active.png",
+            "FileNameSelectedPressed": "__designer\\Blue_Check_buttons_Check_Round_mark_pressed.png",
+            "FileNameUnselected": "__designer\\Blue_Check_buttons_Check_Round_mark_inactive.png",
+            "FileNameUnselectedPressed": "__designer\\Blue_Check_buttons_Check_Round_mark_normal.png",
+            "RadioButtonGroup": "radioButtonGroup1",
+            "Name": "checkbox_regular_diesel",
+            "X": 20,
+            "Y": 330,
+            "Width": 44,
+            "Height": 44,
+            "Type": "RadioButton",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Alpha": 255,
+            "Selected": false,
+            "Deselectable": false,
+            "FileNameSelected": "__designer\\Blue_Check_buttons_Check_Round_mark_active.png",
+            "FileNameSelectedPressed": "__designer\\Blue_Check_buttons_Check_Round_mark_pressed.png",
+            "FileNameUnselected": "__designer\\Blue_Check_buttons_Check_Round_mark_inactive.png",
+            "FileNameUnselectedPressed": "__designer\\Blue_Check_buttons_Check_Round_mark_normal.png",
+            "RadioButtonGroup": "radioButtonGroup1",
+            "Name": "checkbox_premium_diesel",
+            "X": 20,
+            "Y": 394,
+            "Width": 44,
+            "Height": 44,
+            "Type": "RadioButton",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId76",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Alpha": 255,
+            "AutoSize": true,
+            "LineSpacing": 0,
+            "Name": "lbl_title_regular",
+            "X": 82,
+            "Y": 198,
+            "Width": 118,
+            "Height": 40,
+            "Type": "TextArea",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId77",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Alpha": 255,
+            "AutoSize": true,
+            "LineSpacing": 0,
+            "Name": "lbl_title_premium",
+            "X": 82,
+            "Y": 264,
+            "Width": 136,
+            "Height": 40,
+            "Type": "TextArea",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId78",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Alpha": 255,
+            "AutoSize": true,
+            "LineSpacing": 0,
+            "Name": "lbl_title_regular_diesel",
+            "X": 82,
+            "Y": 332,
+            "Width": 219,
+            "Height": 40,
+            "Type": "TextArea",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId79",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "Alpha": 255,
+            "AutoSize": true,
+            "LineSpacing": 0,
+            "Name": "lbl_title_premium_diesel",
+            "X": 82,
+            "Y": 396,
+            "Width": 237,
+            "Height": 40,
+            "Type": "TextArea",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Components": [
+              {
+                "TextId": "SingleUseId81",
+                "TextRotation": "0",
+                "Color": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "Alpha": 255,
+                "AutoSize": true,
+                "LineSpacing": 0,
+                "Wildcard1": {
+                  "UseBuffer": true,
+                  "BufferSize": 100
+                },
+                "Name": "lbl_popup",
+                "X": 23,
+                "Y": 95,
+                "Width": 0,
+                "Height": 40,
+                "Type": "TextArea",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
+              {
+                "Pressed": "__designer\\Blue_Buttons_Round_Edge_small_pressed.png",
+                "Released": "__designer\\Blue_Buttons_Round_Edge_small.png",
+                "Alpha": 255,
+                "TextId": "SingleUseId83",
+                "ReleasedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "PressedColor": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "TextRotation": "0",
+                "Style": "Style4",
+                "Name": "btn_popup",
+                "X": 314,
+                "Y": 201,
+                "Width": 170,
+                "Height": 60,
+                "Type": "ButtonWithLabel",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              }
+            ],
+            "FileName": "Background_qwerty.png",
+            "Color": {
+              "Red": 0,
+              "Green": 0,
+              "Blue": 0
+            },
+            "ModalX": 150,
+            "ModalY": 105,
+            "ModalWidth": 500,
+            "ModalHeight": 270,
+            "ContX": 0,
+            "ContY": 0,
+            "Alpha": 255,
+            "Name": "popup",
+            "X": 0,
+            "Y": 0,
+            "Width": 800,
+            "Height": 480,
+            "Type": "ModalWindow",
+            "Visible": false,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Color": {
+              "Red": 0,
+              "Green": 0,
+              "Blue": 0
+            },
+            "Alpha": 255,
+            "Name": "background_progress",
+            "X": 0,
+            "Y": 0,
+            "Width": 800,
+            "Height": 480,
+            "Type": "Box",
+            "Visible": false,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "FileNameProgress": "__designer\\Blue_ProgressIndicators_fill_medium_circle_indicator_fill_line_full.png",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "CenterX": 52,
+            "CenterY": 52,
+            "Radius": 42,
+            "LineWidth": 16,
+            "StartAngle": 0,
+            "EndAngle": 360,
+            "CapPrecision": "Round",
+            "Alpha": 255,
+            "Style": "Style7",
+            "FileNameBackground": "__designer\\Blue_ProgressIndicators_bg_medium_circle_indicator_bg_line_full.png",
+            "IndicatorPositionX": 0,
+            "IndicatorPositionY": 0,
+            "IndicatorPositionWidth": 0,
+            "IndicatorPositionHeight": 0,
+            "ProgressRangeMin": 0,
+            "ProgressRangeMax": 100,
+            "ProgressRangeSteps": 0,
+            "ProgressRangeStepsMin": 0,
+            "ProgressInitialValue": 58,
+            "Name": "progress_bar",
+            "X": 348,
+            "Y": 188,
+            "Width": 104,
+            "Height": 104,
+            "Type": "CircleProgress",
+            "Visible": false,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "Pay_sale",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "btn_pay_sale",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "FunctionName": "pay_sale_action",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "Dispache_fuel",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "btn_dispatch",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "FunctionName": "dispatch_fuel_action",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "Stop_dispache",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "bth_stop",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "FunctionName": "stop_dispache_action",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "Select_pump",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "pump_number_select",
+              "Type": "TriggerSliderValueChanged"
+            },
+            "Action": {
+              "FunctionName": "set_pump_selected",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "Select_regular_fuel",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "checkbox_regular",
+              "Type": "TriggerRadioButtonSelected"
+            },
+            "Action": {
+              "FunctionName": "select_types_fuel",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "Select_premium_fuel",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "checkbox_premium",
+              "Type": "TriggerRadioButtonSelected"
+            },
+            "Action": {
+              "FunctionName": "select_types_fuel",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "Select_regular_diesel_fuel",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "checkbox_regular_diesel",
+              "Type": "TriggerRadioButtonSelected"
+            },
+            "Action": {
+              "FunctionName": "select_types_fuel",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "Select_premium_diesel_fuel",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "checkbox_premium_diesel",
+              "Type": "TriggerRadioButtonSelected"
+            },
+            "Action": {
+              "FunctionName": "select_types_fuel",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "Cancel_sale",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "btn_cancel",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "FunctionName": "cancel_sale_action",
+              "Type": "ActionCustom"
+            }
+          },
+          {
+            "InteractionName": "Hide_popup",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "btn_popup",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "ActionComponent": "popup",
+              "Type": "ActionHide"
+            }
+          }
+        ],
+        "Name": "OperationPumpScreen",
+        "OverrideDefaultBufferSize": false,
+        "CanvasBufferSize": 12000
       }
     ],
     "CustomContainerDefinitions": [
@@ -3896,6 +4630,62 @@
       },
       {
         "TextEntryId": "SingleUseId67",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId68",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId69",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId71",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId72",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId73",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId75",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId76",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId77",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId78",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId79",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId80",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId70",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId81",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId83",
         "IsResource": false
       }
     ],

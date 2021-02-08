@@ -232,6 +232,18 @@
     <Filter Include="Source Files\generated\gui_generated\setupmqttscreen_screen">
       <UniqueIdentifier>48538EF2-B294-40AC-16F9-88D613D5858B</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\gui\operationpumpscreen_screen">
+      <UniqueIdentifier>C9E5457C-3BC1-669F-2ECA-933A9C00FB03</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\gui\operationpumpscreen_screen">
+      <UniqueIdentifier>478B3ABE-DEFF-EC2B-F361-BC754F56F909</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\generated\gui_generated\operationpumpscreen_screen">
+      <UniqueIdentifier>3BE374E3-3D04-8A0F-1178-DD0A1843FBA2</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\generated\gui_generated\operationpumpscreen_screen">
+      <UniqueIdentifier>21B62537-1E6D-E253-20E3-BA49DB6CB5E3</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(TouchGFXReleasePath)\framework\source\platform\driver\touch\SDL2TouchController.cpp">
@@ -320,6 +332,15 @@
     </ClCompile>
     <ClCompile Include="..\..\generated\gui_generated\src\setupmqttscreen_screen\SetupMQTTScreenViewBase.cpp">
       <Filter>Source Files\generated\gui_generated\setupmqttscreen_screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gui\src\operationpumpscreen_screen\OperationPumpScreenPresenter.cpp">
+      <Filter>Source Files\gui\operationpumpscreen_screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gui\src\operationpumpscreen_screen\OperationPumpScreenView.cpp">
+      <Filter>Source Files\gui\operationpumpscreen_screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\generated\gui_generated\src\operationpumpscreen_screen\OperationPumpScreenViewBase.cpp">
+      <Filter>Source Files\generated\gui_generated\operationpumpscreen_screen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -819,6 +840,15 @@
     </ClInclude>
     <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\setupmqttscreen_screen\SetupMQTTScreenViewBase.hpp">
       <Filter>Header Files\generated\gui_generated\setupmqttscreen_screen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gui\include\gui\operationpumpscreen_screen\OperationPumpScreenPresenter.hpp">
+      <Filter>Header Files\gui\operationpumpscreen_screen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gui\include\gui\operationpumpscreen_screen\OperationPumpScreenView.hpp">
+      <Filter>Header Files\gui\operationpumpscreen_screen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\operationpumpscreen_screen\OperationPumpScreenViewBase.hpp">
+      <Filter>Header Files\generated\gui_generated\operationpumpscreen_screen</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

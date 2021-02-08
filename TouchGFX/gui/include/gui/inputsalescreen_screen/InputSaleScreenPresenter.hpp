@@ -26,7 +26,8 @@ public:
     virtual void deactivate();
 
     virtual ~InputSaleScreenPresenter() {};
-    virtual uint32_t get_liters_fuel_available(void);
+    virtual float get_liters_fuel_available(void);
+    virtual void set_liters_to_dispache(uint8_t *liters_selected);
 
 private:
     InputSaleScreenPresenter();

@@ -212,8 +212,7 @@ int main(void)
   TouchGFXTaskHandle = osThreadNew(TouchGFX_Task, NULL, &TouchGFXTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
-  if (module_wifi_started() == FALSE)
-  {
+  if (module_wifi_started() == FALSE) {
 	  Error_Handler();
   }
 
@@ -221,7 +220,7 @@ int main(void)
 	  Error_Handler();
   }
 
-  if (module_controller_pump_started() == FALSE) {
+  if (module_pump_controller_started() == FALSE) {
 	  Error_Handler();
   }
   /* USER CODE END RTOS_THREADS */
@@ -769,8 +768,8 @@ static void MX_UART5_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN UART5_Init 2 */
-	WifiUART_SetHandlerUart(&huart5);
-	if (WifiUART_Operation_Init() == FALSE)
+	wifi_uart_set_handler_uart(&huart5);
+	if (wifi_uart_operation_init() == FALSE)
 	{
 		Error_Handler();
 	}
@@ -808,7 +807,11 @@ static void MX_USART6_UART_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN USART6_Init 2 */
-
+	pump_controller_uart_set_handler_uart(&huart6);
+	if (!pump_controller_uart_operation_init())
+	{
+		Error_Handler();
+	}
   /* USER CODE END USART6_Init 2 */
 
 }

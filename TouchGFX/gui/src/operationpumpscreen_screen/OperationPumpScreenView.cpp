@@ -1,0 +1,155 @@
+#include <gui/operationpumpscreen_screen/OperationPumpScreenView.hpp>
+
+#include <stdlib.h>
+#include <string.h>
+
+OperationPumpScreenView::OperationPumpScreenView()
+: liters_dispensed(0.0),
+  selector_enable(true)
+{
+	strncpy((char *)type_fuel, "Regular", strlen("Regular"));
+}
+
+void OperationPumpScreenView::setupScreen()
+{
+    OperationPumpScreenViewBase::setupScreen();
+    dispache_liters = atof((char *)presenter->get_liters_to_dispahe());
+
+    Unicode::snprintfFloat(lbl_titleBuffer, LBL_TITLE_SIZE, "%.3f", dispache_liters);
+    lbl_title.resizeToCurrentText();
+    lbl_title.invalidate();
+    status_operation.setValue(0);
+
+    progress_bar.getRange(boxProgressMin, boxProgressMax);
+}
+
+void OperationPumpScreenView::tearDownScreen()
+{
+    OperationPumpScreenViewBase::tearDownScreen();
+}
+
+void OperationPumpScreenView::pay_sale_action()
+{
+	uint8_t liters_dispensed[LBL_TITLE_SIZE];
+
+	Unicode::toUTF8(lbl_titleBuffer, liters_dispensed, LBL_TITLE_SIZE);
+	presenter->pay_sale_action(liters_dispensed);
+
+	progress_bar.setVisible(true);
+	background_progress.setVisible(true);
+	progress_bar.invalidate();
+	background_progress.invalidate();
+}
+
+void OperationPumpScreenView::cancel_sale_action()
+{
+	uint8_t pump[LBL_TITLE_PUMP_SELECTED_SIZE];
+
+	memset(pump, 0, LBL_TITLE_PUMP_SELECTED_SIZE);
+	Unicode::toUTF8(lbl_title_pump_selectedBuffer, pump, LBL_TITLE_PUMP_SELECTED_SIZE);
+	presenter->stop_dispatch_action(pump);
+
+	application().gotoMainScreenScreenCoverTransitionNorth();
+}
+
+void OperationPumpScreenView::dispatch_fuel_action()
+{
+	uint8_t pump[LBL_TITLE_PUMP_SELECTED_SIZE];
+
+	memset(pump, 0, LBL_TITLE_PUMP_SELECTED_SIZE);
+	Unicode::toUTF8(lbl_title_pump_selectedBuffer, pump, LBL_TITLE_PUMP_SELECTED_SIZE);
+	selector_enable = false;
+	presenter->dispatch_fuel_action(pump, type_fuel);
+}
+
+void OperationPumpScreenView::stop_dispache_action()
+{
+	uint8_t pump[LBL_TITLE_PUMP_SELECTED_SIZE];
+
+	memset(pump, 0, LBL_TITLE_PUMP_SELECTED_SIZE);
+	Unicode::toUTF8(lbl_title_pump_selectedBuffer, pump, LBL_TITLE_PUMP_SELECTED_SIZE);
+	presenter->stop_dispatch_action(pump);
+}
+
+void OperationPumpScreenView::set_pump_selected(int value)
+{
+	if (selector_enable) {
+		Unicode::snprintf(lbl_title_pump_selectedBuffer, LBL_TITLE_PUMP_SELECTED_SIZE, "%d", value);
+		lbl_title_pump_selected.resizeToCurrentText();
+		lbl_title_pump_selected.invalidate();
+	}
+}
+
+void OperationPumpScreenView::select_types_fuel()
+{
+	if (selector_enable) {
+		if (checkbox_regular.getSelected()) {
+			strcpy((char *)type_fuel, "Regular");
+		}
+		else if (checkbox_premium.getSelected()) {
+			strcpy((char *)type_fuel, "Premium");
+		}
+		else if (checkbox_regular_diesel.getSelected()) {
+			strcpy((char *)type_fuel, "Regular diesel");
+		}
+		else if (checkbox_premium_diesel.getSelected()) {
+			strcpy((char *)type_fuel, "Premium diesel");
+		}
+	}
+}
+
+void OperationPumpScreenView::show_mesage_pump_controller(uint8_t *message)
+{
+	popup.setVisible(true);
+	Unicode::fromUTF8(message, lbl_popupBuffer, LBL_POPUP_SIZE);
+	lbl_popup.resizeToCurrentText();
+	lbl_popup.invalidate();
+	popup.invalidate();
+}
+
+void OperationPumpScreenView::update_state_pump_controller(uint8_t *fuel_dispensed)
+{
+	int porcent = 0;
+
+	Unicode::snprintfFloat(lbl_titleBuffer, LBL_TITLE_SIZE, "%.3f", atof((char *)fuel_dispensed));
+	porcent = (100.0*atof((char *)fuel_dispensed))/(this->dispache_liters);
+	status_operation.setValue(porcent);
+	lbl_title.invalidate();
+	status_operation.invalidate();
+}
+
+void OperationPumpScreenView::show_status_sale(uint8_t result)
+{
+	progress_bar.setVisible(false);
+	background_progress.setVisible(false);
+	progress_bar.invalidate();
+	background_progress.invalidate();
+
+	if (result == 1) {
+		application().gotoMainScreenScreenCoverTransitionNorth();
+	}
+	else {
+		popup.setVisible(true);
+		Unicode::fromUTF8((const uint8_t *)"Problem with sale pay", lbl_popupBuffer, LBL_POPUP_SIZE);
+		lbl_popup.resizeToCurrentText();
+		lbl_popup.invalidate();
+		popup.invalidate();
+	}
+}
+
+void OperationPumpScreenView::update_progress(uint16_t tick)
+{
+	progress_bar.setValue(tick % (boxProgressMax+1));
+
+	if (progress_bar.getValue() >= 100) {
+		progress_bar.setValue(0);
+	}
+}
+
+void OperationPumpScreenView::handleTickEvent()
+{
+	if (progress_bar.isVisible()) {
+		tickCounter++;
+		update_progress(tickCounter);
+	}
+}

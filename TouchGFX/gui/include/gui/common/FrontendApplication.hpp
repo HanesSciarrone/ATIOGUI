@@ -21,11 +21,15 @@ public:
 
     void gotoInputSaleScreenScreenCoverTransitionSouth();
     void gotoInputSaleScreenScreenCoverTransitionSouthImpl();
+    void gotoOperationPumpScreenCoverTransitionSouth();
+
 private:
 
     touchgfx::Callback<FrontendApplication> transitionCallback_custom;
     FrontendHeap& frontendHeap_custom;
     Model& model_custom;
+
+    void gotoOperationPumpScreenCoverTransitionSouthImpl();
 };
 
 #endif // FRONTENDAPPLICATION_HPP

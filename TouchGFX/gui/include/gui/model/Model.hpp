@@ -44,11 +44,32 @@ public:
     void sent_credential_to_IoT(uint8_t *buffer, uint16_t length);
 
     /**
+     * @brief Get user id used to operation.
+     *
+     * @return Pointer with user id.
+     */
+    uint8_t *get_user_id(void);
+
+    /**
      * @brief Getting liters available of back end.
      *
      * @return Return liters available.
      */
-    uint32_t get_liters_fuel_available(void);
+    float get_liters_fuel_available(void);
+
+    /**
+     * @brief Setting liters selected by user to dispache.
+     *
+     * @param[in]	liters_selected	Liters selected by user.
+     */
+    void set_liters_to_dispache(uint8_t *liters_selected);
+
+    /**
+     * @brief Getting liters selected by user to dispache.
+     *
+     * @return	Pointer of string with liters selected by user.
+     */
+    uint8_t *get_liters_to_dispahe();
 
     /**
      * @brief Configure MQTT parameters sending parameters of GUI to
@@ -62,6 +83,30 @@ public:
      * @brief Activa reader card NFC.
      */
     void active_reader(void);
+
+    /**
+     * @brief Sent command to dispache fuel.
+     *
+     * @param[in]	pump Pump number.
+     * @param[in]	type Type fuel used.
+     */
+    void dispatch_fuel_action(uint8_t *pump, uint8_t * type);
+
+    /**
+     * @brief Sent command to stop dispatch.
+     *
+     * @param[in]	pump Pump number to stop.
+     */
+    void stop_dispatch_action(uint8_t *pump);
+
+    /**
+     * @brief Send command to finish sale.
+     *
+     * @param[in]	fuel_dispensed	Fuel dispensed on sale.
+     */
+    void pay_sale_action(uint8_t *fuel_dispensed);
+
+
 
     void tick();
 protected:

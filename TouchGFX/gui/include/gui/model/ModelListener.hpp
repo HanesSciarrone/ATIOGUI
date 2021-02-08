@@ -22,6 +22,12 @@ public:
 
     virtual void hide_progreess_bar() {}
 
+    virtual void show_mesage_pump_controller(uint8_t *message) {}
+
+    virtual void update_state_pump_controller(uint8_t *fuel_dispensed) {}
+
+    virtual void show_status_sale(uint8_t result) {}
+
     void bind(Model* m)
     {
         model = m;

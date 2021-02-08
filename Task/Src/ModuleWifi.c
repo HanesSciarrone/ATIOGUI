@@ -144,7 +144,7 @@ static enum result_validation_user parse_result_credential(void);
  *
  * @param[in]	data	Data that will be send to broker
  */
-static void send_credential(uint8_t *data);
+static void send_resquest(uint8_t *data);
 
 /**
  * @brief All functionality of task that control Module Wi-fi is here
@@ -415,6 +415,40 @@ static enum mqtt_state sent_connect_mqtt(void)
 	return state;
 }
 
+static bool parse_result_sale_finalization(void)
+{
+	uint8_t index, offset, response[21];
+
+	/*
+	 * Format of mesage is:
+	 *
+	 * [CommandID]|[response of sale]
+	 *
+	 * Where each data is separate for |
+	 */
+
+	memset(response, 0, sizeof(response));
+
+	// Ask if command received is correct
+	if (wifiParameters.data[0] != CMD_RESULT_SALE) {
+		return false;
+	}
+
+	index = 2;
+	offset = 0;
+	while(wifiParameters.data[index] != '\0' && index < 21) {
+		response[offset] = wifiParameters.data[index];
+		index++;
+		offset++;
+	}
+
+	if (!strcmp((char *)response, "Approved")) {
+		return true;
+	}
+
+	return false;
+}
+
 static enum result_validation_user parse_result_credential(void)
 {
 	uint8_t index, offset, liters[21];
@@ -439,7 +473,7 @@ static enum result_validation_user parse_result_credential(void)
 	index = 4;
 	offset = 0;
 	strncpy((char *)liters, "\0", 21);
-	while(wifiParameters.data[index] >= '0' && wifiParameters.data[index] <= '9' && index < 23) {
+	while(((wifiParameters.data[index] >= '0' && wifiParameters.data[index] <= '9') || (wifiParameters.data[index] == '.')) && index < 23) {
 		liters[offset] = wifiParameters.data[index];
 		index++;
 		offset++;
@@ -451,7 +485,7 @@ static enum result_validation_user parse_result_credential(void)
 	return VALID_USER;
 }
 
-static void send_credential(uint8_t *data)
+static void send_resquest(uint8_t *data)
 {
 	ESP8266_StatusTypeDef_t status;
 	enum mqtt_state state = STATUS_CONNECTION;
@@ -650,8 +684,8 @@ static bool_t WifiModule_Init(void)
 
 static bool_t WifiModule_Comm_Init(void)
 {
-	commInterface.send = &WifiUART_Send;
-	commInterface.recv = &WifiUART_Receive;
+	commInterface.send = &wifi_uart_sent;
+	commInterface.recv = &wifi_uart_receive;
 
 	return (ESP8266_CommInterface_Init(&commInterface) == ESP8266_OK) ? 1 : 0;
 }
@@ -718,9 +752,19 @@ static void ModuleWifi(void *argument)
 
 			case SEND_CREDENTIAL: {
 				osMutexAcquire(mutex_new_msg_wifi_handle, osWaitForever);
-				send_credential(wifiParameters.data);
+				send_resquest(wifiParameters.data);
 				msgGUI = 2;
 				wifiParameters.resultOperation = parse_result_credential();
+				osMessageQueuePut(queue_NewMsg_GUI, &msgGUI, 0L, osWaitForever);
+				osMutexRelease(mutex_new_msg_wifi_handle);
+			}
+			break;
+
+			case SEND_FINISH_SALE: {
+				osMutexAcquire(mutex_new_msg_wifi_handle, osWaitForever);
+				send_resquest(wifiParameters.data);
+				wifiParameters.resultOperation = parse_result_sale_finalization() ? 1 : 0;
+				msgGUI = 7;
 				osMessageQueuePut(queue_NewMsg_GUI, &msgGUI, 0L, osWaitForever);
 				osMutexRelease(mutex_new_msg_wifi_handle);
 			}

@@ -40,6 +40,9 @@
     <ClCompile Include="..\..\gui\src\setupmqttscreen_screen\SetupMQTTScreenPresenter.cpp"/>
     <ClCompile Include="..\..\gui\src\setupmqttscreen_screen\SetupMQTTScreenView.cpp"/>
     <ClCompile Include="..\..\generated\gui_generated\src\setupmqttscreen_screen\SetupMQTTScreenViewBase.cpp"/>
+    <ClCompile Include="..\..\gui\src\operationpumpscreen_screen\OperationPumpScreenPresenter.cpp"/>
+    <ClCompile Include="..\..\gui\src\operationpumpscreen_screen\OperationPumpScreenView.cpp"/>
+    <ClCompile Include="..\..\generated\gui_generated\src\operationpumpscreen_screen\OperationPumpScreenViewBase.cpp"/>
   </ItemGroup>
   <ItemGroup>
     <None Include="$(ApplicationRoot)\assets\texts\texts.xlsx"/>
@@ -209,6 +212,9 @@
     <ClInclude Include="..\..\gui\include\gui\setupmqttscreen_screen\SetupMQTTScreenPresenter.hpp"/>
     <ClInclude Include="..\..\gui\include\gui\setupmqttscreen_screen\SetupMQTTScreenView.hpp"/>
     <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\setupmqttscreen_screen\SetupMQTTScreenViewBase.hpp"/>
+    <ClInclude Include="..\..\gui\include\gui\operationpumpscreen_screen\OperationPumpScreenPresenter.hpp"/>
+    <ClInclude Include="..\..\gui\include\gui\operationpumpscreen_screen\OperationPumpScreenView.hpp"/>
+    <ClInclude Include="..\..\generated\gui_generated\include\gui_generated\operationpumpscreen_screen\OperationPumpScreenViewBase.hpp"/>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="$(ApplicationRoot)\generated\simulator\touchgfx.rc"/>
